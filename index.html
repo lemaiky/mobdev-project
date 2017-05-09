@@ -33,7 +33,6 @@
 				<input type="text" id="gameName" value="" placeholder="Game name">
 				<input type="text" id="nickname" value="" placeholder="Nickname">
 			</div>
-
 			<div id="page1Buttons">
 				<button class="page1Button" onclick="createGame(gameName.value,nickname.value)">Create Game</button> 
 				<button class="page1Button" onclick="joinGame(gameName.value,nickname.value)">Join Game</button> 
@@ -45,17 +44,72 @@
 				<div id="team1">
 
 				</div>
-
 				<div id="team2">
 
 				</div>
-
 				<div id="createGameAreaButton">
 					<button class="page2Button" onclick="createGameArea()">Create game area</button>
 				</div>
 
 			</div>
 		</div>
+
+		<div id="page3">
+			<div id="page3mapContainer">
+				<div id="page3map" style="width:600px;height:400px"></div>
+			</div>
+			<div id="placeBaseAndFlagsButton">
+				<button class="page3Button" onclick="placeBaseAndFlags()">Place flags and team base in game area</button>
+			</div>
+		</div>
+
+		<div id="page4">
+			<div id="page4mapContainer">
+				<div id="page4map" style="width:600px;height:400px"></div>
+			</div>
+			<div id="completeSetUp">
+				<button class="page4Button" onclick="completeSetUp()">Complete set up</button>
+			</div>
+		</div>
+
+		<div id="page5">  
+			<div id="teamLists">
+				<div id="team1">
+
+				</div>
+				<div id="team2">
+
+				</div>
+				<div id="playButton">
+					<button class="page5Button" onclick="play()">Play</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="page6">
+			<div id="page6header">
+				score
+			</div>
+			<div id="page6mapContainer">
+				<div id="page6map" style="width:600px;height:400px"></div>
+			</div>
+			<div id="page6footer">
+				<div id="page6grabButton">
+					<button class="page6grabButton" onclick="grab()">Grab</button>
+				</div>
+				<div id="page6releaseButton">
+					<button class="page6releaseButton" onclick="release()">Release</button>
+				</div>
+				<div id="page6timer">
+					timer
+				</div>
+			</div>
+		</div>
+
+		<div id="page7">
+			your team LOST
+		</div>
+
 
 		<script> 
 			function createGame(name, user){
@@ -66,7 +120,33 @@
 				console.log("join game " + name, user + " teamLeader=false ");
 			}
 
+			function createGameArea(){
+				console.log("create game area ");
+			}
 
+			function placeBaseAndFlags(){
+				console.log("place base and flags ");
+			}
+
+			function completeSetUp(){
+				console.log("complete set up ");
+			}
+			
+			function play(){
+				console.log("play ");
+			}
+			
+			function grab(){
+				console.log("grab ");
+			}
+
+			function release(){
+				console.log("release ");
+			}
+
+			function theEnd(){
+				console.log("your team lost");
+			}
 	  //       // Script that will be run when (or is it also run before due to the undefined uuid?) button "Connect" is clicked
 		 //   var function userNameChosen(){
 	  //   	   var markerName = document.getElementById("userName").value;
@@ -80,11 +160,6 @@
 	  //   		  initialize(markerName);
 	  //   		}
 			// }
-
-			// <div id="map-container" class="container">
-			// 	<h1>Cash a flegg</h1>
-			// 	<div id="map-canvas" style="width:600px;height:400px"></div>
-			// </div>
 
 		</script>
 
