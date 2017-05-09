@@ -41,6 +41,7 @@ var Player = {
 	// caught position: {lat, long}
 	// state
 	// inside/outside map (bool)
+	//leader
 }
 
 var Flag = {
@@ -62,3 +63,34 @@ var Base = {
 	// team id
 	// position: {lat, long}
 }
+
+
+
+/*
+ assigning to team
+ teamId
+ playerID
+
+
+ map to draw /recieve
+ mapPosition
+
+
+ flagPlacements
+ array of flags
+ 
+
+
+ normal msg
+ player id
+ location
+ state
+ flagId
+ caughtPosition
+
+
+
+
+
+
+*/
