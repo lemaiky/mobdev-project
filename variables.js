@@ -1,14 +1,23 @@
 var State = {FLAG, CAUGHT, RELEASED, RELEASING};
 
-var allGames = new Array();
+var allGames = [];
 
 var Game = {
+	gameId,
+	teams: [],
+	admin
 	// game id
 	// 2 teams
 	// game admin
 }
 
 var Team = {
+	teamId,
+	players: [],
+	base: {},
+	flags: [],
+	points,
+	leader
 	// team id
 	// list of player ids
 	// base
@@ -18,6 +27,13 @@ var Team = {
 }
 
 var Player = {
+	nickname,
+	playerId,
+	teamId,
+	position: {},
+	caughtPosition: {},
+	state,
+	insideMap
 	// nickname
 	// player id
 	// team id
@@ -28,6 +44,11 @@ var Player = {
 }
 
 var Flag = {
+	flagId,
+	position: {},
+	teamId,
+	originalPos: {},
+	caught = false
 	// flag id
 	// position: {lat, long}
 	// team id
@@ -36,6 +57,8 @@ var Flag = {
 }
 
 var Base = {
+	teamId,
+	position: {}
 	// team id
 	// position: {lat, long}
 }
