@@ -57,7 +57,9 @@ function publish(msg){
 		channel: pubnub_channel,
 		message: msg
 	}
-	pubnub.publish(pubConfig, )
+	pubnub.publish(pubConfig, function(status, response){
+		console.log(status, response);
+	})
 }
 
 pubnub.addListener({
@@ -79,7 +81,18 @@ pubnub.addListener({
         } 
     },
     message: function(message) {
-        //Handle message
+        var msgObj = JSON.parse(message);
+        if(msgObj.msgType == 0){ // player info
+
+        }else if(msgObj.msgType == 1){	//map posiiton
+
+        }else if(msgObj.msgType == 2){	//player joined team
+
+        }else if(msgObj.msgType == 3){	//flag placements
+
+        }else{ //Defeault msg
+
+        }
     }
 })
 
