@@ -39,10 +39,11 @@
       <div id="map-canvas" style="width:600px;height:400px"></div>
     </div>
 
-
     <script> 
 	  document.getElementById("login").style.display = "block";
 	  document.getElementById("map-container").style.display = "none";
+
+    // Script that will be run when (or is it also run before due to the undefined uuid?) button "Connect" is clicked
 	  function userNameChosen(){
 		  var markerName = document.getElementById("userName").value;
 		  if (markerName == "") {
