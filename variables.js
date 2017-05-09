@@ -69,8 +69,9 @@ var Base = {
 
 	0 : informing players a new player is joined
 	1 : informs players of map posiiton
-	2 : informs players of flag placements
-	3 : the general update 
+	2 : informs players that a player join team #
+	3 : informs players of flag placements
+	4 : the general update 
 
 
 
@@ -88,12 +89,19 @@ var mapPositionMsg = {
 
 }
 
-var flagPlacementsMsg = {
+var playerJoinedTeam ={
 	msgType: 2
+	nickname, 
+	playerId,
+	teamId
+}
+
+var flagPlacementsMsg = {
+	msgType: 3
 }
 
 var updateMsg = {
-	msgType: 3,
+	msgType: 4,
 	playerId,
 	position: {},
 	caughtPosition: {},
