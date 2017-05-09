@@ -11,6 +11,8 @@
 
 		<!-- PubNub is used for its realtime data stream network. This is what allows us to broadcast. -->	
 		<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
+    <script src="setup.js"></script>
+    <script src="variables.js"></script>
 
 		<!-- Angular is used for its two-way data binding and digest. -->
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
@@ -112,14 +114,6 @@
 
 
 		<script> 
-			function createGame(name, user){
-				console.log("create game " + name, user + " teamLeader=true ");
-			}
-			
-			function joinGame(name, user){
-				console.log("join game " + name, user + " teamLeader=false ");
-			}
-
 			function createGameArea(){
 				console.log("create game area ");
 			}
@@ -147,19 +141,6 @@
 			function theEnd(){
 				console.log("your team lost");
 			}
-	  //       // Script that will be run when (or is it also run before due to the undefined uuid?) button "Connect" is clicked
-		 //   var function userNameChosen(){
-	  //   	   var markerName = document.getElementById("userName").value;
-	  //   	   if (markerName == "") {
-	  //   	       //do nothing
-	  //   	       console.log("no username");
-	  //   	   } else {
-	  //   		  console.log("username chosen: " + markerName);
-	  //   		  document.getElementById("login").style.display = "none";
-	  //   		  document.getElementById("map-container").style.display = "block";
-	  //   		  initialize(markerName);
-	  //   		}
-			// }
 
 		</script>
 

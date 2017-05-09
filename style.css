@@ -4,7 +4,7 @@ html, body{
 }
 
 #page1{
-	display: none;
+	display: block;
 }
 
 #page1Textfields{
