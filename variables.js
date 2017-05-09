@@ -77,22 +77,22 @@ var Base = {
 **/
 
 
-var playerJoined = {
+var playerJoinedMsg = {
 	msgType: 0,
 	nickname,
 	playerId
 }
 
-var mapPosition = {
+var mapPositionMsg = {
 	msgType: 1
 
 }
 
-var flagPlacements = {
+var flagPlacementsMsg = {
 	msgType: 2
 }
 
-var updateMessage = {
+var updateMsg = {
 	msgType: 3,
 	playerId,
 	position: {},

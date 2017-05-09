@@ -43,13 +43,7 @@ function init(username, gameame){
 }
 
 function sendInfo(username){
-	var msg = {
-		'msg_type': 0,
-		'nickname': username,
-		'playerId': playerId,
-	}
-	playerObj.nickname = username;
-	playerObj.playerId = playerId;
+	var msg = new playerJoinedMsg();
 
 	var jsonMsg = JSON.stringify(playerObj);
 
@@ -57,7 +51,6 @@ function sendInfo(username){
 
 
 }
-
 
 function publish(msg){
 	var pubConfig = {
