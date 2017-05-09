@@ -1,0 +1,21 @@
+html, body{
+
+
+}
+
+#page1{
+	display: block;
+}
+
+#page1Textfields{
+	display: block;
+
+}
+
+#page1Button{
+	display: block;
+}
+
+#page2{
+	display: none;
+}
