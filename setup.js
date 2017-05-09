@@ -1,20 +1,25 @@
 
-
-
 var playerId;  //Unqiue user id from username
 var pubnub_channel; //Publish channel
 var playersConnected;
 
-var pubnub;
+var pubnub = new PubNub({ //Keys
+		publishKey: 'pub-c-55161405-5bed-4bdc-b6fe-fb40a35da458',
+		subscribeKey: 'sub-c-7209c0a8-34bc-11e7-81b3-02ee2ddab7fe',
+		sss: true
+})
 
 
 //Combine these 2 same thing...
-function newGame(username, gamename){ 
+function createGame(gamename, username){ 
 	// Create a unique username from inpu
-	init(username, gamename);
+	console.log("trying to create game");
+	console.log(gamename);
+
+	init(gamename, username);
 
 }
-function connectToGame(username, gamename){
+function joinGame(gamename, username){
 	init(username, gamename);
 }
 /*
@@ -23,22 +28,21 @@ function connectToGame(username, gamename){
 	sends client information to all other clients
 */
 
-function init(username, gameame){
+function init(gamename, username){
 	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
-	pubnub_channel = "mobileCatchTheFlag/" + gamename; = "mobileCatchTheFlag/" + gamename;
+	pubnub_channel = "MobileCatchTheFlag";
 
-	pubnub = new PubNub({ //Keys
-		publishKey: 'pub-c-55161405-5bed-4bdc-b6fe-fb40a35da458',
-		subscribeKey: 'sub-c-7209c0a8-34bc-11e7-81b3-02ee2ddab7fe',
-		sss: true,
-		uuid: playerId
+	pubnub.setUUID(playerId);
+	console.log("is now trying to subscribe");
+	pubnub.subscribe({
+    	channels: [pubnub_channel]
 	});
-	pubnub.subscribe({channels: [pubnub_channel]});
-
+   
+	publish("sending connected through pubnub");
 	//Tell all other that a new player is connected
 
 
-	sendInfo(username); // Tell everyone that a new player is joined and the info of the player
+	//sendInfo(username); // Tell everyone that a new player is joined and the info of the player
 
 }
 
@@ -64,8 +68,10 @@ function publish(msg){
 
 pubnub.addListener({
     status: function(statusEvent) {
+    	console.log(statusEvent);
         if (statusEvent.category === "PNConnectedCategory") {
             //Do something if connected
+
         } else if (statusEvent.category === "PNUnknownCategory") {
             var newState = {
                 new: 'error'
@@ -80,8 +86,10 @@ pubnub.addListener({
             );
         } 
     },
-    message: function(message) {
-        var msgObj = JSON.parse(message);
+
+    message: function(msg) {
+        //var msgObj = JSON.parse(message);
+        /*
         if(msgObj.msgType == 0){ // player info
 
         }else if(msgObj.msgType == 1){	//map posiiton
@@ -90,9 +98,11 @@ pubnub.addListener({
 
         }else if(msgObj.msgType == 3){	//flag placements
 
-        }else{ //Defeault msg
-
+        }else{ 
         }
+       *///Defeault msg
+        	console.log("msg rec");
+        	console.log(msg.message);
     }
 })
 
