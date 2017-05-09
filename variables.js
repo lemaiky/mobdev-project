@@ -33,7 +33,8 @@ var Player = {
 	position: {},
 	caughtPosition: {},
 	state,
-	insideMap
+	insideMap,
+	carryingFlag
 	// nickname
 	// player id
 	// team id
@@ -49,7 +50,7 @@ var Flag = {
 	position: {},
 	teamId,
 	originalPos: {},
-	caught = false
+	caught: false
 	// flag id
 	// position: {lat, long}
 	// team id
@@ -64,9 +65,57 @@ var Base = {
 	// position: {lat, long}
 }
 
+/** MSGs WE ARE SENDING **\
 
+	0 : informing players a new player is joined
+	1 : informs players of map posiiton
+	2 : informs players that a player join team #
+	3 : informs players of flag placements
+	4 : the general update 
+
+
+
+**/
+
+
+var playerJoinedMsg = {
+	msgType: 0,
+	nickname,
+	playerId
+}
+
+var mapPositionMsg = {
+	msgType: 1
+
+}
+
+var playerJoinedTeam ={
+	msgType: 2
+	nickname, 
+	playerId,
+	teamId
+}
+
+var flagPlacementsMsg = {
+	msgType: 3
+}
+
+var updateMsg = {
+	msgType: 4,
+	playerId,
+	position: {},
+	caughtPosition: {},
+	state,
+	carryingFlag
+}
 
 /*
+	Msg types:
+	0 = telling users 
+
+
+
+
  assigning to team
  teamId
  playerID
@@ -78,7 +127,7 @@ var Base = {
 
  flagPlacements
  array of flags
- 
+
 
 
  normal msg
