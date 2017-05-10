@@ -1,4 +1,3 @@
-
 var lat;
 var lng;
 var map;
@@ -11,12 +10,14 @@ var labelIndex = 0;
 // Pubnub keys to allow us to use their network
 var pnChannel = "map-channelOR";
 var pubnub = new PubNub({
-  publishKey: 'pub-c-609a8ba5-d39c-44f6-9781-e1ac5db06375',
-  subscribeKey: 'sub-c-8952104c-2ffa-11e7-bc1c-0619f8945a4f',
+  publishKey: '',
+  subscribeKey: '',
   sss: true
 });
 
 // When a message is received, call the function "redraw" with the coordinate data in the message
+
+
 function redraw(payload) {
   markeruuid = payload.message.markeruuid;
   for (var i in markerList) {

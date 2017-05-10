@@ -3,9 +3,10 @@ var playerId;  //Unqiue user id from username
 var pubnub_channel; //Publish channel
 var playersConnected;
 
+
 var pubnub = new PubNub({ //Keys
-		publishKey: 'pub-c-55161405-5bed-4bdc-b6fe-fb40a35da458',
-		subscribeKey: 'sub-c-7209c0a8-34bc-11e7-81b3-02ee2ddab7fe',
+		publishKey: config.PUB_KEY,
+		subscribeKey: config.SUB_KEY,
 		sss: true
 })
 
