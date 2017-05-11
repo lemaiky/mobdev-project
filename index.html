@@ -51,23 +51,32 @@
 			</fieldset>
 			<fieldset>
 				<h2> Choose your teams</h2>
-				<h3> Team 1 </h3>
-				<ol data-draggable="target" id="team1"></ol>
-				<h3> Team 2 </h3>
-				<ol data-draggable="target" id="team2"></ol>
-				<h3> Place these players in a team!</h3>
-				<ol data-draggable="target" id="freeplayers">
+				<table>
+				<tr> <th> Team 1 </th> <th> Team 2 </th> </tr>
+				<tr><td><ol data-draggable="target" class="teamtable" id="team1"></ol></td>
+				
+				<td><ol data-draggable="target" class="teamtable" id="team2"></ol></td></tr>
+				<tr><th colspan="2"> Place these players in a team!</th></tr> 
+				<tr><td colspan="2"><ol data-draggable="target" id="freeplayers">
 				<li data-draggable="item" id="blabla"> thingy</li>					
-				</ol>
-				<input type="button" name="next" class="next action-button" value="Next" />
+				<li data-draggable="item" id="blabla"> adfsfwer</li>					
+				<li data-draggable="item" id="blabla"> yadaya</li>					
+				<li data-draggable="item" id="blabla"> stuffy</li>					
+				</ol></td></tr>
+				</table>
+				<input type="button" id="toAreaSelection" name="next" class="next action-button" value="Next" />
 			</fieldset>
 			<fieldset>
 				<h2> Choose your playing area</h2>
-				<input type="button" id="setarea" class="next action-button" value="Confirm area"/>
+				<input type="button" id="toHomeBasePlacement" class="next action-button" value="Confirm area"/>
+			</fieldset>
+			<fieldset>
+				<h2> Place your Home Base!</h2>
+				<input type="button" id="toFlagPlacement" class="next action-button" value="Confirm"/>
 			</fieldset>
 			<fieldset>
 				<h2> Place your flags!</h2>
-				<input type="button" id="placeflags" class="next action-button" value="Confirm"/>
+				<input type="button" id="toConfirm" class="next action-button" value="Confirm"/>
 			</fieldset>
 			<fieldset>
 				<h2> Ready to play?</h2>
@@ -88,6 +97,6 @@
 
 	</body>
 	<script type='text/javascript' src="ui.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyAxv6rhst3Ha6gvsAwY_pKYEg4XbrkTehU&callback=initMap"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyAxv6rhst3Ha6gvsAwY_pKYEg4XbrkTehU&libraries=drawing&callback=initMap"></script>
 </html>
 

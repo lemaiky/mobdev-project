@@ -4,6 +4,15 @@ height:100%;
 width:100%;
 }
 
+table{
+	margin-right: auto;
+	margin-left: auto;
+	width:100%;
+}
+td{
+	width:50%;
+}
+
 #map{
 	height:100%;
 	position:relative;
@@ -18,20 +27,22 @@ a[href^="https://www.google.com/maps"] {
 }
 .gmnoprint:not(.gm-bundled-control) {
     display: none;
-}
+}	
 .gm-bundled-control .gmnoprint {
     display: block;
 }
 
 
-
+.teamtable li{
+	display:block;
+}
 /* draggable targets */
 [data-draggable="target"]
 {
-    float:left;
+    float:center;
     list-style-type:none;
     
-    width:42%;
+    width:100%;
     height:7.5em;
     overflow-y:auto;
     
@@ -48,13 +59,14 @@ a[href^="https://www.google.com/maps"] {
 /* draggable items */
 [data-draggable="item"]
 {
-    display:block;
+    display:inline-block;
     list-style-type:none;
+    width:auto;
     
-    margin:0 0 2px 0;
+/*    margin:0 0 2px 0;
     padding:0.2em 0.4em;
     
-    border-radius:0.2em;
+    border-radius:0.2em;*/
     
     line-height:1.3;
 }

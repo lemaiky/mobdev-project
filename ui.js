@@ -1,4 +1,5 @@
 var map;
+var drawingManager;
 // Callback function for current location search
 function centerOnPos(position) {
 	map.setCenter({lat:position.coords.latitude , lng:position.coords.longitude });
@@ -6,7 +7,7 @@ function centerOnPos(position) {
 
 
 
-function initMap() {	
+function initMap() {    
 	
 	var styledMapType = new google.maps.StyledMapType(
 		[
@@ -267,15 +268,15 @@ function initMap() {
 		]
 	}
 ]
-	)		
+	)       
 	map = new google.maps.Map(document.getElementById('map'), { 
 	center: {lat: 59.349405116200636, lng: 18.072359561920166},
 	zoom: 17,
 	mapTypeId: 'roadmap',
 	disableDefaultUI: true, 
-	 	oomControl: false,
-	zoomControlOptions: {	position: google.maps.ControlPosition.LEFT_CENTER		 
-	},			
+		oomControl: false,
+	zoomControlOptions: {   position: google.maps.ControlPosition.LEFT_CENTER        
+	},          
 	scaleControl: false,
 	streetViewControl: false,
 	rotateControl: false,
@@ -284,9 +285,10 @@ function initMap() {
 		});
 
 	map.mapTypes.set('styled_map', styledMapType);
-    map.setMapTypeId('styled_map');
+	map.setMapTypeId('styled_map');
 	// gamestartdiv = document.getElementById('gamestart');
 	// map.controls[google.maps.ControlPosition.TOP_CENTER].push(gamestartdiv);
+
 }
 
 
@@ -301,7 +303,6 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
-	console.log("YAAHAHERWQEORAHQE");
 	if(animating) return false;
 	animating = true;
 	
@@ -333,6 +334,52 @@ $(".next").click(function(){
 		easing: 'easeInOutBack'
 	});
 });
+
+$("#toAreaSelection").click(function(){
+
+	drawingManager = new google.maps.drawing.DrawingManager({
+		drawingMode: google.maps.drawing.OverlayType.POLYGON,
+		drawingControl: false,
+	});
+	drawingManager.setMap(map);
+
+	google.maps.event.addListener(drawingManager, 'polygoncomplete', function(){
+		drawingManager.setOptions({
+			drawingMode: null
+		})
+	});
+});
+
+
+
+$("#toHomeBasePlacement").click(function(){
+
+	drawingManager.setOptions({
+		drawingMode: google.maps.drawing.OverlayType.MARKER,
+		drawingControl: false,
+	});
+	drawingManager.setMap(map);
+});
+
+$("#toFlagPlacement").click(function(){
+	drawingManager.setOptions({
+		drawingMode: google.maps.drawing.OverlayType.MARKER,
+		drawingControl: false,
+	});
+	drawingManager.setMap(map);
+});
+
+$("#toConfirm").click(function(){
+	drawingManager.setOptions({
+		drawingMode: null
+	})
+});
+
+
+
+
+
+
 
 $(".previous").click(function(){
 	if(animating) return false;
@@ -367,86 +414,86 @@ $(".previous").click(function(){
 	});
 });
 
-$(".submit").click(function(){
-	return false;
-})
+// $(".submit").click(function(){
+//  return false;
+// })
 
 
 
-// (function()
-// {
+(function()
+{
 
-// 	//exclude older browsers by the features we need them to support
-// 	//and legacy opera explicitly so we don't waste time on a dead browser
-// 	if
-// 	(
-// 		!document.querySelectorAll 
-// 		|| 
-// 		!('draggable' in document.createElement('span')) 
-// 		|| 
-// 		window.opera
-// 	) 
-// 	{ return; }
+	//exclude older browsers by the features we need them to support
+	//and legacy opera explicitly so we don't waste time on a dead browser
+	if
+	(
+		!document.querySelectorAll 
+		|| 
+		!('draggable' in document.createElement('span')) 
+		|| 
+		window.opera
+	) 
+	{ return; }
 	
-// 	//get the collection of draggable items and add their draggable attribute
-// 	for(var 
-// 		items = document.querySelectorAll('[data-draggable="item"]'), 
-// 		len = items.length, 
-// 		i = 0; i < len; i ++)
-// 	{
-// 		items[i].setAttribute('draggable', 'true');
-// 	}
+	//get the collection of draggable items and add their draggable attribute
+	for(var 
+		items = document.querySelectorAll('[data-draggable="item"]'), 
+		len = items.length, 
+		i = 0; i < len; i ++)
+	{
+		items[i].setAttribute('draggable', 'true');
+	}
 
-// 	//variable for storing the dragging item reference 
-// 	//this will avoid the need to define any transfer data 
-// 	//which means that the elements don't need to have IDs 
-// 	var item = null;
+	//variable for storing the dragging item reference 
+	//this will avoid the need to define any transfer data 
+	//which means that the elements don't need to have IDs 
+	var item = null;
 
-// 	//dragstart event to initiate mouse dragging
-// 	document.addEventListener('dragstart', function(e)
-// 	{
-// 		//set the item reference to this element
-// 		item = e.target;
+	//dragstart event to initiate mouse dragging
+	document.addEventListener('dragstart', function(e)
+	{
+		//set the item reference to this element
+		item = e.target;
 		
-// 		//we don't need the transfer data, but we have to define something
-// 		//otherwise the drop action won't work at all in firefox
-// 		//most browsers support the proper mime-type syntax, eg. "text/plain"
-// 		//but we have to use this incorrect syntax for the benefit of IE10+
-// 		e.dataTransfer.setData('text', '');
+		//we don't need the transfer data, but we have to define something
+		//otherwise the drop action won't work at all in firefox
+		//most browsers support the proper mime-type syntax, eg. "text/plain"
+		//but we have to use this incorrect syntax for the benefit of IE10+
+		e.dataTransfer.setData('text', '');
 	
-// 	}, false);
+	}, false);
 
-// 	//dragover event to allow the drag by preventing its default
-// 	//ie. the default action of an element is not to allow dragging 
-// 	document.addEventListener('dragover', function(e)
-// 	{
-// 		if(item)
-// 		{
-// 			e.preventDefault();
-// 		}
+	//dragover event to allow the drag by preventing its default
+	//ie. the default action of an element is not to allow dragging 
+	document.addEventListener('dragover', function(e)
+	{
+		if(item)
+		{
+			e.preventDefault();
+		}
 	
-// 	}, false);	
+	}, false);  
 
-// 	//drop event to allow the element to be dropped into valid targets
-// 	document.addEventListener('drop', function(e)
-// 	{
-// 		//if this element is a drop target, move the item here 
-// 		//then prevent default to allow the action (same as dragover)
-// 		if(e.target.getAttribute('data-draggable') == 'target')
-// 		{
-// 			e.target.appendChild(item);
+	//drop event to allow the element to be dropped into valid targets
+	document.addEventListener('drop', function(e)
+	{
+		//if this element is a drop target, move the item here 
+		//then prevent default to allow the action (same as dragover)
+		if(e.target.getAttribute('data-draggable') == 'target')
+		{
+			e.target.appendChild(item);
 			
-// 			e.preventDefault();
-// 		}
+			e.preventDefault();
+		}
 	
-// 	}, false);
+	}, false);
 	
-// 	//dragend event to clean-up after drop or abort
-// 	//which fires whether or not the drop target was valid
-// 	document.addEventListener('dragend', function(e)
-// 	{
-// 		item = null;
+	//dragend event to clean-up after drop or abort
+	//which fires whether or not the drop target was valid
+	document.addEventListener('dragend', function(e)
+	{
+		item = null;
 	
-// 	}, false);
+	}, false);
 
-// })();	 
+})();    
