@@ -1,5 +1,7 @@
 var map;
+var playingArea;
 var drawingManager;
+var homeBaseListener;
 // Callback function for current location search
 function centerOnPos(position) {
 	map.setCenter({lat:position.coords.latitude , lng:position.coords.longitude });
@@ -343,14 +345,25 @@ $("#toAreaSelection").click(function(){
 	});
 	drawingManager.setMap(map);
 
-	google.maps.event.addListener(drawingManager, 'polygoncomplete', function(){
+	google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon){
 		drawingManager.setOptions({
 			drawingMode: null
 		})
+		playingArea = polygon;
+		var coordinates  = (polygon.getPath().getArray()); // These should be the coords
+
+		console.log(coordinates);
 	});
 });
 
+$("#resetPlayingArea").off()
 
+$("#resetPlayingArea").click(function(){
+	playingArea.setMap(null);
+	drawingManager.setOptions({
+		drawingMode:google.maps.drawing.OverlayType.POLYGON
+	})
+});
 
 $("#toHomeBasePlacement").click(function(){
 
@@ -359,9 +372,21 @@ $("#toHomeBasePlacement").click(function(){
 		drawingControl: false,
 	});
 	drawingManager.setMap(map);
+
+	homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+		drawingManager.setOptions({
+			drawingMode: null
+		})
+		var coordinates  = marker.getPosition();
+
+		console.log(coordinates);
+	});
 });
 
 $("#toFlagPlacement").click(function(){
+
+	google.maps.event.removeListener(homeBaseListener);
+
 	drawingManager.setOptions({
 		drawingMode: google.maps.drawing.OverlayType.MARKER,
 		drawingControl: false,
