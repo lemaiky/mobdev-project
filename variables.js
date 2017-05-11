@@ -1,23 +1,20 @@
-var State = {FLAG, CAUGHT, RELEASED, RELEASING};
+var State = {NORMAL:0, FLAG:1, CAUGHT:2, RELEASED:3, RELEASING:4};
 
 var allGames = [];
 
 var Game = {
-	gameId,
-	teams: [],
-	admin
-	// game id
-	// 2 teams
-	// game admin
+	gameId:0,
+	teams: {}, // array of 2 teams
+	admin:""
 }
 
 var Team = {
-	teamId,
+	teamId:0,
 	players: [],
 	base: {},
 	flags: [],
-	points,
-	leader
+	points:0,
+	leader:0
 	// team id
 	// list of player ids
 	// base
@@ -27,14 +24,14 @@ var Team = {
 }
 
 var Player = {
-	nickname,
-	playerId,
-	teamId,
+	nickname:"",
+	playerId:0,
+	teamId:0,
 	position: {},
 	caughtPosition: {},
-	state,
-	insideMap,
-	carryingFlag
+	state:State.NORMAL,
+	insideMap: true
+	//carryingFlag: false
 	// nickname
 	// player id
 	// team id
@@ -46,11 +43,12 @@ var Player = {
 }
 
 var Flag = {
-	flagId,
+	flagId:0,
 	position: {},
-	teamId,
+	teamId:0,
 	originalPos: {},
-	caught: false
+	caught: false,
+	holdingPlayerId:0
 	// flag id
 	// position: {lat, long}
 	// team id
@@ -59,7 +57,7 @@ var Flag = {
 }
 
 var Base = {
-	teamId,
+	teamId:0,
 	position: {}
 	// team id
 	// position: {lat, long}
@@ -80,8 +78,8 @@ var Base = {
 
 var playerJoinedMsg = {
 	msgType: 0,
-	nickname,
-	playerId
+	nickname:"",
+	playerId:0
 }
 
 var mapPositionMsg = {
@@ -90,10 +88,10 @@ var mapPositionMsg = {
 }
 
 var playerJoinedTeam ={
-	msgType: 2
-	nickname, 
-	playerId,
-	teamId
+	msgType: 2,
+	nickname:"", 
+	playerId:0,
+	teamId:0
 }
 
 var flagPlacementsMsg = {
@@ -102,11 +100,11 @@ var flagPlacementsMsg = {
 
 var updateMsg = {
 	msgType: 4,
-	playerId,
+	playerId:0,
 	position: {},
 	caughtPosition: {},
-	state,
-	carryingFlag
+	state: State.NORMAL,
+	carryingFlag:false
 }
 
 /*
