@@ -9,6 +9,8 @@
 		<title>Capture the flag</title>
 		<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.8.0.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="http://thecodeplayer.com/uploads/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+		<script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script> 
 
 		<!-- PubNub is used for its realtime data stream network. This is what allows us to broadcast. -->	
 		<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
@@ -35,8 +37,9 @@
 	</head>
   
 	<body>
+		<div id="map"></div>
 
-	<!-- multistep form -->
+			<!-- multistep form -->
 		<form id="gamestart">
 			<!-- fieldsets -->
 			<fieldset>
@@ -60,11 +63,11 @@
 			</fieldset>
 			<fieldset>
 				<h2> Choose your playing area</h2>
-				<input type="button" id="setarea" value="Confirm area"/>
+				<input type="button" id="setarea" class="next action-button" value="Confirm area"/>
 			</fieldset>
 			<fieldset>
 				<h2> Place your flags!</h2>
-				<input type="button" id="placeflags" value="Confirm"/>
+				<input type="button" id="placeflags" class="next action-button" value="Confirm"/>
 			</fieldset>
 			<fieldset>
 				<h2> Ready to play?</h2>
@@ -72,98 +75,19 @@
 				<ol data-draggable="target" id="team1"></ol>
 				<h3> Team 2 </h3>
 				<ol data-draggable="target" id="team2"></ol>
-				<input type="button" id="startgame" value="Play game!"/>
+				<input type="button" id="startgame" class="next action-button" value="Play game!"/>
 			</fieldset>
 
-		</form>
+		</form> 
 
-<!-- jQuery -->
-<script src="http://thecodeplayer.com/uploads/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<!-- jQuery easing plugin -->
-<script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
-<!-- 		<div id="page1">	
-			<div id="page1Textfields">
 
-			</div>
-			<div id="page1Buttons">
-				<button class="page1Button" onclick="createGame(gameName.value,nickname.value)">Create Game</button> 
-				<button class="page1Button" onclick="joinGame(gameName.value,nickname.value)">Join Game</button> 
-			</div>
-		</div>
 
-		<div id="page2">  
-			<div id="teamLists">
-				<div id="team1">
 
-				</div>
-				<div id="team2">
 
-				</div>
-				<div id="createGameAreaButton">
-					<button class="page2Button" onclick="createGameArea()">Create game area</button>
-				</div>
 
-			</div>
-		</div>
 
-		<div id="page3">
-			<div id="page3mapContainer">
-				<div id="page3map" style="width:600px;height:400px"></div>
-			</div>
-			<div id="placeBaseAndFlagsButton">
-				<button class="page3Button" onclick="placeBaseAndFlags()">Place flags and team base in game area</button>
-			</div>
-		</div>
-
-		<div id="page4">
-			<div id="page4mapContainer">
-				<div id="page4map" style="width:600px;height:400px"></div>
-			</div>
-			<div id="completeSetUp">
-				<button class="page4Button" onclick="completeSetUp()">Complete set up</button>
-			</div>
-		</div>
-
-		<div id="page5">  
-			<div id="teamLists">
-				<div id="team1">
-
-				</div>
-				<div id="team2">
-
-				</div>
-				<div id="playButton">
-					<button class="page5Button" onclick="play()">Play</button>
-				</div>
-			</div>
-		</div>
-
-		<div id="page6">
-			<div id="page6header">
-				score
-			</div>
-			<div id="page6mapContainer">
-				<div id="page6map" style="width:600px;height:400px"></div>
-			</div>
-			<div id="page6footer">
-				<div id="page6grabButton">
-					<button class="page6grabButton" onclick="grab()">Grab</button>
-				</div>
-				<div id="page6releaseButton">
-					<button class="page6releaseButton" onclick="release()">Release</button>
-				</div>
-				<div id="page6timer">
-					timer
-				</div>
-			</div>
-		</div>
-
-		<div id="page7">
-			your team LOST
-		</div> -->
-
-		<!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyC-S5yQtBTll1cZSlbA7vv1lqygKKOXHTw&callback=initialize"></script> -->
 	</body>
 	<script type='text/javascript' src="ui.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyAxv6rhst3Ha6gvsAwY_pKYEg4XbrkTehU&callback=initMap"></script>
 </html>
 

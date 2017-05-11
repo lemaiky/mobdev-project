@@ -1,43 +1,26 @@
 html, body{
 
-
+height:100%;
+width:100%;
 }
 
-#page1{
-	display: block;
+#map{
+	height:100%;
+	position:relative;
+/*	z-index:-1;*/
 }
 
-#page1Textfields{
-	display: block;
 
+a[href^="http://maps.google.com/maps"],
+a[href^="https://maps.google.com/maps"],
+a[href^="https://www.google.com/maps"] {
+    display: none !important;
 }
-
-#page1Button{
-	display: block;
+.gmnoprint:not(.gm-bundled-control) {
+    display: none;
 }
-
-#page2{
-	display: none;
-}
-
-#page3{
-	display: none;
-}
-
-#page4{
-	display: none;
-}
-
-#page5{
-	display: none;
-}
-
-#page6{
-	display: none;
-}
-
-#page7{
-	display: none;
+.gm-bundled-control .gmnoprint {
+    display: block;
 }
 
 
@@ -80,8 +63,11 @@ html, body{
 #gamestart {
 	width: 400px;
 	margin: 50px auto;
+	top:20%;
+	left:30%;
 	text-align: center;
-	position: relative;
+	position: absolute;
+	z-index:99999999;
 }
 #gamestart fieldset {
 	background: white;
