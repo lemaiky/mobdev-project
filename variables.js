@@ -3,7 +3,7 @@ var State = {NORMAL:0, FLAG:1, CAUGHT:2, RELEASED:3, RELEASING:4};
 var allGames = [];
 
 var Game = {
-	gameId:0,
+	gameName:"",
 	teams: {}, // array of 2 teams
 	admin:""
 }
@@ -25,7 +25,7 @@ var Team = {
 
 var Player = {
 	nickname:"",
-	playerId:0,
+	playerId:"",
 	teamId:0,
 	position: {},
 	caughtPosition: {},
@@ -79,7 +79,7 @@ var Base = {
 var playerJoinedMsg = {
 	msgType: 0,
 	nickname:"",
-	playerId:0
+	playerId:""
 }
 
 var mapPositionMsg = {
@@ -90,7 +90,7 @@ var mapPositionMsg = {
 var playerJoinedTeam ={
 	msgType: 2,
 	nickname:"", 
-	playerId:0,
+	playerId:"",
 	teamId:0
 }
 
