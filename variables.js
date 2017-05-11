@@ -30,8 +30,8 @@ var Player = {
 	position: {},
 	caughtPosition: {},
 	state:State.NORMAL,
-	insideMap: true
-	//carryingFlag: false
+	insideMap: true,
+	carryingFlag: false
 	// nickname
 	// player id
 	// team id
@@ -48,7 +48,7 @@ var Flag = {
 	teamId:0,
 	originalPos: {},
 	caught: false,
-	holdingPlayerId:0
+	holdingPlayerId:""
 	// flag id
 	// position: {lat, long}
 	// team id
@@ -95,7 +95,9 @@ var playerJoinedTeam ={
 }
 
 var flagPlacementsMsg = {
-	msgType: 3
+	msgType: 3,
+	flagId: null,
+	originalPos: {}
 }
 
 var updateMsg = {
@@ -105,6 +107,11 @@ var updateMsg = {
 	caughtPosition: {},
 	state: State.NORMAL,
 	carryingFlag:false
+}
+
+var baseMsg = {
+	msgType: 5,
+	position: {}
 }
 
 /*

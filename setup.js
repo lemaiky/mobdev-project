@@ -1,21 +1,14 @@
 /*
 TODO LIST:
 	get info about who is admin
-
-
-
-
-
-
 */
-
-
-
 var playerName;
 var playerId;  //Unqiue user id from username
 var pubnub_channel; //Publish channel
+var playerTeamId; // THIS Client team id
 var playersConnected = new Array(); //List of players connected
-
+var friendlyFlagList = new Array(); //List of flag objects 
+var enemyFlagList = new Array(); //List of flag objects 
 
 
 var pubnub = new PubNub({ //Keys
@@ -52,14 +45,6 @@ function init(gamename, username){
 	pubnub.subscribe({
     	channels: [pubnub_channel]
 	});
-   
-	
-	
-	//Tell all other that a new player is connected
-
-
-	//sendInfo(username); // Tell everyone that a new player is joined and the info of the player
-
 }
 
 function onConnectMessage(){
@@ -118,11 +103,24 @@ pubnub.addListener({
 
         }else if(msgObj.msgType == 2){	//player joined team
         	console.log("recieved team info");
+        	updatePlayerInfo(msg.playerId, msg.teamId, null, null, null, null);
 
         }else if(msgObj.msgType == 3){	//flag placements
         	console.log("recieved flag placements");
+        	if()
+        	addFlags(msgObj);
 
-        }else{ 
+        }else if(msgObj.msgType == 4){
+        	 console.log("default update msg");
+        	 if(caughtPosition != null){
+        	 	updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
+        	 }else{
+        	 	updatePlayerInfo(msgObj.playerId, null, msgObj.position, null, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
+        	 }
+        	 
+        }else if(msgObj.msgType == 5){
+        	console.log("recieved map info");
+        	// Add map info somehow
         }
     }
 })
@@ -130,7 +128,7 @@ pubnub.addListener({
 	Input: playerID must be passed to id the player
 	Optional: teamId, position, caughtPosition, state, insideMap
 */
-function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, insideMap){
+function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, insideMap, carryingFlag){
 	if(!playerId){
 		console.log("Player id must be passed to id the player");
 		break;
@@ -153,6 +151,9 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 			if(insideMap){
 				playersConnected[i].insideMap = insideMap;
 			}
+			if(carryingFlag){
+				playersConnected[i].carryingFlag = carryingFlag;
+			}
 			break;	
 		}
 	}
@@ -173,4 +174,64 @@ function addToPlayerList(playerName, playerId){
 
 	console.log(playersConnected);
 }
+/*
+	Adds flags to list of flags :)
+*/
+function addFlags(){
+	var cFlag = Object.create(Flag);
+	cFlag.flagId = flagId;
+	cFlag.teamId = teamId;
+	cFlag.originalPos = {'lat': originalPos.lat, 'lng': originalPos.lng}
+	if(teamId)
+	friendlyFlagList.push(cFlag);
+
+	enemyFlagList.push(cFlag);
+}
+
+
+/*
+
+	Methods to call for sending messages
+
+var updateMsg = {
+	msgType: 4,
+	playerId:0,
+	position: {},
+	caughtPosition: {},
+	state: State.NORMAL,
+	carryingFlag:false
+}
+
+
+
+*/
+
+function pubRegularUpdate(playerId, position, caughtPosition, state, carryingFlag, flagId){
+	//fix
+
+}
+
+
+function pubBasePosition(coordinates){
+	baseMsg.position = coordinates;
+	publish(baseMsg);
+}
+
+
+function pubTeamChoice(teamId){
+	playerJoinedTeam.playerId = playerId;
+	playerJoinedTeam.nickname = nickname;
+	playerJoinedTeam.teamId = teamId;
+	publish(playerJoinedTeam);
+}
+
+function pubMapPosition(coordinates){
+	/// Dunno how these coordinates look
+}
+function pubFlagPosition(coordinates, teamId){
+	Flag.teamId = teamId;
+	Flag.originalPos = coordinates
+	publish(Flag);
+}
+
 
