@@ -2,7 +2,7 @@
 TODO LIST:
 	get info about who is admin
 */
-var playerName;
+var player;
 var playerId;  //Unqiue user id from username
 var pubnub_channel; //Publish channel
 var playerTeamId; // THIS Client team id
@@ -37,7 +37,6 @@ function joinGame(gamename, username){
 function init(gamename, username){
 
 	Game.gameName = gamename;
-	playerName = username;
 	
 	pubnub_channel = "MobileCatchTheFlag";
 
@@ -52,6 +51,14 @@ function init(gamename, username){
 	  	localStorage.setItem("playerId", playerId);
 	  	console.log(localStorage.getItem("playerId"));
 	}
+
+    player.nickname = username;
+    player.playerId = playerId;
+    player.teamId = 0;
+    player.position = {};
+    player.caughtPosition = {};
+    player.state = State.NORMAL;
+    player.insideMap = false;
 
 	pubnub.setUUID(playerId);
 
@@ -186,15 +193,15 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 	Creates player object and adds to list of connected players
 */
 function addToPlayerList(playerName, playerId){
-	var player = Object.create(Player);
-	player.nickname = playerName;
-	player.playerId = playerId;
-	player.teamId = 0;
-	player.position = {};
-	player.caughtPosition = {};
-	player.state= State.NORMAL;
-	player.insideMap = false;
-	playersConnected.push(player);
+	var newplayer = Object.create(Player);
+	newplayer.nickname = playerName;
+	newplayer.playerId = playerId;
+	newplayer.teamId = 0;
+	newplayer.position = {};
+	newplayer.caughtPosition = {};
+	newplayer.state= State.NORMAL;
+	newplayer.insideMap = false;
+	playersConnected.push(newplayer);
 
 	console.log(playersConnected);
 }
