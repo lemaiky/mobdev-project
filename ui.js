@@ -526,12 +526,12 @@ $(".previous").click(function(){
 
 // $('#post4').after('<div id="post5">new post content</div>');
 
-function addPlayertoPlayerList(player){
+function addPlayertoFreePlayersListUI(playername, playerID){
 	var newplayer = document.createElement('li');
 	newplayer.setAttribute('data-draggable', 'item');
 	newplayer.setAttribute('draggable', true);
-	newplayer.innerText = player.name;
-	newplayer.id = player.id;
+	newplayer.innerText = playername;
+	newplayer.id = playerID;
 	$('#freeplayers').append(newplayer);
 }
 

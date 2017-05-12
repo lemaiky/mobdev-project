@@ -2,7 +2,7 @@
 TODO LIST:
 	get info about who is admin
 */
-var player;
+var player = Object.create(Player);
 var playerId;  //Unqiue user id from username
 var pubnub_channel; //Publish channel
 var playerTeamId; // THIS Client team id
@@ -202,6 +202,7 @@ function addToPlayerList(playerName, playerId){
 	newplayer.state= State.NORMAL;
 	newplayer.insideMap = false;
 	playersConnected.push(newplayer);
+	addPlayertoFreePlayersListUI(newplayer.nickname, newplayer.playerId);
 
 	console.log(playersConnected);
 }
