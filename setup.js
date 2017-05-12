@@ -138,7 +138,7 @@ pubnub.addListener({
 
         }else if(msgObj.msgType == 3){	//flag placements
         	console.log("recieved flag placements");
-        	addFlags(JSON.parse(msgObj.flagList);
+        	addFlags(JSON.parse(msgObj.flagList));
 
         }else if(msgObj.msgType == 4){
         	 console.log("default update msg");
@@ -320,8 +320,4 @@ function isAdmin(){
 function updateMapInfo(coordinates){
 	updateMapInfoUI(coordinates);
 }
-
-
-
-
 
