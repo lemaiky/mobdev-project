@@ -78,6 +78,17 @@ function onConnectMessage(){
 	playerJoinedMsg.nickname = player.nickname;
 
 	publish(playerJoinedMsg);
+
+	//Get connected players
+	pubnub.hereNow(
+		{
+			channels: [pubnub_channel]
+		},
+		function(status, response){
+			console.log("here now is done");
+			console.log(response);
+		}
+	);
 }
 
 function publish(msg){
