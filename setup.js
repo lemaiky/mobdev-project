@@ -291,7 +291,7 @@ function pubReleaseFriend(playerId, state) {
 function pubPlayerList(){
 	var msg = {
 		msgType: 8,
-		playerList: playersConnected
+		playerList: JSON.stringify(playersConnected)
 	}
 	publish(msg);
 }
