@@ -137,6 +137,14 @@ pubnub.addListener({
         }else if(msgObj.msgType == 5){
         	console.log("recieved map info");
         	// Add map info somehow
+        } else if(msgObj.msgType == 6){
+            //freeze someone
+            //playerId = enemy
+            updatePlayerInfo(msgObj.playerId, null, null, msgObj.caughtPosition, msgObj.state, null, null);
+        } else if(msgObj.msgType == 7){
+            //release someone
+            // playerId = friend
+            updatePlayerInfo(msgObj.playerId, null, null, null, msgObj.state, null, null);
         }
     }
 })
@@ -242,4 +250,21 @@ function pubFlagPosition(coordinates, teamId){
 	publish(Flag);
 }
 
+function pubFreezeEnemy(playerId, caughtPosition, state) {
+    var msg = {
+        msgType: 6,
+        playerId: playerId,
+        caughtPosition: caughtPosition,
+        state: state
+    };
+    publish(msg);
+}
 
+function pubReleaseFriend(playerId, state) {
+    var msg = {
+        msgType: 7,
+        playerId: playerId,
+        state: state
+    };
+    publish(msg);
+}

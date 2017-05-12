@@ -1,14 +1,26 @@
+/*
+	var playerName;
+	var playerId;  //Unqiue user id from username
+	var playerTeamId; // THIS Client team id
+	var playersConnected = new Array(); //List of players connected
+	var friendlyFlagList = new Array(); //List of flag objects 
+	var enemyFlagList = new Array(); //List of flag objects 
+*/
+
 function grab() {
 	if(state === State.CAUGHT) {
 		return;
 	}
 
 	// check all flags
-	var flag;
-	if(flag.teamId != teamId && inradius(flag)) {
-		flag.caught = true;
-		flag.holdingPlayerId = playerId;
-		state = State.FLAG;
+	for(var i = 0; i < enemyFlagList.length; ++i) {
+		var flag = enemyFlagList[i];
+		if(inradius(flag)) {
+			flag.caught = true;
+			flag.holdingPlayerId = playerId;
+			state = State.FLAG;
+			break;
+		}
 	}
 }
 
@@ -19,20 +31,33 @@ function release() {
 
 	var friend;
 	// check all friends
-	if(friend.state === State.CAUGHT && inradius(friend)) {
-		// send message to go back to base
-		// friend.beingReleased();
+	for(var i = 0; i < playersConnected.length; ++i) {
+		if(playersConnected[i].teamId != playerTeamId)
+			continue;
+
+		friend = playersConnected[i];
+		if(friend.state === State.CAUGHT && inradius(friend)) {
+			// send message to release friend
+			break;
+		}
 	}
 }
 
 function freezeEnemy() {
 	var enemy;
-	if (enemy.state != State.RELEASED && inradius(enemy)) {
-		if(enemy.state === State.FLAG) {
-			resetFlag(enemy);
+	// check all enemies
+	for(var i = 0; i < playersConnected.length; ++i) {
+		if(playersConnected[i].teamId === playerTeamId)
+			continue;
+
+		enemy = playersConnected[i];
+		if (enemy.state != State.RELEASED && inradius(enemy)) {
+			if(enemy.state === State.FLAG) {
+				resetFlag(enemy);
+			}
+			// send a message to freeze the player
+			break;
 		}
-		// send a message to catch the player
-		// enemy.frozen();
 	}
 	wait(5000);
 }
@@ -69,8 +94,8 @@ function inradius(obj) {
 	var lng = Player.position.lng;
 
 	// to replace with obj.position
-	var objLat = lat + 0.000001;
-	var objLng = lng + 0.000001;
+	var objLat = obj.position['lat'];
+	var objLng = obbj.position['lng'];
 
 	var R = 6371e3; // metres
 	var latDiff = lat - objLat;
@@ -85,24 +110,6 @@ function inradius(obj) {
 	if(d <= 10) {
 		console.log("inside radius " + d)
 		return true;
-		/*
-		if (Player.teamId != teamId && Player.state != State.RELEASED) {
-			if(Player.state === FLAG) {
-				resetFlag(Player);
-			}
-			Player.state = State.CAUGHT;		// send a message to catch the player
-		}
-		else if (Player.teamId === teamId && Player.teamId.state === State.CAUGHT)
-			Player.state = State.RELEASED;
-		else if (Flag.teamId != teamId)
-			caught = true;
-		else if (Base.teamId === teamId && state === State.FLAG) {
-			winningFlag();
-		} else if (Base.teamId === teamId && state === State.RELEASED) {
-			unlockPosition();
-		}
-		*/
-
 	} else {
 		console.log("outside radius " + d);
 		return false;
@@ -118,11 +125,12 @@ function isWinning(teamId) {
 }
 
 function resetFlag(enemy) {
-	for(var i = 0; Game.teams[teamId].flags.length; ++i) {
-		var flag = Game.teams[teamId].flags[i];
+	for(var i = 0; friendlyFlagList.length; ++i) {
+		var flag = friendlyFlagList[i];
 		if(flag.caught && flag.holdingPlayerId === enemy.playerId) {
 			flag.position = flag.originalPos;
 			flag.caught = false;
+			flag.holdingPlayerId = 0;
 			break;
 		}
 	}
@@ -130,13 +138,13 @@ function resetFlag(enemy) {
 
 function winningFlag() {
 	var enemyTeamId;
-	for(var i = 0; Game.teams[enemyTeamId].flags.length; ++i) {
-		var flag = Game.teams[enemyTeamId].flags[i];
+	for(var i = 0; enemyFlagList.length; ++i) {
+		var flag = enemyFlagList[i];
 		if(flag.caught && flag.holdingPlayerId === playerId) {
 			// flag disappears from the other team's side
-			Game.teams[teamId].points += 1;
+			//teams[teamId].points += 1;
 			state = State.NORMAL;
-			isWinning(teamId);
+			isWinning(playerTeamId);
 			break;
 		}
 	}
@@ -151,6 +159,7 @@ function unlockPosition() {
 function beingReleased() {
 	if(position === caughtPosition) {
 		state = State.RELEASED;
+		alert('go back to your base');
 	} else {
 		alert("you need to be at your caught position");
 	}
