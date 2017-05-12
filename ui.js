@@ -585,6 +585,13 @@ function addPlayertoFreePlayersListUI(playername, playerID){
 	$('#freeplayers').append(newplayer);
 }
 
+function updateMapInfoUI(coordinates){
+	playingArea = new google.maps.Polygon({
+		paths:coordinates
+	})
+	playingArea.setMap(map);
+}
+
 
 
 
