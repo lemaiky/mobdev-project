@@ -3,6 +3,21 @@ var playingArea;
 var drawingManager;
 var homeBaseListener;
 
+
+/// INITIALIZATION
+
+// $('#newgame')[0].onClick = createGame($('#gameName')[0].value, $('#nickname')[0].value);
+// $('#joingame').onClick = joinGame($('#gameName')[0].value, $('#nickname')[0].value);
+$('#newgame').click(function(){
+	createGame($('#gameName')[0].value, $('#nickname')[0].value);
+});
+
+$('#joingame').click(function(){
+	joinGame($('#gameName')[0].value, $('#nickname')[0].value);
+});
+
+
+
 // Callback function for current location search
 function centerOnPos(position) {	// NOT BEING USED
 	map.setCenter({lat:position.coords.latitude , lng:position.coords.longitude });
