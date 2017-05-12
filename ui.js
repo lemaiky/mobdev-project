@@ -404,7 +404,7 @@ $("#toHomeBasePlacement").click(function(){
 		console.log(coordinates);
 
 		// send these home base coordinates to ziad
-		pubFlagPosition(coordinates); // He wants team id also. How do we get that? 
+		pubBasePosition(coordinates); // He wants team id also. How do we get that? 
 	});
 });
 
