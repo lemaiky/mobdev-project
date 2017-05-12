@@ -130,6 +130,7 @@ pubnub.addListener({
 
         }else if(msgObj.msgType == 1){	//map posiiton
         	console.log("recieved map position");
+        
 
         }else if(msgObj.msgType == 2){	//player joined team
         	console.log("recieved team info");
@@ -137,7 +138,7 @@ pubnub.addListener({
 
         }else if(msgObj.msgType == 3){	//flag placements
         	console.log("recieved flag placements");
-        	//addFlags(msgObj);
+        	addFlags(JSON.parse(msgObj.flagList));
 
         }else if(msgObj.msgType == 4){
         	 console.log("default update msg");
@@ -228,15 +229,20 @@ function addToPlayerList(playerName, playerId){
 /*
 	Adds flags to list of flags :)
 */
-function addFlags(){
-	var cFlag = Object.create(Flag);
-	cFlag.flagId = flagId;
-	cFlag.teamId = teamId;
-	cFlag.originalPos = {'lat': originalPos.lat, 'lng': originalPos.lng}
-	if(teamId)
-	friendlyFlagList.push(cFlag);
 
-	enemyFlagList.push(cFlag);
+function addFlags(flagList){
+	for(var i = 0; flagList.length; i++){
+		var newFlag = Object.create(Flag);
+		cFlag.flagId = flagList[i].flagId;
+		cFlag.teamId = flagList[i].teamId;
+		cFlag.originalPos = flagList[i].originalPos;
+		if(teamId){
+			friendlyFlagList.push(cFlag);
+		}else{
+			enemyFlagList.push(cFlag);
+		}
+	}
+	
 }
 
 
@@ -254,16 +260,13 @@ function pubRegularUpdate(playerId, position, caughtPosition, state, carryingFla
 
 }
 
-
 function pubBasePosition(coordinates){
 	baseMsg.position = coordinates;
 	publish(baseMsg);
 }
 
-
-function pubTeamChoice(teamId){
-	playerJoinedTeam.playerId = playerId;
-	playerJoinedTeam.nickname = nickname;
+function pubTeamChoice(movedPlayerId,teamId){
+	playerJoinedTeam.playerId = movedPlayerId;
 	playerJoinedTeam.teamId = teamId;
 	publish(playerJoinedTeam);
 }
@@ -273,11 +276,15 @@ function pubMapPosition(coordinates){
 	publish(baseMsg);
 }
 
-function pubFlagPosition(coordinates, teamId){
-	Flag.teamId = teamId;
-	Flag.originalPos = coordinates
-	publish(Flag);
+function pubFlagPosition(coordinates, teamId, flagId){
+	var msg = {
+		msgType: 3,
+		flagList: JSON.stringify(flagList)
+	}
+	publish(msg);
 }
+
+
 
 function pubFreezeEnemy(playerId, caughtPosition, state) {
     var msg = {
@@ -313,8 +320,4 @@ function isAdmin(){
 function updateMapInfo(coordinates){
 	updateMapInfoUI(coordinates);
 }
-
-
-
-
 
