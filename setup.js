@@ -21,12 +21,26 @@ var pubnub = new PubNub({ //Keys
 //Combine these 2 same thing...
 function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN 
 	// Create a unique username from input
-
+	/*
+	if(localStorage.getItem("playerId")){
+		console.log("Exists cookie");
+		//get playerId value from cookie
+		//playerId = getFromcookie
+	}else{
+		//Create cookie with playerId
+		console.log("Exists no cookie");
+		playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	  	localStorage.setItem("playerId", playerId);
+	  	console.log(localStorage.getItem("playerId"));
+	}
+	*/
+	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	Game.admin = playerId;
 	init(gamename, username);
 
 }
 function joinGame(gamename, username){
-	
+	playerId = username + "-" + Math.random().toString(36).slice(2); 
 	init(username, gamename);
 }
 /*
@@ -40,17 +54,7 @@ function init(gamename, username){
 	
 	pubnub_channel = "MobileCatchTheFlag";
 
-	if(localStorage.getItem("playerId")){
-		console.log("Exists cookie");
-		//get playerId value from cookie
-		//playerId = getFromcookie
-	}else{
-		//Create cookie with playerId
-		console.log("Exists no cookie");
-		playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
-	  	localStorage.setItem("playerId", playerId);
-	  	console.log(localStorage.getItem("playerId"));
-	}
+	
 
     player.nickname = username;
     player.playerId = playerId;
@@ -80,15 +84,6 @@ function onConnectMessage(){
 	publish(playerJoinedMsg);
 
 	//Get connected players
-	pubnub.hereNow(
-		{
-			channels: [pubnub_channel]
-		},
-		function(status, response){
-			console.log("here now is done");
-			console.log(response);
-		}
-	);
 }
 
 function publish(msg){
@@ -163,6 +158,9 @@ pubnub.addListener({
             //release someone
             // playerId = friend
             updatePlayerInfo(msgObj.playerId, null, null, null, msgObj.state, null, null);
+        } else if(msgObj.msgObj == 8){
+        	console.log("recieved list of players " + msgObj);
+        	playersConnected = msgObj.playerList;
         }
     }
 })
@@ -204,18 +202,20 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 	Creates player object and adds to list of connected players
 */
 function addToPlayerList(playerName, playerId){
-	var newplayer = Object.create(Player);
-	newplayer.nickname = playerName;
-	newplayer.playerId = playerId;
-	newplayer.teamId = 0;
-	newplayer.position = {};
-	newplayer.caughtPosition = {};
-	newplayer.state= State.NORMAL;
-	newplayer.insideMap = false;
-	playersConnected.push(newplayer);
-	addPlayertoFreePlayersListUI(newplayer.nickname, newplayer.playerId);
+	if(player.playerID == Game.admin){
+		var newplayer = Object.create(Player);
+		newplayer.nickname = playerName;
+		newplayer.playerId = playerId;
+		newplayer.teamId = 0;
+		newplayer.position = {};
+		newplayer.caughtPosition = {};
+		newplayer.state= State.NORMAL;
+		newplayer.insideMap = false;
+		playersConnected.push(newplayer);
+		addPlayertoFreePlayersListUI(newplayer.nickname, newplayer.playerId);
 
-	console.log(playersConnected);
+		console.log(playersConnected);
+	}
 }
 /*
 	Adds flags to list of flags :)
@@ -287,3 +287,16 @@ function pubReleaseFriend(playerId, state) {
     };
     publish(msg);
 }
+
+function pubPlayerList(){
+	var msg = {
+		msgType: 8,
+		playerList: playersConnected
+	}
+	publish(msg);
+}
+
+
+
+
+
