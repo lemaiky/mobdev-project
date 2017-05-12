@@ -162,7 +162,12 @@ pubnub.addListener({
         } else if(msgObj.msgType == 8){
         	console.log("recieved list of players");
         	console.log(msgObj);
-        	playersConnected = msgObj.playerList;
+        	playersConnected = JSON.parse(msgObj.playerList);
+        	if (!isAdmin){
+        		for (var i = 0; i < playersConnected.length; i++){
+        			addPlayertoFreePlayersListUI(playersConnected[i].nickname, playersConnected[i].playerId);
+        		}
+        	}
         }
     }
 })
@@ -300,6 +305,10 @@ function pubPlayerList(){
 	publish(msg);
 }
 
+
+function isAdmin(){
+	return (player.playerId === Game.admin);
+}
 function updateMapInfo(coordinates){
 	updateMapInfoUI(coordinates);
 }
