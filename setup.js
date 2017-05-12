@@ -75,7 +75,7 @@ function init(gamename, username){
 function onConnectMessage(){
 	//var playerInfo = Object.create(playerJoinedMsg);
 	playerJoinedMsg.playerId = playerId;
-	playerJoinedMsg.nickname = playerName;
+	playerJoinedMsg.nickname = player.nickname;
 
 	publish(playerJoinedMsg);
 }
