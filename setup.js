@@ -41,7 +41,7 @@ function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN
 }
 function joinGame(gamename, username){
 	playerId = username + "-" + Math.random().toString(36).slice(2); 
-	init(username, gamename);
+	init(gamename, username);
 }
 /*
 	Creates a unique user id
@@ -163,7 +163,8 @@ pubnub.addListener({
         	console.log("recieved list of players");
         	console.log(msgObj);
         	playersConnected = JSON.parse(msgObj.playerList);
-        	if (!isAdmin){
+        	if (!isAdmin()){
+        		console.log("pls add");
         		for (var i = 0; i < playersConnected.length; i++){
         			addPlayertoFreePlayersListUI(playersConnected[i].nickname, playersConnected[i].playerId);
         		}
