@@ -379,6 +379,11 @@ $("#resetPlayingArea").click(function(){
 	})
 });
 
+
+$('#broadcastPlayers').click(function(){
+	pubPlayerList();
+})
+
 $("#toHomeBasePlacement").click(function(){
 
 	drawingManager.setOptions({
