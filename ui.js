@@ -383,6 +383,11 @@ $("#resetPlayingArea").click(function(){
 	})
 });
 
+
+$('#broadcastPlayers').click(function(){
+	pubPlayerList();
+})
+
 $("#toHomeBasePlacement").click(function(){
 
 	drawingManager.setOptions({
@@ -579,6 +584,7 @@ function addPlayertoFreePlayersListUI(playername, playerID){
 	newplayer.id = playerID;
 	$('#freeplayers').append(newplayer);
 }
+
 
 
 

@@ -149,6 +149,7 @@ pubnub.addListener({
         	 
         }else if(msgObj.msgType == 5){
         	console.log("recieved map info");
+        	updateMapInfo(msgObj.position);
         	// Add map info somehow
         } else if(msgObj.msgType == 6){
             //freeze someone
@@ -158,8 +159,9 @@ pubnub.addListener({
             //release someone
             // playerId = friend
             updatePlayerInfo(msgObj.playerId, null, null, null, msgObj.state, null, null);
-        } else if(msgObj.msgObj == 8){
-        	console.log("recieved list of players " + msgObj);
+        } else if(msgObj.msgType == 8){
+        	console.log("recieved list of players");
+        	console.log(msgObj);
         	playersConnected = msgObj.playerList;
         }
     }
@@ -261,8 +263,10 @@ function pubTeamChoice(teamId){
 }
 
 function pubMapPosition(coordinates){
-	/// Dunno how these coordinates look
+	baseMsg.position = coordinates;
+	publish(baseMsg);
 }
+
 function pubFlagPosition(coordinates, teamId){
 	Flag.teamId = teamId;
 	Flag.originalPos = coordinates
@@ -294,6 +298,10 @@ function pubPlayerList(){
 		playerList: JSON.stringify(playersConnected)
 	}
 	publish(msg);
+}
+
+function updateMapInfo(coordinates){
+	updateMapInfoUI(coordinates);
 }
 
 
