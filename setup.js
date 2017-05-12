@@ -20,11 +20,13 @@ var pubnub = new PubNub({ //Keys
 
 //Combine these 2 same thing...
 function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN 
-	// Create a unique username from inpu
+	// Create a unique username from input
+
 	init(gamename, username);
 
 }
 function joinGame(gamename, username){
+	
 	init(username, gamename);
 }
 /*
@@ -32,18 +34,34 @@ function joinGame(gamename, username){
 	subscribes to a channel
 	sends client information to all other clients
 */
-
 function init(gamename, username){
+
 	Game.gameName = gamename;
 	playerName = username;
-	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	
 	pubnub_channel = "MobileCatchTheFlag";
+
+	if(localStorage.getItem("playerId")){
+		console.log("Exists cookie");
+		//get playerId value from cookie
+		//playerId = getFromcookie
+	}else{
+		//Create cookie with playerId
+		console.log("Exists no cookie");
+		playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	  	localStorage.setItem("playerId", playerId);
+	  	console.log(localStorage.getItem("playerId"));
+	}
 
 	pubnub.setUUID(playerId);
 
 	console.log("is now trying to subscribe");
 	pubnub.subscribe({
-    	channels: [pubnub_channel]
+    	channels: [pubnub_channel],
+    	restore: true,
+    	disconnect :function(){
+    		console.log("disconnected")
+    	}
 	});
 }
 
@@ -66,7 +84,6 @@ function publish(msg){
 		console.log(status, response);
 	})
 }
-
 
 pubnub.addListener({
     status: function(statusEvent) {
@@ -107,8 +124,7 @@ pubnub.addListener({
 
         }else if(msgObj.msgType == 3){	//flag placements
         	console.log("recieved flag placements");
-        	if()
-        	addFlags(msgObj);
+        	//addFlags(msgObj);
 
         }else if(msgObj.msgType == 4){
         	 console.log("default update msg");
@@ -131,30 +147,30 @@ pubnub.addListener({
 function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, insideMap, carryingFlag){
 	if(!playerId){
 		console.log("Player id must be passed to id the player");
-		break;
-	}
-	for(i = 0; i < playersConnected.length;i++){
-		if(playersConnected[i].playerId == playerId){
-			if(teamId){
-				playersConnected[i].teamId = teamId;
-			}
-			if(position){
-				playersConnected[i].position = position;
+	}else{
+		for(i = 0; i < playersConnected.length;i++){
+			if(playersConnected[i].playerId == playerId){
+				if(teamId){
+					playersConnected[i].teamId = teamId;
+				}
+				if(position){
+					playersConnected[i].position = position;
 
+				}
+				if(caughtPosition){
+					playersConnected[i].caughtPosition = caughtPosition;
+				}
+				if(state){
+					playersConnected[i].state = state;
+				}
+				if(insideMap){
+					playersConnected[i].insideMap = insideMap;
+				}
+				if(carryingFlag){
+					playersConnected[i].carryingFlag = carryingFlag;
+				}
+				break;	
 			}
-			if(caughtPosition){
-				playersConnected[i].caughtPosition = caughtPosition;
-			}
-			if(state){
-				playersConnected[i].state = state;
-			}
-			if(insideMap){
-				playersConnected[i].insideMap = insideMap;
-			}
-			if(carryingFlag){
-				playersConnected[i].carryingFlag = carryingFlag;
-			}
-			break;	
 		}
 	}
 }
@@ -190,24 +206,16 @@ function addFlags(){
 
 
 /*
-
 	Methods to call for sending messages
-
-var updateMsg = {
-	msgType: 4,
-	playerId:0,
-	position: {},
-	caughtPosition: {},
-	state: State.NORMAL,
-	carryingFlag:false
-}
-
-
-
 */
-
 function pubRegularUpdate(playerId, position, caughtPosition, state, carryingFlag, flagId){
-	//fix
+	updateMsg.playerId = playerId;
+	updateMsg.position = position;
+	updateMsg.caughtPosition = caughtPosition;
+	updateMsg.state = state;
+	updateMsg.carryingFlag = carryingFlag;
+	updateMsg.flagId = flagId;
+	publish(updateMsg); 
 
 }
 

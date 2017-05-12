@@ -106,7 +106,8 @@ var updateMsg = {
 	position: {},
 	caughtPosition: {},
 	state: State.NORMAL,
-	carryingFlag:false
+	carryingFlag:false,
+	flagId:0
 }
 
 var baseMsg = {
