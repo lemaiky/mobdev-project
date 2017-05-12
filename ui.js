@@ -522,3 +522,18 @@ $(".previous").click(function(){
 	}, false);
 
 })();    
+
+// f
+
+// $('#post4').after('<div id="post5">new post content</div>');
+
+function addPlayertoPlayerList(player){
+	var newplayer = document.createElement('li');
+	newplayer.setAttribute('data-draggable', 'item');
+	newplayer.setAttribute('draggable', true);
+	newplayer.innerText = player.name;
+	newplayer.id = player.id;
+	$('#freeplayers').append(newplayer);
+}
+
+
