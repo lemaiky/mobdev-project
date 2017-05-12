@@ -409,27 +409,34 @@ $("#toHomeBasePlacement").click(function(){
 });
 
 $("#toFlagPlacement").click(function(){
-	flagList = []; // is this the right place to declare the markerList ? 
-	google.maps.event.removeListener(homeBaseListener);
+	flagList = [];
+	
 
-	drawingManager.setOptions({
-		drawingMode: google.maps.drawing.OverlayType.MARKER,
-		drawingControl: false,
-	});
+		google.maps.event.removeListener(homeBaseListener);
 
-	drawingManager.setMap(map);
-
-	flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
 		drawingManager.setOptions({
+			drawingMode: google.maps.drawing.OverlayType.MARKER,
 			drawingControl: false,
-		})
-		console.log("flag positioned ");
-		console.log(marker.getPosition());	
+		});
 
-		flagList.push(marker.getPosition());
-		console.log(flagList.length);
-		
-	});
+		drawingManager.setMap(map);
+
+		flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+			drawingManager.setOptions({
+				drawingControl: false,
+			});
+			console.log("flag positioned ");
+
+			flagList.push(marker.getPosition());
+			console.log(flagList.length); 
+
+			if (flagList.length == 5) {
+				drawingManager.setOptions({
+					drawingMode: null,
+				});
+			}
+		});
+
 });
 
 $("#toConfirm").click(function(){
