@@ -233,9 +233,9 @@ function addToPlayerList(playerName, playerId){
 function addFlags(flagList){
 	for(var i = 0; flagList.length; i++){
 		var newFlag = Object.create(Flag);
-		cFlag.flagId = flagId;
-		cFlag.teamId = teamId;
-		cFlag.originalPos = {'lat': originalPos.lat, 'lng': originalPos.lng}
+		cFlag.flagId = flagList[i].flagId;
+		cFlag.teamId = flagList[i].teamId;
+		cFlag.originalPos = flagList[i].originalPos;
 		if(teamId){
 			friendlyFlagList.push(cFlag);
 		}else{
@@ -260,12 +260,10 @@ function pubRegularUpdate(playerId, position, caughtPosition, state, carryingFla
 
 }
 
-
 function pubBasePosition(coordinates){
 	baseMsg.position = coordinates;
 	publish(baseMsg);
 }
-
 
 function pubTeamChoice(movedPlayerId,teamId){
 	playerJoinedTeam.playerId = movedPlayerId;
@@ -284,15 +282,6 @@ function pubFlagPosition(coordinates, teamId, flagId){
 		flagList: JSON.stringify(flagList)
 	}
 	publish(msg);
-	/*
-	var flagMsg = Object.create(Flag);
-	flagMsg.teamId = teamId;
-	flagMsg.originalPos = coordinates;
-	flagMsg.caught = false;
-	flagMsg.flagId = flagId;
-	flagMsg.holdingPlayerId = "";
-	publish(Flag);
-	*/
 }
 
 
