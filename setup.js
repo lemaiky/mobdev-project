@@ -149,6 +149,7 @@ pubnub.addListener({
         	 
         }else if(msgObj.msgType == 5){
         	console.log("recieved map info");
+        	updateMapInfo(coordinates);
         	// Add map info somehow
         } else if(msgObj.msgType == 6){
             //freeze someone
@@ -294,6 +295,10 @@ function pubPlayerList(){
 		playerList: playersConnected
 	}
 	publish(msg);
+}
+
+function updateMapInfo(coordinates){
+	updateMapInfoUI(coordinates);
 }
 
 
