@@ -366,7 +366,11 @@ $("#toAreaSelection").click(function(){
 		playingArea = polygon;
 		var coordinates  = (polygon.getPath().getArray()); // These should be the coords
 
+		console.log("polygon coordinates below ");
 		console.log(coordinates);
+
+		// send these polygon coordinates to ziad
+		pubMapPosition(coordinates);
 	});
 });
 
@@ -392,26 +396,45 @@ $("#toHomeBasePlacement").click(function(){
 			drawingMode: null
 		})
 		var coordinates  = marker.getPosition();
-
 		console.log(coordinates);
+
+		// send these home base coordinates to ziad
+		pubFlagPosition(coordinates); // He wants team id also. How do we get that? 
 	});
 });
 
 $("#toFlagPlacement").click(function(){
-
+	flagList = []; // is this the right place to declare the markerList ? 
 	google.maps.event.removeListener(homeBaseListener);
 
 	drawingManager.setOptions({
 		drawingMode: google.maps.drawing.OverlayType.MARKER,
 		drawingControl: false,
 	});
+
 	drawingManager.setMap(map);
+
+	flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+		drawingManager.setOptions({
+			drawingControl: false,
+		})
+		console.log("flag positioned ");
+		console.log(marker.getPosition());	
+
+		flagList.push(marker.getPosition());
+		console.log(flagList.length);
+		
+	});
 });
 
 $("#toConfirm").click(function(){
 	drawingManager.setOptions({
 		drawingMode: null
-	})
+	});
+
+	console.log(flagList.length);
+	// send these home base coordinates to ziad
+	pubFlagPosition(flagList); // He wants team id also. How do we get that? 
 });
 
 
