@@ -384,6 +384,7 @@ $("#resetPlayingArea").click(function(){
 });
 
 
+
 $('#broadcastPlayers').click(function(){
 	pubPlayerList();
 })
@@ -408,9 +409,15 @@ $("#toHomeBasePlacement").click(function(){
 	});
 });
 
+// $("#resetHomeBasePlacement").click(function(){
+// 	playingArea.setMap(null);
+// 	drawingManager.setOptions({
+// 		drawingMode:google.maps.drawing.OverlayType.POLYGON
+// 	})
+// });
+
 $("#toFlagPlacement").click(function(){
 	flagList = [];
-	
 
 		google.maps.event.removeListener(homeBaseListener);
 
@@ -418,15 +425,15 @@ $("#toFlagPlacement").click(function(){
 			drawingMode: google.maps.drawing.OverlayType.MARKER,
 			drawingControl: false,
 		});
-
+		
 		drawingManager.setMap(map);
-
+		
 		flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
 			drawingManager.setOptions({
 				drawingControl: false,
 			});
 			console.log("flag positioned ");
-
+			
 			flagList.push(marker.getPosition());
 			console.log(flagList.length); 
 
@@ -436,7 +443,6 @@ $("#toFlagPlacement").click(function(){
 				});
 			}
 		});
-
 });
 
 $("#toConfirm").click(function(){
