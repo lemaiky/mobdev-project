@@ -3,6 +3,7 @@ var playingArea;
 var drawingManager;
 var homeBaseListener;
 
+
 /// INITIALIZATION
 
 // $('#newgame')[0].onClick = createGame($('#gameName')[0].value, $('#nickname')[0].value);
@@ -18,14 +19,12 @@ $('#joingame').click(function(){
 
 
 // Callback function for current location search
-function centerOnPos(position) {
+function centerOnPos(position) {	// NOT BEING USED
 	map.setCenter({lat:position.coords.latitude , lng:position.coords.longitude });
 }
 
 
-
 function initMap() {    
-	
 	var styledMapType = new google.maps.StyledMapType(
 		[
 	{
@@ -537,3 +536,23 @@ $(".previous").click(function(){
 	}, false);
 
 })();    
+
+// f
+
+// $('#post4').after('<div id="post5">new post content</div>');
+
+function addPlayertoFreePlayersListUI(playername, playerID){
+	var newplayer = document.createElement('li');
+	newplayer.setAttribute('data-draggable', 'item');
+	newplayer.setAttribute('draggable', true);
+	newplayer.innerText = playername;
+	newplayer.id = playerID;
+	$('#freeplayers').append(newplayer);
+}
+
+
+
+
+
+
+
