@@ -158,8 +158,9 @@ pubnub.addListener({
             //release someone
             // playerId = friend
             updatePlayerInfo(msgObj.playerId, null, null, null, msgObj.state, null, null);
-        } else if(msgObj.msgObj == 8){
-        	console.log("recieved list of players " + msgObj);
+        } else if(msgObj.msgType == 8){
+        	console.log("recieved list of players");
+        	console.log(msgObj);
         	playersConnected = msgObj.playerList;
         }
     }
