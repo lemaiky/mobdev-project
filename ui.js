@@ -2,6 +2,7 @@ var map;
 var playingArea;
 var drawingManager;
 var homeBaseListener;
+var flagList;
 
 
 /// INITIALIZATION
@@ -15,6 +16,7 @@ $('#newgame').click(function(){
 $('#joingame').click(function(){
 	joinGame($('#gameName')[0].value, $('#nickname')[0].value);
 });
+
 
 
 
@@ -588,6 +590,15 @@ function addPlayertoFreePlayersListUI(playername, playerID){
 	newplayer.setAttribute('draggable', true);
 	newplayer.innerText = playername;
 	newplayer.id = playerID;
+	newplayer.on('touchend mouseup', function(e){
+		var parent = newplayer.parent();
+		if (parent.id === "team1"){
+			pubTeamChoice(newplayer.id, 0);
+		}
+		else if (parent.id === "team2"){
+			pubTeamChoice(newplayer.id, 1);
+		}
+	})
 	$('#freeplayers').append(newplayer);
 }
 
