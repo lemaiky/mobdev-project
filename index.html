@@ -46,8 +46,8 @@
 				<h2>Capture the flag!</h2>
 				<input type="text" id="gameName" value="" placeholder="Game name">
 				<input type="text" id="nickname" value="" placeholder="Nickname">
-				<input type="button" id="newgame" class="next action-button" value="New Game" />
-				<input type="button" id="joingame" class="next action-button" value="Join Game" />
+				<input type="button" id="newgame" class="next action-button" onClick="createGame(gameName.value, nickname.value)" value="New Game" />
+				<input type="button" id="joingame" class="next action-button" onClick="joinGame(gameName.value, nickname.value)" value="Join Game" />
 			</fieldset>
 			<fieldset>
 				<h2> Choose your teams</h2>
