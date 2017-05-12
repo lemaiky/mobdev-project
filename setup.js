@@ -149,7 +149,7 @@ pubnub.addListener({
         	 
         }else if(msgObj.msgType == 5){
         	console.log("recieved map info");
-        	updateMapInfo(coordinates);
+        	updateMapInfo(msgObj.position);
         	// Add map info somehow
         } else if(msgObj.msgType == 6){
             //freeze someone
@@ -262,8 +262,10 @@ function pubTeamChoice(teamId){
 }
 
 function pubMapPosition(coordinates){
-	/// Dunno how these coordinates look
+	baseMsg.position = coordinates;
+	publish(baseMsg);
 }
+
 function pubFlagPosition(coordinates, teamId){
 	Flag.teamId = teamId;
 	Flag.originalPos = coordinates
