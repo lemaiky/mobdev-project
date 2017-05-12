@@ -202,7 +202,7 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 	Creates player object and adds to list of connected players
 */
 function addToPlayerList(playerName, playerId){
-	if(player.playerID == Game.admin){
+	if(player.playerId == Game.admin){
 		var newplayer = Object.create(Player);
 		newplayer.nickname = playerName;
 		newplayer.playerId = playerId;
