@@ -2,15 +2,14 @@ var map;
 var playingArea;
 var drawingManager;
 var homeBaseListener;
+
 // Callback function for current location search
-function centerOnPos(position) {
+function centerOnPos(position) {	// NOT BEING USED
 	map.setCenter({lat:position.coords.latitude , lng:position.coords.longitude });
 }
 
 
-
 function initMap() {    
-	
 	var styledMapType = new google.maps.StyledMapType(
 		[
 	{
@@ -535,5 +534,10 @@ function addPlayertoPlayerList(player){
 	newplayer.id = player.id;
 	$('#freeplayers').append(newplayer);
 }
+
+
+
+
+
 
 
