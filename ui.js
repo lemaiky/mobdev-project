@@ -590,12 +590,16 @@ function addPlayertoFreePlayersListUI(playername, playerID){
 	newplayer.setAttribute('draggable', true);
 	newplayer.innerText = playername;
 	newplayer.id = playerID;
-	newplayer.on('touchend mouseup', function(e){
-		var parent = newplayer.parent();
+	newplayer.id
+	newplayer.addEventListener('dragend', function(e){
+		console.log("CALLING");
+		var parent = newplayer.parentElement;
 		if (parent.id === "team1"){
+			console.log("team1");
 			pubTeamChoice(newplayer.id, 0);
 		}
 		else if (parent.id === "team2"){
+			console.log("team2");
 			pubTeamChoice(newplayer.id, 1);
 		}
 	})
