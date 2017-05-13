@@ -87,12 +87,12 @@ function onConnectMessage(){
 }
 
 function publish(msg){
-	console.log("sending msg" + msg);
+	console.log("sending msg: ");
+	console.log(msg);
 	var pubConfig = {
 		channel: pubnub_channel,
 		message: msg
 	}
-	console.log(pubConfig);
 	pubnub.publish(pubConfig, function(status, response){
 		console.log(status, response);
 	})
@@ -129,19 +129,24 @@ pubnub.addListener({
         	addToPlayerList(msgObj.nickname, msgObj.playerId);
 
         }else if(msgObj.msgType == 1){	//map posiiton
+        	console.log(msgObj);
         	console.log("recieved map position");
         
 
         }else if(msgObj.msgType == 2){	//player joined team
         	console.log("recieved team info");
-        	updatePlayerInfo(msg.playerId, msg.teamId, null, null, null, null);
+        	console.log(msgObj);
+        	updatePlayerInfo(msgObj.playerId, msgObj.teamId);
+        	//Call function to show player in team
 
         }else if(msgObj.msgType == 3){	//flag placements
         	console.log("recieved flag placements");
+        	console.log(msgObj);
         	addFlags(JSON.parse(msgObj.flagList));
 
         }else if(msgObj.msgType == 4){
         	 console.log("default update msg");
+        	 console.log(msgObj);
         	 if(caughtPosition != null){
         	 	updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
         	 }else{
@@ -150,6 +155,7 @@ pubnub.addListener({
         	 
         }else if(msgObj.msgType == 5){
         	console.log("recieved map info");
+        	console.log(msgObj);
         	updateMapInfo(msgObj.position);
         	// Add map info somehow
         } else if(msgObj.msgType == 6){
@@ -183,7 +189,7 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 	}else{
 		for(i = 0; i < playersConnected.length;i++){
 			if(playersConnected[i].playerId == playerId){
-				if(teamId){
+				if(playersConnected[i].teamId != teamId){
 					playersConnected[i].teamId = teamId;
 				}
 				if(position){
