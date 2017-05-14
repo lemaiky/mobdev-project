@@ -459,9 +459,11 @@ $("#toConfirm").click(function(){
 
 
 $("#startgame").click(function(){
-	document.getElementById("gameplayCatch").style.display = "block"; 
-	document.getElementById("gameplayRelease").style.display = "block";
-	document.getElementById("gameplayHeader").style.display = "block";	
+	document.getElementById("gameplayCatchDiv").style.display = "block"; 
+	document.getElementById("gameplayReleaseDiv").style.display = "block";
+	document.getElementById("gameplayHeader").style.display = "block";
+	document.getElementById("scoreTeam1").innerText = 4;
+	document.getElementById("scoreTeam2").innerText = 2;
 });
 
 

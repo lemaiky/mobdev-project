@@ -6,7 +6,13 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Capture the flag</title>
+		<title>Capture the flag</title>	
+		<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  		<meta name='apple-mobile-web-app-capable' content='yes'>
+   		<meta name='mobile-web-app-capable' content='yes'>
+  		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
 		<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.8.0.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="http://thecodeplayer.com/uploads/js/jquery-1.9.1.min.js" type="text/javascript"></script>
@@ -42,19 +48,19 @@
 		<div id="gameplayHeader">
 			<table>
 			<tr>
-				<th> Team uno </th>	<th> Team due </th>
+				<th><h2>Team 1</h2></th>	<th><h2>Team 2</h2></th>
 			</tr>
 			<tr>
-				<th> 4 </th> <th> 1 </th>
+				<th><div id="scoreTeam1"></div></th> <th><div id="scoreTeam2"></div></th>
 			</tr>
 			</table>
 		</div>
 
-		<div id="gameplayCatch">
-			<input type="button" class="gameplayButton" id="catchButton" value="Catch!" />
+		<div id="gameplayCatchDiv" class="gameplayButtonDivs">
+			<input type="button" class="gameplayButtons action-button" id="catchButton" value="Catch!" />
 		</div>
-		<div id="gameplayRelease">
-			<input type="button" class="gameplayButton" id="releaseButton" value="Release!" />
+		<div id="gameplayReleaseDiv" class="gameplayButtonDivs">
+			<input type="button" class="gameplayButtons action-button" id="releaseButton" value="Release!" />
 		</div>
 
 			<!-- multistep form -->
