@@ -404,7 +404,7 @@ $("#toHomeBasePlacement").click(function(){
 			drawingMode: null
 		})
 		var coordinates  = marker.getPosition();
-		console.log(coordinates);
+		//console.log(coordinates);
 
 		// send these home base coordinates to ziad
 		pubBasePosition(coordinates); // He wants team id also. How do we get that? 
@@ -434,10 +434,10 @@ $("#toFlagPlacement").click(function(){
 			drawingManager.setOptions({
 				drawingControl: false,
 			});
-			console.log("flag positioned ");
+			//console.log("flag positioned ");
 			
 			flagList.push(marker.getPosition());
-			console.log(flagList.length); 
+			//console.log(flagList.length); 
 
 			if (flagList.length == 5) {
 				drawingManager.setOptions({
@@ -458,7 +458,11 @@ $("#toConfirm").click(function(){
 });
 
 
-
+$("#startgame").click(function(){
+	document.getElementById("gameplayCatch").style.display = "block"; 
+	document.getElementById("gameplayRelease").style.display = "block";
+	document.getElementById("gameplayHeader").style.display = "block";	
+});
 
 
 
@@ -580,9 +584,6 @@ $(".previous").click(function(){
 
 })();    
 
-// f
-
-// $('#post4').after('<div id="post5">new post content</div>');
 
 function addPlayertoFreePlayersListUI(playername, playerID){
 	var newplayer = document.createElement('li');
@@ -607,6 +608,10 @@ function addPlayertoFreePlayersListUI(playername, playerID){
 }
 
 function updateMapInfoUI(coordinates){
+	//console.log("object length");
+	//console.log(Object.keys(coordinates).length);
+	//objectLength = Object.keys(coordinates).length;
+	
 	playingArea = new google.maps.Polygon({
 		paths:coordinates
 	})
