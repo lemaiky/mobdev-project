@@ -137,6 +137,7 @@ pubnub.addListener({
         	console.log("recieved team info");
         	console.log(msgObj);
         	updatePlayerInfo(msgObj.playerId, msgObj.teamId);
+        	updateTeamUI(msgObj.playerId, msgObj.teamId);
         	//Call function to show player in team
 
         }else if(msgObj.msgType == 3){	//flag placements

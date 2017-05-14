@@ -590,16 +590,12 @@ function addPlayertoFreePlayersListUI(playername, playerID){
 	newplayer.setAttribute('draggable', true);
 	newplayer.innerText = playername;
 	newplayer.id = playerID;
-	newplayer.id
 	newplayer.addEventListener('dragend', function(e){
-		console.log("CALLING");
 		var parent = newplayer.parentElement;
 		if (parent.id === "team1"){
-			console.log("team1");
 			pubTeamChoice(newplayer.id, 0);
 		}
 		else if (parent.id === "team2"){
-			console.log("team2");
 			pubTeamChoice(newplayer.id, 1);
 		}
 	})
@@ -611,6 +607,41 @@ function updateMapInfoUI(coordinates){
 		paths:coordinates
 	})
 	playingArea.setMap(map);
+}
+
+
+function updateTeamUI(playerid, teamId){
+	var playerlisted = 	$('#'+playerid);
+	var currentTeamSelection = playerlisted.parent().attr('id');
+	if ((teamId =="0" && currentTeamSelection==="team1") ||
+		(teamId =="1" && currentTeamSelection==="team2")){
+		console.log("nothing changed");
+		console.log('team id is'+ teamId);
+		console.log('current team is '+ currentTeamSelection);
+		return;
+	}
+	else if (currentTeamSelection == "freeplayers"){
+		var destination = '';
+		if (teamId == "0"){
+			destination = '#team1';
+		}
+		else{
+			destination = '#team2';
+		}
+		playerlisted.remove().appendTo(destination)
+	}
+	else if (teamId == "0" && currentTeamSelection == 'team2'){
+		console.log('moving to two but current parent is ' + currentTeamSelection);
+		playerlisted.remove().appendTo('#team1');
+	} 
+	else if (teamId == "1" && currentTeamSelection == 'team1'){
+		console.log('moving to one but current parent is ' + currentTeamSelection);
+		playerlisted.remove().appendTo('#team2');
+	}
+	else{
+		console.log('something has gone horribly wrong');
+	}
+
 }
 
 
