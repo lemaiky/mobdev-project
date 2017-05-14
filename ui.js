@@ -459,12 +459,28 @@ $("#toConfirm").click(function(){
 
 
 $("#startgame").click(function(){
-	document.getElementById("gameplayCatchDiv").style.display = "block"; 
-	document.getElementById("gameplayReleaseDiv").style.display = "block";
-	document.getElementById("gameplayHeader").style.display = "block";
-	document.getElementById("scoreTeam1").innerText = 4;
+	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
+	document.getElementById("gameplayReleaseDiv").style.display = "inline-block";
+	document.getElementById("gameplayHeader").style.display = "inline-block";
+	document.getElementById("scoreTeam1").innerText = 5;
 	document.getElementById("scoreTeam2").innerText = 2;
+	document.getElementById("gameplayTimer").innerText = "2:59";
+	gameover();
 });
+
+function gameover(){
+	if (document.getElementById("scoreTeam1").innerText == 5 || document.getElementById("scoreTeam2").innerText == 5){
+	// hide gameplay components
+		document.getElementById("gameplayCatchDiv").style.display = "none"; 
+		document.getElementById("gameplayReleaseDiv").style.display = "none";
+		document.getElementById("gameplayHeader").style.display = "none";
+
+	// show game over components
+		document.getElementById("youWon").style.display = "inline-block";
+	//document.getElementById("youLost").style.display = "inline-block";
+
+	}
+}
 
 
 
