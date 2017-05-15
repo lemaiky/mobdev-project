@@ -3,6 +3,8 @@ var playingArea;
 var drawingManager;
 var homeBaseListener;
 var flagList;
+var homeBase; 
+var enemyBase;
 
 
 /// INITIALIZATION
@@ -403,6 +405,7 @@ $("#toHomeBasePlacement").click(function(){
 		drawingManager.setOptions({
 			drawingMode: null
 		})
+		homeBase = marker;
 		var coordinates  = marker.getPosition();
 		//console.log(coordinates);
 

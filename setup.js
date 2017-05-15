@@ -366,6 +366,7 @@ function pubRegularUpdate(playerId, position, caughtPosition, state, carryingFla
 
 function pubBasePosition(coordinates){
 	baseMsg.position = coordinates;
+	baseMsg.teamId = player.teamId;
 	publish(baseMsg);
 }
 
