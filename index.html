@@ -28,6 +28,8 @@
 		<script src="libs/mqttws31m.js" type="text/javascript"></script>
 		<script src="libs/mqttws/mqttws.js" type="text/javascript"></script>
 
+		<!-- Font -->
+		<link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/intuitive" type="text/css"/>
 
 
 		<!-- PubNub is used for its realtime data stream network. This is what allows us to broadcast. -->	
@@ -59,10 +61,10 @@
 		<div id="gameplayHeader">
 			<table>
 			<tr>
-				<th><h2>Team 1</h2></th> <th><h2>Team 2</h2></th> 
+				<th><h2 id="team1Header">Team 1</h2></th> <th><h2 id="team2Header">Team 2</h2></th> 
 			</tr>
 			<tr>
-				<th><div id="scoreTeam1"></div></th> <th><div id="scoreTeam2"></div></th> 
+				<th><div id="scoreTeam1" class="scoreContent"></div></th> <th><div id="scoreTeam2" class="scoreContent"></div></th> 
 			</tr>
 			</table>
 		</div>
@@ -80,10 +82,10 @@
 		</div>
 
 		<div id="gameplayCatchDiv" class="gameplayButtonDivs">
-			<input type="button" class="gameplayButtons action-button" id="catchButton" value="Catch!" />
+			<input type="button" class="gameplayButtons action-button" id="catchButton" value="CATCH!" />
 		</div>
 		<div id="gameplayReleaseDiv" class="gameplayButtonDivs">
-			<input type="button" class="gameplayButtons action-button" id="releaseButton" value="Release!" />
+			<input type="button" class="gameplayButtons action-button" id="releaseButton" value="RELEASE!" />
 		</div>
 
 		<div id="youWon">

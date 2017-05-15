@@ -469,15 +469,15 @@ $("#startgame").click(function(){
 
 	// header
 	document.getElementById("gameplayHeader").style.display = "inline-block";
-	document.getElementById("scoreTeam1").innerText = 3;
-	document.getElementById("scoreTeam2").innerText = 4;
+	document.getElementById("scoreTeam1").innerText = 2;
+	document.getElementById("scoreTeam2").innerText = 0;
 
 	// footer
 	document.getElementById("gameplayFooter").style.display = "inline-block";
-	// document.getElementById("gameplayTimer").innerText = "2:59";
 
-	document.getElementById("youHaveTheFlag").style.display = "inline-block";
+	document.getElementById("youAreFrozen").style.display = "inline-block";
 							// youAreFrozen
+							// youHaveTheFlag
 
 	gameover();
 });
@@ -488,6 +488,8 @@ function gameover(){
 		document.getElementById("gameplayCatchDiv").style.display = "none"; 
 		document.getElementById("gameplayReleaseDiv").style.display = "none";
 		document.getElementById("gameplayHeader").style.display = "none";
+		document.getElementById("gameplayFooter").style.display = "none";
+
 
 	// show game over components
 		document.getElementById("youWon").style.display = "inline-block";
