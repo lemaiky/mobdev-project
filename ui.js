@@ -860,6 +860,7 @@ function addFlagUI(teamId, flaglist){
 }
 
 function updatePlayerPosition(playerId, position){
+	console.log('looking for player with id'+ playerId);
 	players[playerId].setPosition(position);	
 }
 

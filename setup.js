@@ -167,11 +167,9 @@ function onMessageArrived(message) {
 			addFlags(msgObj.teamId, JSON.parse(msgObj.flagList));
 			break;
 		case 4: // Default update msg
-			 if(msgObj.caughtPosition != null){
+				console.log("recvieved info");
+				console.log(msgObj);
 				updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
-			 }else{
-				updatePlayerInfo(msgObj.playerId, null, msgObj.position, null, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
-			 }
 			 break;
 		case 5: // Map info
 			updateMapInfo(msgObj.position);
@@ -198,7 +196,7 @@ function onMessageArrived(message) {
 			}
 			break;
 		case 9: // A player has disconnected
-			addDisconnectedPlayer(msgObj.playerId);
+			//addDisconnectedPlayer(msgObj.playerId);
 			break;
 			
 		case 10:
@@ -307,7 +305,7 @@ function addDisconnectedPlayer(disconnectedPlayerId){
 
 
 function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, insideMap, carryingFlag){
-	if(!playerId){
+	if(playerId==null){
 		console.log("Player id must be passed to id the player");
 	}else{
 		for(i = 0; i < playersConnected.length;i++){
