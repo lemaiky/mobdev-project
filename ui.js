@@ -859,8 +859,8 @@ function updateOwnPosition(){
 			lng: position.coords.longitude
 		};
 		ownMarker.setPosition(posn);
-		ownRadius.setPosition(posn);
-		pubRegularUpdate(player.id, ownMarker.getPosition(), null);
+		// ownRadius.setPosition(posn);
+		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
 	})
 }
 
