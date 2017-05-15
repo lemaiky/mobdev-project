@@ -7,6 +7,7 @@ var enemyFlagListUI = [];
 var homeBase; 
 var enemyBase;
 var players ={};
+var ownMarker; 
 
 
 /// INITIALIZATION
@@ -496,11 +497,39 @@ $("#toConfirm").click(function(){
 $("#startgame").click(function(){
 	// iterate over players, setting marker
 
+	navigator.geolocation.getCurrentPosition(function(position){
+		var pos = {
+			lat: position.coords.latitude,
+			lng: position.coords.longitude
+		};
+
+		ownMarker = new google.maps.Marker({
+			position:pos,
+			map:map,
+			icon: google.maps.SymbolPath.CIRCLE
+		});
+
+		circle = new google.maps.Circle({
+			strokeColor: '#FF0000',
+			strokeOpacity: 0.8,
+			strokeWeight: 2,
+			fillColor: '#FF0000',
+			fillOpacity: 0.35,
+			map: map,
+			center: ownMarker.getPosition(),
+			radius: 10
+		});
+
+		circle.bindTo('center', ownMarker, 'position');
+		
+	})
+
 	var playermarker = new google.maps.Marker({
 		map: map
 	});
 	players[playerId] = playermarker;
 
+	posnLoop();
 
 	publishGameInfo();
 	// buttons
@@ -811,4 +840,22 @@ function updateFlagPosition(teamId, flagId, position){
 		enemyFlagListUI[flagId].setPosition(position);
 	}
 }
+
+function updateOwnPosition(){
+	navigator.geolocation.getCurrentPosition(function(position){
+		posn = {
+			lat:position.coords.latitude,
+			lng: position.coords.longitude
+		};
+		ownMarker.setPosition(posn);
+		pubRegularUpdate(player.id, ownMarker.getPosition(), null);
+	})
+}
+
+function posnLoop(){
+	console.log("updating");
+	updateOwnPosition();
+	setTimeout(posnLoop, 500);
+}
+
 
