@@ -213,7 +213,7 @@ function onConnect(context) {
 	connected = true;
 	playerJoinedMsg.playerId = player.playerId;
 	playerJoinedMsg.nickname = player.nickname;
-	publich(playerJoinedMsg);
+	publish(playerJoinedMsg);
 }
 
 function onConnectFailure(e){
@@ -235,7 +235,8 @@ function status (s) {
 	Does a retain publish to save game state
 */
 function publishGameInfo(){
-	var msg {
+	/*
+	var msg = {
 		msgType: 9
 		gameName: Game.gameName,
 		admin: Game.admin,
@@ -244,7 +245,8 @@ function publishGameInfo(){
 		enemyFlagList: enemyFlagList
 		//add base 
 	}
-	retainPublish(msg);
+	*/
+	//retainPublish(msg);
 }
 
 /*
