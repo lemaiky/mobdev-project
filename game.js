@@ -13,17 +13,22 @@ function grab() {
 		return;
 	}
 
-	// check all flags
-	for(var i = 0; i < enemyFlagList.length; ++i) {
-		var flag = enemyFlagList[i];
-		if(inradius(flag, "flag")) {
-			flag.caught = true;
-			flag.holdingPlayerId = player.playerId;
-			player.state = State.FLAG;
-			//pubGrabFlag();
-			break;
+	setTimeout(function() {
+		if(freezeEnemy())
+		return;
+
+		// check all flags
+		for(var i = 0; i < enemyFlagList.length; ++i) {
+			var flag = enemyFlagList[i];
+			if(inradius(flag, "flag")) {
+				flag.caught = true;
+				flag.holdingPlayerId = player.playerId;
+				player.state = State.FLAG;
+				//pubGrabFlag();
+				break;
+			}
 		}
-	}
+	}, 5000);
 }
 
 function release() {
@@ -59,14 +64,15 @@ function freezeEnemy() {
 	// check all enemies
 	for(var i = 0; i < enemyTeam.players.length; ++i) {
 		enemy = enemyTeam.players[i];
-		if (enemy.state === State.FLAG && inradius(enemy)) {
-			resetFlag(enemy);
+		if (enemy.teamId != player.teamId && enemy.state != State.RELEASED && enemy.state != State.CAUGHT && inradius(enemy)) {
+			if(enemy.state === State.FLAG)
+				resetFlag(enemy);
 			// send a message to freeze the player
 			pubFreezeEnemy(enemy.playerId, player.position, State.CAUGHT);
-			break;
+			return true;
 		}
 	}
-	wait(5000);
+	return false;
 }
 
 function incourt() {
@@ -109,7 +115,7 @@ function inradius(obj, type) {
 
 
 	var objLat, objLng, LatLngObj;
-	if(type === "flag") {
+	if(type && type === "flag") {
 		objLat = obj.originalPos['lat'];
 		objLng = obj.originalPos['lng'];
 	} else {
