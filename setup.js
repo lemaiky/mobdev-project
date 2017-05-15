@@ -74,11 +74,13 @@ function init(gamename, username){
     team0.base = {};
     team0.points = 0;
     Game.teams.team0 = team0;
+    Game.teams.team0.players = [];
 	team1 = Object.create(Team);
 	team1.teamId = 1;
     team1.base = {};
     team1.points = 0;
     Game.teams.team1 = team1;
+    Game.teams.team1.players = [];
 	player.nickname = username;
 	player.playerId = playerId;
 	player.teamId = 0;
