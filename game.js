@@ -48,7 +48,7 @@ function release() {
 	for(var i = 0; i < team.players.length; ++i) {
 		friend = team.players[i];
 		
-		var distance = computeDistanceBetween(friend.position,friend.caughtPosition);
+		var distance = google.maps.geometry.spherical.computeDistanceBetween(friend.position,friend.caughtPosition);
 		// OBSERVE: CHANGE 50 TO 10 meters
 		if(distance < 50 && friend.state === State.CAUGHT && inradius(friend)) {
 
