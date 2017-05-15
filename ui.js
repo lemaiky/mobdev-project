@@ -516,6 +516,7 @@ $("#startgame").click(function(){
 			fillColor: '#FF0000',
 			fillOpacity: 0.35,
 			map: map,
+			center: ownMarker.getPosition(),
 			radius: 10
 		});
 
