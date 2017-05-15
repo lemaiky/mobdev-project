@@ -150,14 +150,14 @@ h2 {
 	color: #2C3E50;
 	margin-bottom: 10px;
 }
-h3{
+h3 {
 	font-weight: normal;
 	font-size: 13px;
 	color: #666;
 	margin-bottom: 20px;
 }
 
-h4{
+h4 {
 	font-size: 11px;
 	text-align: center;
 }
@@ -270,16 +270,22 @@ h4{
 
 #youWon, #youLost{
 	display: none;
-	
-	background-color: #27AE60;
+	background: #FAFCF9;
+	font-size: 40;
+	border-radius: 1px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	text-align: center;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	height: auto;
+	border: 1px 1px;
+    border-style: solid;
 
-	top: 50%;
-	left: 50%;
-    transform: translateX(-50%);	
-    transform: translateY(-50%);	
+    top: 30%;
 
 	position: absolute;
-	z-index:9999999999;
 }
 
 

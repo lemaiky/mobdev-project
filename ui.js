@@ -32,7 +32,7 @@ function centerOnPos(position) {	// NOT BEING USED
 }
 
 
-function initMap() {    
+function initMap() {  
 	var styledMapType = new google.maps.StyledMapType(
 		[
 	{
@@ -294,22 +294,31 @@ function initMap() {
 ]
 	)       
 	map = new google.maps.Map(document.getElementById('map'), { 
-	center: {lat: 59.349405116200636, lng: 18.072359561920166},
-	zoom: 17,
-	mapTypeId: 'roadmap',
-	disableDefaultUI: true, 
-		oomControl: false,
-	zoomControlOptions: {   position: google.maps.ControlPosition.LEFT_CENTER        
-	},          
-	scaleControl: false,
-	streetViewControl: false,
-	rotateControl: false,
-	fullscreenControl: false,
-	mapTypeControl: true,
-		});
+		center: {lat: 59.349405116200636, lng: 18.072359561920166},
+		zoom: 17,
+		mapTypeId: 'roadmap',
+		disableDefaultUI: true, 
+			oomControl: false,
+		zoomControlOptions: {   position: google.maps.ControlPosition.LEFT_CENTER        
+		},          
+		scaleControl: false,
+		streetViewControl: false,
+		rotateControl: false,
+		fullscreenControl: false,
+		mapTypeControl: true,
+	});
 
 	map.mapTypes.set('styled_map', styledMapType);
 	map.setMapTypeId('styled_map');
+
+	// navigator.geolocation.getCurrentPosition(function(position){
+	// 	mapInitPos = {
+	// 		lat: position.coords.latitude,
+	// 		lng: position.coords.longitude
+	// 	}
+	// 	map.setCenter(mapInitPos);
+	// });
+
 	// gamestartdiv = document.getElementById('gamestart');
 	// map.controls[google.maps.ControlPosition.TOP_CENTER].push(gamestartdiv);
 
@@ -472,21 +481,6 @@ $("#toConfirm").click(function(){
 	for (var i = 0; i < ownFlagListUI.length; i++){
 		posns.push(ownFlagListUI[i].getPosition());
 	}
-
-
-	// circle = new google.maps.Circle({
- //        strokeColor: '#FF0000',
- //        strokeOpacity: 0.8,
- //        strokeWeight: 2,
- //        fillColor: '#FF0000',
- //        fillOpacity: 0.35,
- //        map: map,
- //        center: ownFlagListUI[0].getPosition(),
- //        radius: 10
- //      });
-
-
-
 	// send these home base coordinates to ziad
 	pubFlagPosition(posns); // He wants team id also. How do we get that? 
 });
@@ -584,7 +578,7 @@ function youLostUI(){
 	document.getElementById("gameplayHeader").style.display = "none";
 	document.getElementById("gameplayFooter").style.display = "none";
 
-	document.getElementById("youWon").innerText = "You lost! grrr!";
+	document.getElementById("youLost").innerText = "You lost! grrr!";
 	document.getElementById("youLost").style.display = "inline-block";
 }
 
@@ -617,10 +611,12 @@ function updateTeamScoreUI(teamid){
 
 $("#catchButton").click(function(){
 	console.log("CATCH");
+	grab();
 });
 
 $("#releaseButton").click(function(){
 	console.log("RELEASE");
+	release();
 });
 
 $(".previous").click(function(){
