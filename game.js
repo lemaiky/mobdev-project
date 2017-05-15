@@ -8,14 +8,15 @@
 */
 
 function grab() {
-	if(player.state === State.CAUGHT) {
+	if(player.state === State.CAUGHT || player.state === State.RELEASED) {
+		console.log("can't grab a flag");
 		return;
 	}
 
 	// check all flags
 	for(var i = 0; i < enemyFlagList.length; ++i) {
 		var flag = enemyFlagList[i];
-		if(inradius(flag)) {
+		if(inradius(flag, "flag")) {
 			flag.caught = true;
 			flag.holdingPlayerId = player.playerId;
 			player.state = State.FLAG;
@@ -26,7 +27,8 @@ function grab() {
 }
 
 function release() {
-	if(player.state === State.CAUGHT) {
+	if(player.state === State.CAUGHT || player.state === State.RELEASED) {
+		console.log("can't release a friend");
 		return;
 	}
 
@@ -79,6 +81,12 @@ function incourt() {
 
 function inbase() {
 	var base;
+	if(player.teamId === 0) {
+		base = Game.teams.team0.base;
+	} else {
+		base = Game.teams.team0.base;
+	}
+
 	if(inradius(base)) {
 		switch(player.state) {
 			case State.RELEASED:
@@ -93,23 +101,24 @@ function inbase() {
 	}
 }
 
-function inradius(obj) {
+function inradius(obj, type) {
 	// own position
 	var lat = player.position['lat'];
 	var lng = player.position['lng'];
+	var LatLng = new google.maps.LatLng(lat, lng);
 
-	var objLat = obj.position['lat'];
-	var objLng = obj.position['lng'];
 
-	var R = 6371e3; // metres
-	var latDiff = lat - objLat;
-	var lngDiff = lng - objLng;
-
-	var a = Math.sin(latDiff/2) * Math.sin(latDiff/2) +
-	        Math.cos(lat) * Math.cos(objLat) *
-	        Math.sin(lngDiff/2) * Math.sin(lngDiff/2);
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	var d = R * c;
+	var objLat, objLng, LatLngObj;
+	if(type === "flag") {
+		objLat = obj.originalPos['lat'];
+		objLng = obj.originalPos['lng'];
+	} else {
+		objLat = obj.position['lat'];
+		objLng = obj.position['lng'];
+	}
+	LatLngObj = new google.maps.LatLng(objLat, objLng);
+	
+	var d = google.maps.geometry.spherical.computeDistanceBetween(LatLng, LatLngObj);
 
 	if(d <= 10) {
 		console.log("inside radius " + d)
@@ -165,7 +174,7 @@ function winningFlag() {
 			player.state = State.NORMAL;
 			if(team.points === 5)
 				isWinning();
-			
+
 			break;
 		}
 	}

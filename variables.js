@@ -31,7 +31,8 @@ var Player = {
 	caughtPosition: {},
 	state:State.NORMAL,
 	insideMap: true,
-	carryingFlag: false
+	carryingFlag: false,
+	currentFlag: null
 	// nickname
 	// player id
 	// team id
@@ -110,6 +111,13 @@ var updateMsg = {
 	state: State.NORMAL,
 	carryingFlag:false,
 	flagId:0
+}
+
+var flagMsg = {
+	msgType: 13,
+	teamId: -1,
+	flagId: -1,
+	coordinates: {}
 }
 
 var mapInfoMsg = {

@@ -498,7 +498,7 @@ $("#startgame").click(function(){
 		ownMarker = new google.maps.Marker({
 			position:pos,
 			map:map,
-			icon: google.maps.SymbolPath.CIRCLE
+			draggable:true
 		});
 
 		ownRadius = new google.maps.Circle({
@@ -528,7 +528,8 @@ $("#startgame").click(function(){
 	for (var i= 0; i < Game.teams.team0.players.length; i++){
 		players[Game.teams.team0.players[i].playerId] = new google.maps.Marker({
 			map:map, 
-			center: ownMarker
+			center: ownMarker,
+			draggable:true
 		});
  	}
 
@@ -536,7 +537,8 @@ $("#startgame").click(function(){
 	for (var i= 0; i < Game.teams.team1.players.length; i++){
 		players[Game.teams.team1.players[i].playerId] = new google.maps.Marker({
 			map:map, 
-			center: ownMarker
+			center: ownMarker,
+			draggable:true
 		});
  	}
 
@@ -882,6 +884,9 @@ function updateOwnPosition(){
 		ownMarker.setPosition(posn);
 		ownRadius.setCenter(posn);
 		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
+		if (player.state === State.FLAG){
+			pubFlagUpdate(player.teamId, player.currentFlag, position);
+		}
 	})
 }
 
