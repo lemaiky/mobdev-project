@@ -915,7 +915,7 @@ function posnLoop(){
 }
 
 function removeFlag(teamId,flagId){
-	for (var i = 0; i < enemyFlagListUI; i++){
+	for (var i = 0; i < enemyFlagListUI.length; i++){
 		if (flagId === i){
 			enemyFlagListUI[i].setMap(null);
 		}
