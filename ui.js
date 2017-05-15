@@ -658,6 +658,9 @@ function updateMapInfoUI(coordinates){
 	//console.log(Object.keys(coordinates).length);
 	//objectLength = Object.keys(coordinates).length;
 	console.log("does this get called after the home base");
+	if (playingArea){
+		playingArea.setMap(null);
+	}
 	playingArea = new google.maps.Polygon({
 		paths:coordinates
 	})
@@ -739,6 +742,7 @@ function setInitialFlagUI(teamId, flaglist){
 function addFlagUI(teamId, flaglist){
 	flagcoords = flaglist;
 	if (teamId == player.teamId){
+		console.log('hahahaaaaaaa');
 		if (!ownFlagListUI){
 			for (var i = 0 ; i < flagcoords; i++){
 				var marker = new google.maps.Marker({
@@ -750,7 +754,10 @@ function addFlagUI(teamId, flaglist){
 		}
 	}
 	else{
+		console.log('the enemeyyyyyyy');
 		if (!enemyFlagListUI){
+			console.log('asdlfkjafdslksfdlkjdfsjkldsflkdfsljkdsfjklfd');
+
 			for (var i = 0; i< flagcoords; i++){
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
