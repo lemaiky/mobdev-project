@@ -157,7 +157,7 @@ function onMessageArrived(message) {
 		case 3: // Flag placements
 			console.log("recieved flag placements");
 			console.log(msgObj);
-			addFlags(JSON.parse(msgObj.flagList));
+			addFlags(msgObj.teamId, JSON.parse(msgObj.flagList));
 			break;
 		case 4: // Default update msg
 			 if(caughtPosition != null){
@@ -212,6 +212,10 @@ function onMessageArrived(message) {
 			break;
 		case 12: //A player has reconnected
 			playersConnected.push(JSON.parse(msgObj.player));
+			break;
+		case 13: //Flag has moved
+			updateFlagPosition(msgObj.flagId, JSON.parse(msgObj.coordinates));
+			break;
 
 	}	
 }
@@ -368,13 +372,13 @@ function addToPlayerList(playerName, playerId){
 	Adds flags to list of flags :)
 */
 
-function addFlags(flagList){
+function addFlags(teamId, flagList){
 	for(i = 0; i < flagList.length; i++){
 		var newFlag = Object.create(Flag);
-		newFlag.flagId = flagList[i].flagId;
-		newFlag.teamId = flagList[i].teamId;
-		newFlag.originalPos = flagList[i].originalPos;
-		console.log(newFlag.teamId + " ee " + player.teamId);
+		newFlag.flagId = i;
+		newFlag.teamId = teamId;
+		newFlag.originalPos = flagList[i];
+		console.log(newFlag.teamId);
 		if(newFlag.teamId == player.teamId){
 			friendlyFlagList.push(newFlag);
 		}else{
@@ -382,12 +386,19 @@ function addFlags(flagList){
 		}
 	}
 	
+	//addFlagUI(teamId, flaglist);
 }
 
 
 /*
 	Methods to call for sending messages
 */
+
+function newFlagPosition(teamId ,flagId, coordinates){
+	//which array do we update?
+}
+
+
 function pubRegularUpdate(playerId, position, caughtPosition, state, carryingFlag, flagId){
 	updateMsg.playerId = playerId;
 	updateMsg.position = position;
