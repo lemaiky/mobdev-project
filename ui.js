@@ -470,9 +470,10 @@ $("#toConfirm").click(function(){
 	for (var i = 0; i < ownFlagListUI.length; i++){
 		posns.push(ownFlagListUI[i].getPosition());
 	}
+
 	// send these home base coordinates to ziad
-	pubFlagPosition(ownFlagListUI); // He wants team id also. How do we get that? 
-});
+	pubFlagPosition(posns); // He wants team id also. How do we get that? 
+}});
 
 
 $("#startgame").click(function(){
@@ -742,11 +743,20 @@ function addFlagUI(teamId, flaglist){
 					position:flagcoords[i],
 					map: map
 				})
+				ownFlagListUI.push(marker);
 			}
 		}
 	}
 	else{
-		
+		if (!enemyFlagListUI){
+			for (var i = 0; i< flagcoords; i++){
+				var marker = new google.maps.Marker({
+					position:flagcoords[i],
+					map: map
+				});
+				enemyFlagListUI.push(marker);
+			}
+		}
 	}
 }
 
