@@ -556,6 +556,7 @@ $("#startgame").click(function(){
 
 });
 
+// function disconnected 
 
 function enemySuccessfullyGrabbed(){
 	alert("You caught an enemy!");
@@ -853,9 +854,10 @@ function addFlagUI(teamId, flaglist){
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
 					map: map,
-					icon: 'resources/icons/flag_green.png',			//ownFlagListUI[i].setIcon("./resources/icons/flag_green.png");
+					icon: 'resources/icons/flag_green.png'			//ownFlagListUI[i].setIcon("./resources/icons/flag_green.png");
 
 				})
+				ownFlagListUI[i].setIcon("resources/icons/flag_green.png");
 				ownFlagListUI.push(marker);
 			}
 		}
@@ -896,9 +898,10 @@ function updateOwnPosition(){
 			lat:position.coords.latitude,
 			lng: position.coords.longitude
 		};
-		if (ownMarker)
+		if (ownMarker){
 			ownMarker.setPosition(posn);
-		ownRadius.setCenter(posn);
+			ownRadius.setCenter(posn);
+		}
 		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
 		if (player.state === State.FLAG){
 			pubFlagUpdate(player.teamId, player.currentFlag, position);
