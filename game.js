@@ -21,6 +21,7 @@ function grab() {
 		for(var i = 0; i < enemyFlagList.length; ++i) {
 			var flag = enemyFlagList[i];
 			if(inradius(flag, "flag")) {
+				youHaveTheFlagUI();
 				flag.caught = true;
 				flag.holdingPlayerId = player.playerId;
 				player.state = State.FLAG;
@@ -65,6 +66,7 @@ function freezeEnemy() {
 	for(var i = 0; i < enemyTeam.players.length; ++i) {
 		enemy = enemyTeam.players[i];
 		if (enemy.teamId != player.teamId && enemy.state != State.RELEASED && enemy.state != State.CAUGHT && inradius(enemy)) {
+			enemySuccessfullyGrabbed();
 			if(enemy.state === State.FLAG)
 				resetFlag(enemy);
 			// send a message to freeze the player
