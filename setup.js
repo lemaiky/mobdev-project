@@ -328,6 +328,9 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 				if(carryingFlag){
 					playersConnected[i].carryingFlag = carryingFlag;
 				}
+                if(playerId === player.playerId) {
+                    player = playersConnected[i];
+                }
 				break;	
 			}
 		}
