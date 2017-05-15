@@ -48,11 +48,7 @@ function release() {
 	for(var i = 0; i < team.players.length; ++i) {
 		friend = team.players[i];
 		
-		var distance = google.maps.geometry.spherical.computeDistanceBetween(friend.position,friend.caughtPosition);
-		// OBSERVE: CHANGE 50 TO 10 meters
-		if(distance < 50 && friend.state === State.CAUGHT && inradius(friend)) {
-
-		//if(friend.position === friend.caughtPosition && friend.state === State.CAUGHT && inradius(friend)) {
+		if(inradius(friend) == true && friend.state === State.CAUGHT && inradius(friend)) {
 			// send message to release friend
 			pubReleaseFriend(friend.playerId, State.RELEASED);
 			break;
