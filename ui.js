@@ -395,7 +395,7 @@ $('#broadcastPlayers').click(function(){
 
 $("#toHomeBasePlacement").click(function(){
 
-	// createTeams();
+	createTeams();
 	drawingManager.setOptions({
 		drawingMode: google.maps.drawing.OverlayType.MARKER,
 		drawingControl: false,
@@ -439,6 +439,12 @@ $("#toFlagPlacement").click(function(){
 				drawingControl: false,
 			});
 			//console.log("flag positioned ");
+
+			var flag = Object.create(Flag);
+			flag.position = marker.getPosition();
+			flag.teamId = player.teamId;
+			flag.originalPos = marker.getPosition();
+
 			
 			flagList.push(marker.getPosition());
 			//console.log(flagList.length); 
@@ -463,6 +469,8 @@ $("#toConfirm").click(function(){
 
 
 $("#startgame").click(function(){
+
+	publishGameInfo();
 	// buttons
 	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
 	document.getElementById("gameplayReleaseDiv").style.display = "inline-block";
