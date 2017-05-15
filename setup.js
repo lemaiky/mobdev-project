@@ -175,6 +175,9 @@ function onMessageArrived(message) {
 		case 6:
 			//freeze someone
 			//playerId = enemy
+			if (player.playerId == msgObj.playerId){
+				youAreFrozenUI();
+			}
 			updatePlayerInfo(msgObj.playerId, null, null, msgObj.caughtPosition, msgObj.state, null, null);
 			break;
 		case 7:
