@@ -67,6 +67,7 @@ function freezeEnemy() {
 		enemy = enemyTeam.players[i];
 		if (enemy.teamId != player.teamId && enemy.state != State.RELEASED && enemy.state != State.CAUGHT && inradius(enemy)) {
 			enemySuccessfullyGrabbed();
+			youAreFrozenUI();
 			if(enemy.state === State.FLAG)
 				resetFlag(enemy);
 			// send a message to freeze the player
