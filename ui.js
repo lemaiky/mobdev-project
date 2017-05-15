@@ -474,9 +474,9 @@ $("#startgame").click(function(){
 
 	// footer
 	document.getElementById("gameplayFooter").style.display = "inline-block";
-	document.getElementById("gameplayTimer").innerText = "2:59";
+	// document.getElementById("gameplayTimer").innerText = "2:59";
 
-	document.getElementById("youHaveTheFlag").style.visibility = "show";
+	document.getElementById("youHaveTheFlag").style.display = "inline-block";
 							// youAreFrozen
 
 	gameover();

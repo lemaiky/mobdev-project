@@ -228,19 +228,19 @@ h3{
 
 
 #youHaveTheFlag, #youAreFrozen{
-	margin: 50px auto;
+/*	margin: 50px auto;
 	top:80%;
-
+*/
 	background-color: green;
 
 	left: 50%;
     transform: translateX(-50%);	
 
-	visibility: hidden;
+	display: none;
 	width: auto;
-	height: 5%;
+	height: auto;
 
-	bottom: 5%;
+	bottom: 0;
 	position: absolute;
 	z-index:9999999999;
 }
@@ -251,10 +251,10 @@ h3{
 /*	margin: auto auto;
 */	bottom:0;
 	
-	left: 50%;
+	left: 0;
     transform: translateX(-50%);	
 
-    text-align: center;
+    /*text-align: center;*/
 	position: absolute;
 	z-index:99999999;
 	background: white;
@@ -267,6 +267,11 @@ h3{
 	margin: auto auto;
 	
 	position: absolute;
+}
+
+#gameplayTimer{
+	width: 2%;
+	right: 0;
 }
 
 /* If you have the flag, make map brighter or something
