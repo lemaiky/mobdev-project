@@ -887,7 +887,8 @@ function updateOwnPosition(){
 			lat:position.coords.latitude,
 			lng: position.coords.longitude
 		};
-		ownMarker.setPosition(posn);
+		if (ownMarker)
+			ownMarker.setPosition(posn);
 		ownRadius.setCenter(posn);
 		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
 		if (player.state === State.FLAG){
