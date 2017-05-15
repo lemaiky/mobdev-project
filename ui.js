@@ -761,7 +761,9 @@ function updateBaseInfoUI(teamId, position){
 	received_posn = JSON.parse(position);
 	if (teamId == player.teamId){
 		console.log('wooohooo')
+		//baseIcon = google.maps.MarkerImage("newIcon2.png");
 		homeBase.setPosition(received_posn);
+		homeBase.setIcon("./resources/icons/baseflag_small_green.png");
 	}
 	else{
 		console.log('blaharer')
