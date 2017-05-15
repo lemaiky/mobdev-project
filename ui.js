@@ -2,10 +2,11 @@ var map;
 var playingArea;
 var drawingManager;
 var homeBaseListener;
-var ownFlagListUI;
-var enemyFlagListUI;
+var ownFlagListUI = [];
+var enemyFlagListUI = [];
 var homeBase; 
 var enemyBase;
+var players ={};
 
 
 /// INITIALIZATION
@@ -477,6 +478,13 @@ $("#toConfirm").click(function(){
 
 
 $("#startgame").click(function(){
+	// iterate over players, setting marker
+
+	var playermarker = new google.maps.Marker({
+		map: map
+	});
+	players[playerId] = playermarker;
+
 
 	publishGameInfo();
 	// buttons
@@ -659,6 +667,9 @@ function updateMapInfoUI(coordinates){
 	//console.log(Object.keys(coordinates).length);
 	//objectLength = Object.keys(coordinates).length;
 	console.log("does this get called after the home base");
+	if (playingArea){
+		playingArea.setMap(null);
+	}
 	playingArea = new google.maps.Polygon({
 		paths:coordinates
 	})
@@ -739,9 +750,11 @@ function setInitialFlagUI(teamId, flaglist){
 
 function addFlagUI(teamId, flaglist){
 	flagcoords = flaglist;
+	console.log(flagcoords);
 	if (teamId == player.teamId){
-		if (!ownFlagListUI){
-			for (var i = 0 ; i < flagcoords; i++){
+		console.log('hahahaaaaaaa');
+		if (ownFlagListUI.length==0){
+			for (var i = 0 ; i < flagcoords.length; i++){
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
 					map: map
@@ -751,15 +764,33 @@ function addFlagUI(teamId, flaglist){
 		}
 	}
 	else{
-		if (!enemyFlagListUI){
-			for (var i = 0; i< flagcoords; i++){
+		console.log('the enemeyyyyyyy');
+		if (enemyFlagListUI.length==0){
+			console.log('asdlfkjafdslksfdlkjdfsjkldsflkdfsljkdsfjklfd');
+
+			for (var i = 0; i< flagcoords.length; i++){
+				console.log("marking the marker");
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
 					map: map
 				});
 				enemyFlagListUI.push(marker);
+				marker.setMap(map);
 			}
 		}
+	}
+}
+
+function updatePlayerPosition(playerId, position){
+	players[playerId].setPosition(position);
+}
+
+function updateFlagPosition(teamId, flagId, position){
+	if (teamId==player.teamId){
+		ownFlagListUI[flagId].setPosition(position);
+	}
+	else{
+		enemyFlagListUI[flagId].setPosition(position);
 	}
 }
 
