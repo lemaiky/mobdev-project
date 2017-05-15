@@ -594,12 +594,12 @@ function youWonUI(){
 	document.getElementById("youWon").style.display = "inline-block";
 }
 
-function updateTeamScoreUI(teamid){
-	// temporary testing variables
-	var team1Score = 0;
-	var team2Score = 4;
-	document.getElementById("scoreTeam1").innerText = team1Score;
-	document.getElementById("scoreTeam2").innerText = team2Score;
+function updateTeamScoreUI(teamid, points){
+	if (teamid == 0){
+		document.getElementById("scoreTeam1").innerText = points;
+	} else if (teamid == 1){
+		document.getElementById("scoreTeam2").innerText = points;
+	}
 }
 
 // function activateGameplayTimer(){
