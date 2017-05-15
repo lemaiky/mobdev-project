@@ -2,8 +2,8 @@ var map;
 var playingArea;
 var drawingManager;
 var homeBaseListener;
-var ownFlagList;
-var enemyFlagList;
+var ownFlagListUI;
+var enemyFlagListUI;
 var homeBase; 
 var enemyBase;
 
@@ -424,7 +424,7 @@ $("#toHomeBasePlacement").click(function(){
 // });
 
 $("#toFlagPlacement").click(function(){
-	ownFlagList = [];
+	ownFlagListUI = [];
 
 		google.maps.event.removeListener(homeBaseListener);
 
@@ -441,17 +441,18 @@ $("#toFlagPlacement").click(function(){
 			});
 			//console.log("flag positioned ");
 
-			var flag = Object.create(Flag);
-			flag.flagId = ownFlagList.length;
-			flag.position = marker.getPosition();
-			flag.teamId = player.teamId;
-			flag.originalPos = marker.getPosition();
+			// var flag = Object.create(Flag);
+			// flag.marker = marker;
+			// flag.flagId = ownFlagListUI.length;
+			// flag.position = marker.getPosition();
+			// flag.teamId = player.teamId;
+			// flag.originalPos = marker.getPosition();
 
 			
-			ownFlagList.push(flag);
+			ownFlagListUI.push(marker);
 			//console.log(flagList.length); 
 
-			if (ownFlagList.length == 5) {
+			if (ownFlagListUI.length == 5) {
 				drawingManager.setOptions({
 					drawingMode: null,
 				});
@@ -464,9 +465,13 @@ $("#toConfirm").click(function(){
 		drawingMode: null
 	});
 
-	console.log(ownFlagList.length);
+	console.log(ownFlagListUI.length);
+	posns = [];
+	for (var i = 0; i < ownFlagListUI.length , i++){
+		posns.append(ownFlagListUI.getPosition());
+	}
 	// send these home base coordinates to ziad
-	pubFlagPosition(ownFlagList); // He wants team id also. How do we get that? 
+	pubFlagPosition(ownFlagListUI); // He wants team id also. How do we get that? 
 });
 
 
@@ -708,8 +713,40 @@ function updateBaseInfoUI(teamId, position){
 	}
 }
 
+function setInitialFlagUI(teamId, flaglist){
+	received_flaglist = JSON.parse(flaglist);
+	if (teamId == player.teamId){
+		console.log('here comes your man');
+		if (!ownFlagListUI){
+			ownFlagListUI = received_flaglist;
+			for (var i = 0; i < ownFlagListUI.length; i++){
+				placeFlagMarker(ownFlagListUI[i]);
+			}
+		}
+	}
+	else{
+		console.log('should be the other team flags');
+		enemyFlagListUI = received_flaglist;
+		for (var i = 0; i< enemyFlagListUI.length; i++){
+			placeFlagMarker(enemyFlagListUI[i]);
+		}
+	}
+}
 
-
-
-
+function addFlagUI(teamId, flaglist){
+	flagcoords = JSON.parse(flaglist);
+	if (teamId == player.teamId){
+		if (!ownFlagListUI){
+			for (var i = 0 ; i < flagcoords; i++){
+				var marker = new google.maps.Marker({
+					position:flagcoords[i],
+					map: map
+				})
+			}
+		}
+	}
+	else{
+		
+	}
+}
 
