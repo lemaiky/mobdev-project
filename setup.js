@@ -41,18 +41,21 @@ function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN
 
 }
 function joinGame(gamename, username){ 
+/*
 	if(localStorage.getItem("savedPlayer") && (gamename == JSON.parse(localStorage.getItem("savedPlayer")).gamename)){
 		playerId = JSON.parse(localStorage.getItem("savedPlayer")).playerId;
 		hasReconnected = true;
 	}else{ // todo: disconnect player 
-		var obj = {
-		gamename: gamename,
-		playerId: playerId
-	}
-		localStorage.setItem("savedPlayer", JSON.stringify(obj));
 		playerId = username + "-" + Math.random().toString(36).slice(2); 
+		var obj = {
+			gamename: gamename,
+			playerId: playerId
+		}
+		localStorage.setItem("savedPlayer", JSON.stringify(obj));
+		
 	}
-
+*/
+	playerId = username + "-" + Math.random().toString(36).slice(2); 
 	Game.gameName = gamename;
 	init(gamename, username);
 }
@@ -290,7 +293,7 @@ function loadGameState(msgObj){
 
 }
 
-function addDisconnectedPlayer(diconnectedPlayerId){
+function addDisconnectedPlayer(disconnectedPlayerId){
 	for(var i = 0; i < playersConnected.length; i++){
 		if(playersConnected[i].playerId === disconnectedPlayerId){
 
