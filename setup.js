@@ -150,7 +150,7 @@ function onMessageArrived(message) {
 			break;
 		case 2:
 			if(msgObj.playerId == player.playerId){
-				player.teamId = msgObj.playerId;
+				player.teamId = msgObj.teamId;
 			}		
 			console.log("recieved team info");
 			console.log(msgObj);
@@ -382,8 +382,8 @@ function pubTeamChoice(movedPlayerId,teamId){
 }
 
 function pubMapPosition(coordinates){
-	baseMsg.position = coordinates;
-	publish(baseMsg);
+	mapInfoMsg.position = coordinates;
+	publish(mapInfoMsg);
 }
 
 function pubFlagPosition(coordinates, teamId, flagId){

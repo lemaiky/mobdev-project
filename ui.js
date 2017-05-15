@@ -682,14 +682,19 @@ function updateTeamUI(playerid, teamId){
 }
 
 function updateBaseInfoUI(teamId, position){
-	position = JSON.parse(position);
+	received_posn = JSON.parse(position);
 	if (teamId == player.teamId){
 		console.log('wooohooo')
-		homeBase.setPosition(position);
+		homeBase.setPosition(received_posn);
 	}
 	else{
 		console.log('blaharer')
-		enemyBase.setPosition(position);
+		enemyBase = new google.maps.Marker({
+			position:received_posn,
+			map:map,
+			title: 'ENEMY BASE'
+		});
+		// enemyBase.setPosition(position);
 	}
 }
 
