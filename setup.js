@@ -45,6 +45,10 @@ function joinGame(gamename, username){
 		playerId = JSON.parse(localStorage.getItem("savedPlayer")).playerId;
 		hasReconnected = true;
 	}else{ // todo: disconnect player 
+		var obj = {
+		gamename: gamename,
+		playerId: playerId
+	}
 		localStorage.setItem("savedPlayer", JSON.stringify(obj));
 		playerId = username + "-" + Math.random().toString(36).slice(2); 
 	}
@@ -428,10 +432,10 @@ function pubMapPosition(coordinates){
 }
 
 function pubFlagPosition(flagList){
+	console.log(flagList);
 	var msg = {
 		msgType: 3,
 		flagList: JSON.stringify(flagList),
-		teamId: player.teamId
 	}
 	publish(msg);
 }
