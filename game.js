@@ -158,6 +158,7 @@ function winningFlag() {
 			team.points += 1;
 			flag.win = true;
 			player.state = State.NORMAL;
+			pubTeamPoints(player.teamId, team.points);
 			if(team.points === 5)
 				pubWinningTeam(player.teamId);
 
