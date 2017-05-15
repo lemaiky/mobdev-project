@@ -45,6 +45,7 @@ function joinGame(gamename, username){
 		playerId = JSON.parse(localStorage.getItem("savedPlayer")).playerId;
 		hasReconnected = true;
 	}else{ // todo: disconnect player 
+		localStorage.setItem("savedPlayer", JSON.stringify(obj));
 		playerId = username + "-" + Math.random().toString(36).slice(2); 
 	}
 
