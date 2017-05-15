@@ -374,8 +374,6 @@ $("#toAreaSelection").click(function(){
 		playingArea = polygon;
 		var coordinates  = (polygon.getPath().getArray()); // These should be the coords
 
-		console.log("polygon coordinates below ");
-		console.log(coordinates);
 
 		// send these polygon coordinates to ziad
 		pubMapPosition(coordinates);
@@ -470,7 +468,6 @@ $("#toConfirm").click(function(){
 		drawingMode: null
 	});
 
-	console.log(ownFlagListUI.length);
 	posns = [];
 	for (var i = 0; i < ownFlagListUI.length; i++){
 		posns.push(ownFlagListUI[i].getPosition());
@@ -749,7 +746,6 @@ function updateMapInfoUI(coordinates){
 	//console.log("object length");
 	//console.log(Object.keys(coordinates).length);
 	//objectLength = Object.keys(coordinates).length;
-	console.log("does this get called after the home base");
 	if (playingArea){
 		playingArea.setMap(null);
 	}
@@ -765,9 +761,6 @@ function updateTeamUI(playerid, teamId){
 	var currentTeamSelection = playerlisted.parent().attr('id');
 	if ((teamId =="0" && currentTeamSelection==="team1") ||
 		(teamId =="1" && currentTeamSelection==="team2")){
-		console.log("nothing changed");
-		console.log('team id is'+ teamId);
-		console.log('current team is '+ currentTeamSelection);
 		return;
 	}
 	else if (currentTeamSelection == "freeplayers"){
@@ -781,15 +774,10 @@ function updateTeamUI(playerid, teamId){
 		playerlisted.remove().appendTo(destination)
 	}
 	else if (teamId == "0" && currentTeamSelection == 'team2'){
-		console.log('moving to two but current parent is ' + currentTeamSelection);
 		playerlisted.remove().appendTo('#team1');
 	} 
 	else if (teamId == "1" && currentTeamSelection == 'team1'){
-		console.log('moving to one but current parent is ' + currentTeamSelection);
 		playerlisted.remove().appendTo('#team2');
-	}
-	else{
-		console.log('something has gone horribly wrong');
 	}
 
 }
@@ -797,13 +785,11 @@ function updateTeamUI(playerid, teamId){
 function updateBaseInfoUI(teamId, position){
 	received_posn = JSON.parse(position);
 	if (teamId == player.teamId){
-		console.log('wooohooo')
 		//baseIcon = google.maps.MarkerImage("newIcon2.png");
 		homeBase.setPosition(received_posn);
 		homeBase.setIcon("./resources/icons/baseflag_small_green.png");
 	}
 	else{
-		console.log('blaharer')
 		enemyBase = new google.maps.Marker({
 			position:received_posn,
 			map:map,
@@ -816,7 +802,6 @@ function updateBaseInfoUI(teamId, position){
 function setInitialFlagUI(teamId, flaglist){
 	received_flaglist = JSON.parse(flaglist);
 	if (teamId == player.teamId){
-		console.log('here comes your man');
 		if (!ownFlagListUI){
 			ownFlagListUI = received_flaglist;
 			for (var i = 0; i < ownFlagListUI.length; i++){
@@ -825,7 +810,6 @@ function setInitialFlagUI(teamId, flaglist){
 		}
 	}
 	else{
-		console.log('should be the other team flags');
 		enemyFlagListUI = received_flaglist;
 		for (var i = 0; i< enemyFlagListUI.length; i++){
 			placeFlagMarker(enemyFlagListUI[i]);
@@ -835,9 +819,7 @@ function setInitialFlagUI(teamId, flaglist){
 
 function addFlagUI(teamId, flaglist){
 	flagcoords = flaglist;
-	console.log(flagcoords);
 	if (teamId == player.teamId){
-		console.log('hahahaaaaaaa');
 		if (ownFlagListUI.length==0){
 			for (var i = 0 ; i < flagcoords.length; i++){
 				var marker = new google.maps.Marker({
@@ -849,10 +831,7 @@ function addFlagUI(teamId, flaglist){
 		}
 	}
 	else{
-		console.log('the enemeyyyyyyy');
 		if (enemyFlagListUI.length==0){
-			console.log('asdlfkjafdslksfdlkjdfsjkldsflkdfsljkdsfjklfd');
-
 			for (var i = 0; i< flagcoords.length; i++){
 				console.log("marking the marker");
 				var marker = new google.maps.Marker({
@@ -867,7 +846,6 @@ function addFlagUI(teamId, flaglist){
 }
 
 function updatePlayerPosition(playerId, position){
-	console.log("trynna update player position");
 	players[playerId].setPosition(position);	
 }
 
@@ -888,12 +866,11 @@ function updateOwnPosition(){
 		};
 		ownMarker.setPosition(posn);
 		ownRadius.setPosition(posn);
-		pubRegularUpdate(player.id, ownMarker.getPosition(), null);
+		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
 	})
 }
 
 function posnLoop(){
-	console.log("updating");
 	updateOwnPosition();
 	setTimeout(posnLoop, 500);
 }
