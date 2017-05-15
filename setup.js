@@ -378,9 +378,9 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 function createTeams(){
 	for(i = 0; i < playersConnected.length; i++){
 		if(playersConnected[i].teamId == 0){
-			Game.team0.players.push(playersConnected[i]);
+			Game.teams.team0.players.push(playersConnected[i]);
 		}else{
-			Game.team1.players.push(playersConnected[i]);
+			Game.teams.team1.players.push(playersConnected[i]);
 		}
 	}
 
