@@ -885,7 +885,7 @@ function updateOwnPosition(){
 		ownRadius.setCenter(posn);
 		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
 		if (player.state === State.FLAG){
-			updateFlagPosition(player.teamId, player.currentFlag, position);
+			pubFlagUpdate(player.teamId, player.currentFlag, position);
 		}
 	})
 }
