@@ -271,7 +271,7 @@ h4 {
 #youWon, #youLost{
 	display: none;
 	background: #FAFCF9;
-	font-size: 40;
+	font-size: 25px;
 	border-radius: 1px;
 	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
 	padding: 20px 30px;
@@ -281,7 +281,7 @@ h4 {
 	margin: 0 10%;
 	height: auto;
 	border: 1px 1px;
-    border-style: solid;
+    border-style: none;
 
     top: 30%;
 
