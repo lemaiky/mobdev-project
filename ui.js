@@ -847,6 +847,7 @@ function addFlagUI(teamId, flaglist){
 }
 
 function updatePlayerPosition(playerId, position){
+	console.log("trynna update player position");
 	players[playerId].setPosition(position);	
 }
 
