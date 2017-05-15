@@ -167,7 +167,7 @@ function onMessageArrived(message) {
 			addFlags(msgObj.teamId, JSON.parse(msgObj.flagList));
 			break;
 		case 4: // Default update msg
-			 if(caughtPosition != null){
+			 if(msgObj.caughtPosition != null){
 				updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
 			 }else{
 				updatePlayerInfo(msgObj.playerId, null, msgObj.position, null, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
