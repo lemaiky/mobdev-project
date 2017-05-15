@@ -557,6 +557,12 @@ $("#startgame").click(function(){
 
 });
 
+
+function enemySuccessfullyGrabbed(){
+	alert("You caught an enemy!");
+	navigator.vibrate(50);
+}
+
 function youAreFrozenUI(){
 	document.getElementById("youAreFrozen").style.display = "inline-block";
 	navigator.vibrate(50);
@@ -618,13 +624,11 @@ function updateTeamScoreUI(teamid, points){
 
 $("#catchButton").click(function(){
 	console.log("CATCH");
-	navigator.vibrate(50);
 	grab();
 });
 
 $("#releaseButton").click(function(){
 	console.log("RELEASE");
-	navigator.vibrate(50);
 	release();
 });
 
