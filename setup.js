@@ -436,6 +436,7 @@ function pubFlagPosition(flagList){
 	var msg = {
 		msgType: 3,
 		flagList: JSON.stringify(flagList),
+		teamId: player.teamId
 	}
 	publish(msg);
 }

@@ -473,7 +473,7 @@ $("#toConfirm").click(function(){
 
 	// send these home base coordinates to ziad
 	pubFlagPosition(posns); // He wants team id also. How do we get that? 
-}});
+});
 
 
 $("#startgame").click(function(){
