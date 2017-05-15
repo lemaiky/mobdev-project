@@ -814,7 +814,6 @@ function updateTeamUI(playerid, teamId){
 function updateBaseInfoUI(teamId, position){
 	received_posn = JSON.parse(position);
 	if (teamId == player.teamId){
-		//baseIcon = google.maps.MarkerImage("newIcon2.png");
 		homeBase.setPosition(received_posn);
 		homeBase.setIcon("resources/icons/baseflag_small_green.png");
 	}
@@ -822,31 +821,15 @@ function updateBaseInfoUI(teamId, position){
 		enemyBase = new google.maps.Marker({
 			position:received_posn,
 			map:map,
-			title: 'ENEMY BASE'
+			title: 'ENEMY BASE',
+			icon: 'resources/icons/baseflag_small_red.png',
 		});
 		// enemyBase.setPosition(position);
 		enemyBase.setIcon("resources/icons/baseflag_small_red.png");
 	}
 }
 
-// function setInitialFlagUI(teamId, flaglist){
-// 	received_flaglist = JSON.parse(flaglist);
-// 	if (teamId == player.teamId){
-// 		if (!ownFlagListUI){
-// 			ownFlagListUI = received_flaglist;
-// 			for (var i = 0; i < ownFlagListUI.length; i++){
-// 				placeFlagMarker(ownFlagListUI[i]);
-// 				ownFlagListUI[i].setIcon("resources/icons/flag_green.png");
-// 			}
-// 		}
-// 	}
-// 	else{
-// 		enemyFlagListUI = received_flaglist;
-// 		for (var i = 0; i< enemyFlagListUI.length; i++){
-// 			placeFlagMarker(enemyFlagListUI[i]);
-// 		}
-// 	}
-// }
+
 
 function addFlagUI(teamId, flaglist){
 	flagcoords = flaglist;
@@ -859,6 +842,7 @@ function addFlagUI(teamId, flaglist){
 					icon: "resources/icons/flag_green.png"			//ownFlagListUI[i].setIcon("./resources/icons/flag_green.png");
 
 				});
+
 				ownFlagListUI.push(marker);
 				ownFlagListUI[i].setIcon("resources/icons/flag_green.png");
 				marker.setMap(map);
@@ -874,8 +858,8 @@ function addFlagUI(teamId, flaglist){
 					map: map,
 					icon:"resources/icons/flag_red.png"
 				});
+				marker.setIcon("resources/icons/flag_red.png");
 				enemyFlagListUI.push(marker);
-				enemyFlagListUI[i].setIcon("resources/icons/flag_red.png");
 				marker.setMap(map);
 			}
 		}
