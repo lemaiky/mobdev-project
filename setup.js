@@ -9,13 +9,21 @@ var playerTeamId; // THIS Client team id
 var playersConnected = new Array(); //List of players connected
 var friendlyFlagList = new Array(); //List of flag objects 
 var enemyFlagList = new Array(); //List of flag objects 
+var gameIsOver = true;
+var disconnectedPlayers = new Array();
+var hasReconnected =  false;
 
 
-var pubnub = new PubNub({ //Keys
-		publishKey: config.PUB_KEY,
-		subscribeKey: config.SUB_KEY,
-		sss: true
-})
+var host = 'vernemq.evothings.com';
+var port = 8084;
+var user = 'anon';
+var password = 'ymous';
+var connected = false;
+var ready = false;
+var pubTopic;
+var subTopic;
+
+
 
 
 //Combine these 2 same thing...
@@ -36,11 +44,13 @@ function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN
 	*/
 	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
 	Game.admin = playerId;
+	Game.gameName = gamename;
 	init(gamename, username);
 
 }
 function joinGame(gamename, username){
-	playerId = username + "-" + Math.random().toString(36).slice(2); 
+ 	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	Game.gameName = gamename;
 	init(gamename, username);
 }
 /*
@@ -50,10 +60,7 @@ function joinGame(gamename, username){
 */
 function init(gamename, username){
 
-	Game.gameName = gamename;
-	
-	pubnub_channel = "MobileCatchTheFlag";
-
+	console.log("initalize running");
     player.nickname = username;
     player.playerId = playerId;
     player.teamId = 0;
@@ -61,22 +68,47 @@ function init(gamename, username){
     player.caughtPosition = {};
     player.state = State.NORMAL;
     player.insideMap = false;
+	
+	if (!ready) {
+		pubTopic = 'MobileCatchTheFlag/' + Game.gameName + "/" + player.playerId; // We publish to our own device topic
+		subTopic = 'MobileCatchTheFlag/' + Game.gameName + "/+";  // We subscribe to all devices using "+" wildcard
+		setupConnection();
+		ready = true;
 
-	pubnub.setUUID(playerId);
+	}
 
-	console.log("is now trying to subscribe");
-	pubnub.subscribe({
-    	channels: [pubnub_channel],
-    	restore: true,
-    	disconnect :function(){
-    		console.log("disconnected")
-    	}
-	});
+
 }
+
+/*
+	FUNCTIONS TO HANDLE SERVER STUFF
+*/
+function setupConnection() {
+	var willMsg = {
+		msgType: 9,
+		playerId: player.playerId
+	}
+
+	status("Connecting to " + host + ":" + port + " as " + player.playerId);
+	client = new Paho.MQTT.Client(host, port, player.playerId);
+	client.onConnectionLost = onConnectionLost;
+	client.onMessageArrived = onMessageArrived;
+	console.log(client);
+	var finalWill = new Paho.MQTT.Message(JSON.stringify(willMsg));
+	finalWill.destinationName = pubTopic;
+	var options = {
+	  	useSSL: true,
+	    onSuccess: onConnect,
+	    onFailure: onConnectFailure,
+	    willMessage: finalWill
+	}
+	client.connect(options);
+}
+
 
 function onConnectMessage(){
 	//var playerInfo = Object.create(playerJoinedMsg);
-	playerJoinedMsg.playerId = playerId;
+	playerJoinedMsg.playerId = player.playerId;
 	playerJoinedMsg.nickname = player.nickname;
 
 	publish(playerJoinedMsg);
@@ -84,43 +116,31 @@ function onConnectMessage(){
 	//Get connected players
 }
 
-function publish(msg){
-	console.log("sending msg: ");
-	console.log(msg);
-	var pubConfig = {
-		channel: pubnub_channel,
-		message: msg
-	}
-	pubnub.publish(pubConfig, function(status, response){
-		console.log(status, response);
-	})
+function retainPublish(message) {
+	pubMessage = new Paho.MQTT.Message(JSON.stringify(message));
+	pubMessage.destinationName = pubTopic;
+	pubMessage.retained = true;
+	client.send(pubMessage);
+};
+
+function publish(message){
+	pubMessage = new Paho.MQTT.Message(JSON.stringify(message));
+	pubMessage.destinationName = pubTopic;
+	client.send(pubMessage);
+};
+
+function subscribe(){
+	client.subscribe(subTopic);
+	console.log("Subscribed: " + subTopic);
 }
 
-pubnub.addListener({
-    status: function(statusEvent) {
-    	console.log(statusEvent);
-        if (statusEvent.category === "PNConnectedCategory") {
-            onConnectMessage(); //If connected; sends msg to all clients that a new client has joined
+function unsubscribe(){
+	client.unsubscribe(subTopic);
+	console.log("Unsubscribed: " + subTopic);
+}
 
-        } else if (statusEvent.category === "PNUnknownCategory") {
-            var newState = {
-                new: 'error'
-            };
-            pubnub.setState(
-                {
-                    state: newState 
-                },
-                function (status) {
-                    console.log(statusEvent.errorData.message)
-                }
-            );
-        } 
-    },
-    /*
-		Handles all messages
-    */
-    message: function(msg) {
-        var msgObj = msg.message;
+function onMessageArrived(message) {
+	var msgObj = JSON.parse(message.payloadString);
         if(msgObj.msgType == 0){ // player info
         	console.log("recieved player info");
         	console.log(msgObj);
@@ -175,13 +195,90 @@ pubnub.addListener({
         			addPlayertoFreePlayersListUI(playersConnected[i].nickname, playersConnected[i].playerId);
         		}
         	}
+        }else if (msgObj.msgType == 9){ //Player disconencted
+        	addDisconnectedPlayer(msgObj.playerId);
+        	
+        }else if(msgObj.msgType == 10){ //Load gamestate only if rejoining
+        	if(hasReconnected){
+        		loadGameState(msgObj);
+        	}
+
         }
-    }
-})
+	
+}
+
+function onConnect(context) {
+	subscribe();
+	status("Connected!");
+	connected = true;
+	playerJoinedMsg.playerId = player.playerId;
+	playerJoinedMsg.nickname = player.nickname;
+	publich(playerJoinedMsg);
+}
+
+function onConnectFailure(e){
+  console.log("Failed to connect: " + JSON.stringify(e));
+}
+
+function onConnectionLost (responseObject) {
+	//retainPublish(new Byte[0]);
+	status("Connection lost!");
+	console.log("Connection lost: "+responseObject.errorMessage);
+	connected = false;
+}
+
+function status (s) {
+	console.log("Status update: " + s);
+	
+}
 /*
-	Input: playerID must be passed to id the player
-	Optional: teamId, position, caughtPosition, state, insideMap
+	Does a retain publish to save game state
 */
+function publishGameInfo(){
+	var msg {
+		msgType: 9
+		gameName: Game.gameName,
+		admin: Game.admin,
+		playerList: JSON.stringify(playersConnected),
+		friendlyFlagList: friendlyFlagList,
+		enemyFlagList: enemyFlagList
+		//add base 
+	}
+	retainPublish(msg);
+}
+
+/*
+	Load game state if reconnecting
+*/
+function loadGameState(msgObj){
+
+	for(var i = 0; i < disconnectedPlayers.length; i++){
+		if(playerId == disconnectedPlayers[i].playerId){
+			console.log("Found disconnected player");
+			Game.gameName = msgObj.gameName;
+			Game.admin = msgObj.admin;
+			playersConnected = JSON.parse(msgObj.playerList);
+			friendlyFlagList = JSON.parse(msgObj.friendlyFlagList);
+			enemyFlagList = JSON.parse(msgObj.enemyFlagList);
+		}
+	}
+
+
+}
+
+function addDisconnectedPlayer(diconnectedPlayerId){
+	for(var i = 0; i < playersConnected.length; i++){
+		if(playersConnected[i].playerId === disconnectedPlayerId){
+
+			disconnectedPlayers.push(playersConnected[i]);
+			playersConnected.remove(i);
+			console.log("Added " + disconnectedPlayerId + " to disconnected list");
+		}
+	}
+
+}
+
+
 function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, insideMap, carryingFlag){
 	if(!playerId){
 		console.log("Player id must be passed to id the player");
@@ -207,9 +304,6 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 				if(carryingFlag){
 					playersConnected[i].carryingFlag = carryingFlag;
 				}
-                if(playerId == player.playerId) {
-                    player = playersConnected[i];
-                }
 				break;	
 			}
 		}
@@ -218,11 +312,11 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 /*
 	Creates player object and adds to list of connected players
 */
-function addToPlayerList(playerName, newPlayerId){
+function addToPlayerList(playerName, playerId){
 	if(player.playerId == Game.admin){
 		var newplayer = Object.create(Player);
 		newplayer.nickname = playerName;
-		newplayer.playerId = newPlayerId;
+		newplayer.playerId = playerId;
 		newplayer.teamId = 0;
 		newplayer.position = {};
 		newplayer.caughtPosition = {};
@@ -328,4 +422,3 @@ function isAdmin(){
 function updateMapInfo(coordinates){
 	updateMapInfoUI(coordinates);
 }
-
