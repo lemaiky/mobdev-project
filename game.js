@@ -96,7 +96,7 @@ function inbase() {
 	if(player.teamId === 0) {
 		base = Game.teams.team0.base;
 	} else {
-		base = Game.teams.team0.base;
+		base = Game.teams.team1.base;
 	}
 
 	if(inradius(base)) {
@@ -171,7 +171,7 @@ function winningFlag() {
 			team.points += 1;
 			flag.win = true;
 			player.state = State.NORMAL;
-			pubTeamPoints(player.teamId, team.points);
+			pubTeamPoints(player.teamId, team.points, flag.flagId);
 			if(team.points === 5)
 				pubWinningTeam(player.teamId);
 			break;
