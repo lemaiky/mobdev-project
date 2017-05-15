@@ -110,6 +110,11 @@ var updateMsg = {
 	flagId:0
 }
 
+var mapInfoMsg = {
+	msgType:5,
+	position:{}
+}
+
 var baseMsg = {
 	msgType: 11,
 	teamId:-1,
