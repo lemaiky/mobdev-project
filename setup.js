@@ -374,7 +374,8 @@ function addFlags(flagList){
 		newFlag.flagId = flagList[i].flagId;
 		newFlag.teamId = flagList[i].teamId;
 		newFlag.originalPos = flagList[i].originalPos;
-		if(teamId){
+		console.log(newFlag.teamId + " ee " + player.teamId);
+		if(newFlag.teamId == player.teamId){
 			friendlyFlagList.push(newFlag);
 		}else{
 			enemyFlagList.push(newFlag);
