@@ -624,13 +624,11 @@ function updateTeamScoreUI(teamid, points){
 
 $("#catchButton").click(function(){
 	console.log("CATCH");
-	navigator.vibrate(50);
 	grab();
 });
 
 $("#releaseButton").click(function(){
 	console.log("RELEASE");
-	navigator.vibrate(50);
 	release();
 });
 
