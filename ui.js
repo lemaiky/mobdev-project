@@ -532,6 +532,23 @@ $("#startgame").click(function(){
 
 	posnLoop();
 
+
+	//own team
+	for (var i= 0; i < Game.teams.team0.players.length; i++){
+		players[Game.teams.team0.players[i].id] = new google.maps.Marker({
+			map:map, 
+			center: ownMarker
+		});
+ 	}
+
+ 	//otherteam
+	for (var i= 0; i < Game.teams.team1.players.length; i++){
+		players[Game.teams.team1.players[i].id] = new google.maps.Marker({
+			map:map, 
+			center: ownMarker
+		});
+ 	}
+
 	publishGameInfo();
 	// buttons
 	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
