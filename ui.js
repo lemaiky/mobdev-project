@@ -561,7 +561,7 @@ $("#startgame").click(function(){
 // function disconnected 
 
 function enemySuccessfullyGrabbed(){
-	alert("You caught an enemy!");
+	console.log("You froze an enemy!")	
 	navigator.vibrate(50);
 }
 
