@@ -421,7 +421,10 @@ function addToPlayerList(playerName, playerId){
 */
 
 function addFlags(teamId, flagList){
-	for(i = 0; i < flagList.length; i++){
+	for(i = 0; i < 5; i++){
+		if(i == 4){
+			i = 0;
+		}
 		var newFlag = Object.create(Flag);
 		newFlag.flagId = i;
 		newFlag.teamId = teamId;
