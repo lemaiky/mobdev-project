@@ -860,7 +860,7 @@ function updateOwnPosition(){
 		};
 		ownMarker.setPosition(posn);
 		ownRadius.setPosition(posn);
-		pubRegularUpdate(player.id, ownMarker.getPosition(), null);
+		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
 	})
 }
 
