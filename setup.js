@@ -28,28 +28,26 @@ var subTopic;
 
 //Combine these 2 same thing...
 function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN 
-	// Create a unique username from input
-	/*
-	if(localStorage.getItem("playerId")){
-		console.log("Exists cookie");
-		//get playerId value from cookie
-		//playerId = getFromcookie
-	}else{
-		//Create cookie with playerId
-		console.log("Exists no cookie");
-		playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
-		localStorage.setItem("playerId", playerId);
-		console.log(localStorage.getItem("playerId"));
-	}
-	*/
 	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	var obj = {
+		gamename: gamename,
+		playerId: playerId
+	}
+	localStorage.setItem("savedPlayer", JSON.stringify(obj));
+
 	Game.admin = playerId;
 	Game.gameName = gamename;
 	init(gamename, username);
 
 }
 function joinGame(gamename, username){
-	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	if(localStorage.getItem("savedPlayer") && (gamename == JSON.parse(localStorage.getItem("savedPlayer")).gamename)){
+		playerId = JSON.parse(localStorage.getItem("savedPlayer")).playerId;
+		hasReconnected = true;
+	}else{ // todo: disconnect player 
+		playerId = username + "-" + Math.random().toString(36).slice(2); 
+	}
+
 	Game.gameName = gamename;
 	init(gamename, username);
 }
@@ -148,32 +146,26 @@ function onMessageArrived(message) {
 		case 1:
 			//received map position
 			break;
-		case 2:
+		case 2: // Player changed team
 			if(msgObj.playerId == player.playerId){
 				player.teamId = msgObj.playerId;
 			}		
-			console.log("recieved team info");
-			console.log(msgObj);
 			updatePlayerInfo(msgObj.playerId, msgObj.teamId);
 			updateTeamUI(msgObj.playerId, msgObj.teamId);
 			break;
-		case 3:
+		case 3: // Flag placements
 			console.log("recieved flag placements");
 			console.log(msgObj);
 			addFlags(JSON.parse(msgObj.flagList));
 			break;
-		case 4:
-			 console.log("default update msg");
-			 console.log(msgObj);
+		case 4: // Default update msg
 			 if(caughtPosition != null){
 				updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
 			 }else{
 				updatePlayerInfo(msgObj.playerId, null, msgObj.position, null, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
 			 }
 			 break;
-		case 5:
-			console.log("recieved map info");
-			console.log(msgObj);
+		case 5: // Map info
 			updateMapInfo(msgObj.position);
 			break;
 		case 6:
