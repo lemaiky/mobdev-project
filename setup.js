@@ -369,7 +369,7 @@ function addToPlayerList(playerName, playerId){
 */
 
 function addFlags(flagList){
-	for(var i = 0; flagList.length; i++){
+	for(i = 0; i < flagList.length; i++){
 		var newFlag = Object.create(Flag);
 		cFlag.flagId = flagList[i].flagId;
 		cFlag.teamId = flagList[i].teamId;
@@ -422,8 +422,6 @@ function pubFlagPosition(coordinates, teamId, flagId){
 	}
 	publish(msg);
 }
-
-
 
 function pubFreezeEnemy(playerId, caughtPosition, state) {
 	var msg = {
