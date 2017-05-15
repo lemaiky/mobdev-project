@@ -82,7 +82,7 @@ a[href^="https://www.google.com/maps"] {
 #gamestart {
 	width: 78%;
 	margin: 50px auto;
-	top:10%;
+	top:0;
 	left:12.5%;
 	text-align: center;
 	position: absolute;
@@ -91,6 +91,7 @@ a[href^="https://www.google.com/maps"] {
 
 	
 }
+
 #gamestart fieldset {
 	background: #FAFCF9;
 	
@@ -102,7 +103,7 @@ a[href^="https://www.google.com/maps"] {
 	box-sizing: border-box;
 	width: 80%;
 	margin: 0 10%;
-
+	height: auto;
 	border: 11px 11px;
     border-style: solid;
 
@@ -110,6 +111,7 @@ a[href^="https://www.google.com/maps"] {
 	/*stacking fieldsets above each other*/
 	position: absolute;
 }
+
 /*Hide all except first fieldset*/
 #gamestart fieldset:not(:first-of-type) {
 	display: none;
@@ -138,6 +140,7 @@ a[href^="https://www.google.com/maps"] {
 	padding: 10px 5px;
 	margin: 10px 5px;
 }
+
 #gamestart .action-button:hover, #gamestart .action-button:focus {
 	box-shadow: 0 0 0 2px white, 0 0 0 3px #CCDD89;
 }
@@ -155,6 +158,10 @@ h3{
 	margin-bottom: 20px;
 }
 
+h4{
+	font-size: 11px;
+	text-align: center;
+}
 
 #gameplayHeader {
 	display: none;
@@ -184,7 +191,12 @@ h3{
 
 } 
 
-#team1Header, #team2Header{
+#teamHeader{
+	width: 100%;
+	text-align: center;
+}
+
+.headerText{
 	text-align: center;
 }
 
@@ -313,7 +325,17 @@ h3{
 
 }
 
+#team1{
+	width: 100%;
+}
 
+#team2{
+	width: 100%;
+}
+
+#chooseTeamsTable{
+	width: 100%;
+}
 
 #gameplayTimer{
 	width: 2%;

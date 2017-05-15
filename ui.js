@@ -441,6 +441,8 @@ $("#toFlagPlacement").click(function(){
 			drawingManager.setOptions({
 				drawingControl: false,
 			});
+
+
 			//console.log("flag positioned ");
 
 			// var flag = Object.create(Flag);
@@ -472,6 +474,20 @@ $("#toConfirm").click(function(){
 	for (var i = 0; i < ownFlagListUI.length; i++){
 		posns.push(ownFlagListUI[i].getPosition());
 	}
+
+
+	// circle = new google.maps.Circle({
+ //        strokeColor: '#FF0000',
+ //        strokeOpacity: 0.8,
+ //        strokeWeight: 2,
+ //        fillColor: '#FF0000',
+ //        fillOpacity: 0.35,
+ //        map: map,
+ //        center: ownFlagListUI[0].getPosition(),
+ //        radius: 10
+ //      });
+
+
 
 	// send these home base coordinates to ziad
 	pubFlagPosition(posns); // He wants team id also. How do we get that? 
@@ -514,7 +530,7 @@ $("#startgame").click(function(){
 	// footer
 	document.getElementById("gameplayFooter").style.display = "inline-block";
 
-	document.getElementById("youAreFrozen").style.display = "inline-block";
+	//document.getElementById("youHaveTheFlag").style.display = "inline-block";
 							// youAreFrozen
 							// youHaveTheFlag
 
@@ -600,7 +616,8 @@ $(".previous").click(function(){
 		len = items.length, 
 		i = 0; i < len; i ++)
 	{
-		items[i].setAttribute('draggable', 'true');
+		//items[i].setAttribute('draggable', 'true');
+		items[i].draggable();
 	}
 
 	//variable for storing the dragging item reference 
@@ -796,7 +813,7 @@ function addFlagUI(teamId, flaglist){
 }
 
 function updatePlayerPosition(playerId, position){
-	players[playerId].setPosition(position);
+	players[playerId].setPosition(position);	
 }
 
 function updateFlagPosition(teamId, flagId, position){
