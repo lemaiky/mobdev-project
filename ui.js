@@ -2,7 +2,8 @@ var map;
 var playingArea;
 var drawingManager;
 var homeBaseListener;
-var flagList;
+var ownFlagListUI;
+var enemyFlagListUI;
 var homeBase; 
 var enemyBase;
 
@@ -395,7 +396,7 @@ $('#broadcastPlayers').click(function(){
 
 $("#toHomeBasePlacement").click(function(){
 
-	// createTeams();
+	createTeams();
 	drawingManager.setOptions({
 		drawingMode: google.maps.drawing.OverlayType.MARKER,
 		drawingControl: false,
@@ -423,7 +424,7 @@ $("#toHomeBasePlacement").click(function(){
 // });
 
 $("#toFlagPlacement").click(function(){
-	flagList = [];
+	ownFlagListUI = [];
 
 		google.maps.event.removeListener(homeBaseListener);
 
@@ -439,11 +440,19 @@ $("#toFlagPlacement").click(function(){
 				drawingControl: false,
 			});
 			//console.log("flag positioned ");
+
+			// var flag = Object.create(Flag);
+			// flag.marker = marker;
+			// flag.flagId = ownFlagListUI.length;
+			// flag.position = marker.getPosition();
+			// flag.teamId = player.teamId;
+			// flag.originalPos = marker.getPosition();
+
 			
-			flagList.push(marker.getPosition());
+			ownFlagListUI.push(marker);
 			//console.log(flagList.length); 
 
-			if (flagList.length == 5) {
+			if (ownFlagListUI.length == 5) {
 				drawingManager.setOptions({
 					drawingMode: null,
 				});
@@ -456,13 +465,20 @@ $("#toConfirm").click(function(){
 		drawingMode: null
 	});
 
-	console.log(flagList.length);
+	console.log(ownFlagListUI.length);
+	posns = [];
+	for (var i = 0; i < ownFlagListUI.length; i++){
+		posns.push(ownFlagListUI[i].getPosition());
+	}
+
 	// send these home base coordinates to ziad
-	pubFlagPosition(flagList); // He wants team id also. How do we get that? 
+	pubFlagPosition(posns); // He wants team id also. How do we get that? 
 });
 
 
 $("#startgame").click(function(){
+
+	publishGameInfo();
 	// buttons
 	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
 	document.getElementById("gameplayReleaseDiv").style.display = "inline-block";
@@ -684,19 +700,65 @@ function updateTeamUI(playerid, teamId){
 }
 
 function updateBaseInfoUI(teamId, position){
-	position = JSON.parse(position);
+	received_posn = JSON.parse(position);
 	if (teamId == player.teamId){
 		console.log('wooohooo')
-		homeBase.setPosition(position);
+		homeBase.setPosition(received_posn);
 	}
 	else{
 		console.log('blaharer')
-		enemyBase.setPosition(position);
+		enemyBase = new google.maps.Marker({
+			position:received_posn,
+			map:map,
+			title: 'ENEMY BASE'
+		});
+		// enemyBase.setPosition(position);
 	}
 }
 
+function setInitialFlagUI(teamId, flaglist){
+	received_flaglist = JSON.parse(flaglist);
+	if (teamId == player.teamId){
+		console.log('here comes your man');
+		if (!ownFlagListUI){
+			ownFlagListUI = received_flaglist;
+			for (var i = 0; i < ownFlagListUI.length; i++){
+				placeFlagMarker(ownFlagListUI[i]);
+			}
+		}
+	}
+	else{
+		console.log('should be the other team flags');
+		enemyFlagListUI = received_flaglist;
+		for (var i = 0; i< enemyFlagListUI.length; i++){
+			placeFlagMarker(enemyFlagListUI[i]);
+		}
+	}
+}
 
-
-
-
+function addFlagUI(teamId, flaglist){
+	flagcoords = JSON.parse(flaglist);
+	if (teamId == player.teamId){
+		if (!ownFlagListUI){
+			for (var i = 0 ; i < flagcoords; i++){
+				var marker = new google.maps.Marker({
+					position:flagcoords[i],
+					map: map
+				})
+				ownFlagListUI.push(marker);
+			}
+		}
+	}
+	else{
+		if (!enemyFlagListUI){
+			for (var i = 0; i< flagcoords; i++){
+				var marker = new google.maps.Marker({
+					position:flagcoords[i],
+					map: map
+				});
+				enemyFlagListUI.push(marker);
+			}
+		}
+	}
+}
 

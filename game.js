@@ -19,6 +19,7 @@ function grab() {
 			flag.caught = true;
 			flag.holdingPlayerId = player.playerId;
 			player.state = State.FLAG;
+			//pubGrabFlag();
 			break;
 		}
 	}
@@ -29,13 +30,15 @@ function release() {
 		return;
 	}
 
-	var friend;
+	var friend, team;
+	if(player.teamId === 0)
+		team = Game.teams.team0;
+	else
+		team = Game.teams.team1;
+	
 	// check all friends
-	for(var i = 0; i < playersConnected.length; ++i) {
-		if(playersConnected[i].teamId != player.teamId)
-			continue;
-
-		friend = playersConnected[i];
+	for(var i = 0; i < team.players.length; ++i) {
+		friend = team.players[i];
 		if(friend.position === friend.caughtPosition && friend.state === State.CAUGHT && inradius(friend)) {
 			// send message to release friend
 			pubReleaseFriend(friend.playerId, State.RELEASED);
@@ -45,17 +48,17 @@ function release() {
 }
 
 function freezeEnemy() {
-	var enemy;
-	// check all enemies
-	for(var i = 0; i < playersConnected.length; ++i) {
-		if(playersConnected[i].teamId === player.teamId)
-			continue;
+	var enemy, enemyTeam;
+	if(player.teamId === 0)
+		enemyTeam = Game.teams.team1;
+	else
+		enemyTeam = Game.teams.team0;
 
-		enemy = playersConnected[i];
-		if (enemy.state != State.RELEASED && inradius(enemy)) {
-			if(enemy.state === State.FLAG) {
-				resetFlag(enemy);
-			}
+	// check all enemies
+	for(var i = 0; i < enemyTeam.players.length; ++i) {
+		enemy = enemyTeam.players[i];
+		if (enemy.state === State.FLAG && inradius(enemy)) {
+			resetFlag(enemy);
 			// send a message to freeze the player
 			pubFreezeEnemy(enemy.playerId, player.position, State.CAUGHT);
 			break;
@@ -117,12 +120,18 @@ function inradius(obj) {
 	}
 }
 
-function isWinning(teamId) {
-	if(Game.teams[teamId].points === 5) {
-		// show winning page on teams[teamId]
-		// show losing page on teams[enemyId]
+function isWinning() {
+	var team, enemyTeam;
+	if(player.teamId === 0) {
+		team = Game.teams.team0;
+		enemyTeam = Game.teams.team1;
+	} else {
+		team = Game.teams.team1;
+		enemyTeam = Game.teams.team0;
 	}
-	// else continue the game
+	
+	// show winning page on team
+	// show losing page on enemyTeam
 }
 
 function resetFlag(enemy) {
@@ -141,14 +150,22 @@ function resetFlag(enemy) {
 }
 
 function winningFlag() {
+	var team;
+	if(player.teamId === 0)
+		team = Game.teams.team0;
+	else
+		team = Game.teams.team1;
+
 	for(var i = 0; enemyFlagList.length; ++i) {
 		var flag = enemyFlagList[i];
 		if(flag.caught && flag.holdingPlayerId === player.playerId) {
 			// flag disappears from the other team's side
-			//teams[teamId].points += 1;
+			team.points += 1;
 			flag.win = true;
 			player.state = State.NORMAL;
-			isWinning(playerTeamId);
+			if(team.points === 5)
+				isWinning();
+			
 			break;
 		}
 	}
@@ -158,19 +175,3 @@ function unlockPosition() {
 	player.state = State.NORMAL;
 	player.caughtPosition = {};
 }
-
-// oneself being caught
-// function beingReleased() {
-// 	if(player.position === player.caughtPosition) {
-// 		player.state = State.RELEASED;
-// 		alert('go back to your base');
-// 	} else {
-// 		alert("you need to be at your caught position");
-// 	}
-// }
-
-// function frozen() {
-// 	player.state = State.CAUGHT;
-// 	player.caughtPosition = position;
-// 	alert('stop moving');
-// }
