@@ -416,7 +416,7 @@ function pubMapPosition(coordinates){
 	publish(mapInfoMsg);
 }
 
-function pubFlagPosition(coordinates, teamId, flagId){
+function pubFlagPosition(flagList){
 	var msg = {
 		msgType: 3,
 		flagList: JSON.stringify(flagList)
