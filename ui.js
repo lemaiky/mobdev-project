@@ -899,7 +899,8 @@ function updateOwnPosition(){
 		}
 
 		if (player.state === State.FLAG){
-			pubFlagUpdate(player.teamId, player.currentFlag, position);
+			console.log('we have a flag');
+			pubFlagUpdate(player.teamId, player.currentFlag, ownMarker.getPosition());
 		}
 	})
 }
