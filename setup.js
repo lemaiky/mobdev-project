@@ -190,7 +190,7 @@ function onMessageArrived(message) {
 				}
 			}
 			break;
-		case 9:
+		case 9: // A player has disconnected
 			addDisconnectedPlayer(msgObj.playerId);
 			break;
 			
@@ -201,8 +201,18 @@ function onMessageArrived(message) {
 			break;
 		case 11:
 			console.log("Recieved base location");
+			if(msgObj.teamId == 0){
+				Game.teams.team0.base.teamId = msgObj.teamId;
+				Game.teams.team0.base.position = msgObj.position;
+			}else{
+				Game.teams.team1.base.teamId = msgObj.teamId;
+				Game.teams.team1.base.position = msgObj.position;
+			}
 			updateBaseInfoUI(msgObj.teamId, msgObj.position);
 			break;
+		case 12: //A player has reconnected
+			playersConnected.push(JSON.parse(msgObj.player));
+
 	}	
 }
 
@@ -236,8 +246,7 @@ function status (s) {
 function publishGameInfo(){
 	var msg = {
 		msgType: 9,
-		gameName: Game.gameName,
-		admin: Game.admin,
+		game: JSON.stringify(Game),
 		playerList: JSON.stringify(playersConnected),
 		friendlyFlagList: friendlyFlagList,
 		enemyFlagList: enemyFlagList,
@@ -253,15 +262,22 @@ function publishGameInfo(){
 function loadGameState(msgObj){
 	disconnectedPlayers = JSON.parse(msgObj.disconnectedPlayers);
 	for(var i = 0; i < disconnectedPlayers.length; i++){
-		if(playerId == disconnectedPlayers[i].playerId){
+		if(player.playerId == disconnectedPlayers[i].playerId){
 			console.log("Found disconnected player");
-			Game.gameName = msgObj.gameName;
-			Game.admin = msgObj.admin;
+			Game = JSON.parse(msgObj.game);
 			playersConnected = JSON.parse(msgObj.playerList);
 			friendlyFlagList = JSON.parse(msgObj.friendlyFlagList);
 			enemyFlagList = JSON.parse(msgObj.enemyFlagList);
+			playersConnected.push(disconnectedPlayers[i]);
+			player = disconnectedPlayers[i];
+			disconnectedPlayers.remove(i);
 		}
 	}
+	var msg = {
+		msgType: 12,
+		player: JSON.stringify(player)
+	}
+	publish(msg);
 
 
 }
@@ -309,6 +325,26 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 		}
 	}
 }
+
+
+function createTeams(){
+	var team0 = Object.create(Team);
+	team0.teamId = 0;
+	var team1 = Object.create(Team);
+	team1.teamId = 1;
+
+	for(i = 0; i < playersConnected.length; i++){
+		if(playersConnected[i].teamId == 0){
+			team0.players.push(playersConnected[i]);
+		}else{
+			team1.players.push(playersConnected[i]);
+		}
+	}
+	Game.teams = {team0, team1};
+
+}
+
+
 /*
 	Creates player object and adds to list of connected players
 */

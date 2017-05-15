@@ -57,7 +57,7 @@ var Flag = {
 }
 
 var Base = {
-	teamId:0,
+	teamId:0,	
 	position: {}
 	// team id
 	// position: {lat, long}
