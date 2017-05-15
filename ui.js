@@ -812,7 +812,6 @@ function updateTeamUI(playerid, teamId){
 function updateBaseInfoUI(teamId, position){
 	received_posn = JSON.parse(position);
 	if (teamId == player.teamId){
-		//baseIcon = google.maps.MarkerImage("newIcon2.png");
 		homeBase.setPosition(received_posn);
 		homeBase.setIcon("resources/icons/baseflag_small_green.png");
 	}
@@ -820,7 +819,8 @@ function updateBaseInfoUI(teamId, position){
 		enemyBase = new google.maps.Marker({
 			position:received_posn,
 			map:map,
-			title: 'ENEMY BASE'
+			title: 'ENEMY BASE',
+			icon: 'resources/icons/baseflag_small_red.png',
 		});
 		// enemyBase.setPosition(position);
 		enemyBase.setIcon("resources/icons/baseflag_small_red.png");
@@ -833,8 +833,8 @@ function setInitialFlagUI(teamId, flaglist){
 		if (!ownFlagListUI){
 			ownFlagListUI = received_flaglist;
 			for (var i = 0; i < ownFlagListUI.length; i++){
-				placeFlagMarker(ownFlagListUI[i]);
 				ownFlagListUI[i].setIcon("resources/icons/flag_green.png");
+				placeFlagMarker(ownFlagListUI[i]);
 			}
 		}
 	}
@@ -855,9 +855,10 @@ function addFlagUI(teamId, flaglist){
 					position:flagcoords[i],
 					map: map,
 					icon: 'resources/icons/flag_green.png'			//ownFlagListUI[i].setIcon("./resources/icons/flag_green.png");
+					//icon: 'https://github.com/scottdejonge/map-icons/blob/master/src/icons/embassy.svg'
 
-				})
-				ownFlagListUI[i].setIcon("resources/icons/flag_green.png");
+				});
+				marker.setIcon("resources/icons/flag_green.png");
 				ownFlagListUI.push(marker);
 			}
 		}
@@ -871,8 +872,8 @@ function addFlagUI(teamId, flaglist){
 					map: map,
 					icon:"resources/icons/flag_red.png"
 				});
+				marker.setIcon("resources/icons/flag_red.png");
 				enemyFlagListUI.push(marker);
-				enemyFlagListUI[i].setIcon("resources/icons/flag_red.png");
 				marker.setMap(map);
 			}
 		}
