@@ -459,12 +459,22 @@ $("#toConfirm").click(function(){
 
 
 $("#startgame").click(function(){
+	// buttons
 	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
 	document.getElementById("gameplayReleaseDiv").style.display = "inline-block";
+
+	// header
 	document.getElementById("gameplayHeader").style.display = "inline-block";
 	document.getElementById("scoreTeam1").innerText = 3;
 	document.getElementById("scoreTeam2").innerText = 4;
+
+	// footer
+	document.getElementById("gameplayFooter").style.display = "inline-block";
 	document.getElementById("gameplayTimer").innerText = "2:59";
+
+	document.getElementById("youHaveTheFlag").style.visibility = "show";
+							// youAreFrozen
+
 	gameover();
 });
 
