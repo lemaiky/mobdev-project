@@ -532,7 +532,7 @@ $("#startgame").click(function(){
 
 	//own team
 	for (var i= 0; i < Game.teams.team0.players.length; i++){
-		players[Game.teams.team0.players[i].id] = new google.maps.Marker({
+		players[Game.teams.team0.players[i].playerId] = new google.maps.Marker({
 			map:map, 
 			center: ownMarker
 		});
@@ -540,7 +540,7 @@ $("#startgame").click(function(){
 
  	//otherteam
 	for (var i= 0; i < Game.teams.team1.players.length; i++){
-		players[Game.teams.team1.players[i].id] = new google.maps.Marker({
+		players[Game.teams.team1.players[i].playerId] = new google.maps.Marker({
 			map:map, 
 			center: ownMarker
 		});
@@ -883,7 +883,7 @@ function updateOwnPosition(){
 			lng: position.coords.longitude
 		};
 		ownMarker.setPosition(posn);
-		ownRadius.setPosition(posn);
+		ownRadius.setCenter(posn);
 		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
 	})
 }
