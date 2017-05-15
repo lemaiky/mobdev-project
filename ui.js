@@ -2,7 +2,8 @@ var map;
 var playingArea;
 var drawingManager;
 var homeBaseListener;
-var flagList;
+var ownFlagList;
+var enemyFlagList;
 var homeBase; 
 var enemyBase;
 
@@ -423,7 +424,7 @@ $("#toHomeBasePlacement").click(function(){
 // });
 
 $("#toFlagPlacement").click(function(){
-	flagList = [];
+	ownFlagList = [];
 
 		google.maps.event.removeListener(homeBaseListener);
 
@@ -441,15 +442,16 @@ $("#toFlagPlacement").click(function(){
 			//console.log("flag positioned ");
 
 			var flag = Object.create(Flag);
+			flag.flagId = ownFlagList.length;
 			flag.position = marker.getPosition();
 			flag.teamId = player.teamId;
 			flag.originalPos = marker.getPosition();
 
 			
-			flagList.push(marker.getPosition());
+			ownFlagList.push(flag);
 			//console.log(flagList.length); 
 
-			if (flagList.length == 5) {
+			if (ownFlagList.length == 5) {
 				drawingManager.setOptions({
 					drawingMode: null,
 				});
@@ -462,9 +464,9 @@ $("#toConfirm").click(function(){
 		drawingMode: null
 	});
 
-	console.log(flagList.length);
+	console.log(ownFlagList.length);
 	// send these home base coordinates to ziad
-	pubFlagPosition(flagList); // He wants team id also. How do we get that? 
+	pubFlagPosition(ownFlagList); // He wants team id also. How do we get that? 
 });
 
 
