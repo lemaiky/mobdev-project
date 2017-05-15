@@ -560,6 +560,7 @@ $("#startgame").click(function(){
 
 function enemySuccessfullyGrabbed(){
 	alert("You caught an enemy!");
+	navigator.vibrate(50);
 }
 
 function youAreFrozenUI(){
