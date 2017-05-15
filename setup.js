@@ -221,7 +221,13 @@ function onMessageArrived(message) {
 		case 13: //Flag has moved
 			updateFlagPosition(msgObj.teamId, msgObj.flagId, JSON.parse(msgObj.coordinates));
 			break;
-
+        case 14: // winning/losing message
+            if(msgObj.teamId === player.teamId) {
+                youWonUI();
+            } else {
+                youLostUI();
+            }
+            break;
 	}	
 }
 
@@ -471,6 +477,14 @@ function pubPlayerList(){
 		playerList: JSON.stringify(playersConnected)
 	}
 	publish(msg);
+}
+
+function pubWinningTeam(teamId) {
+    var msg = {
+        msgType: 14,
+        teamId: teamId
+    }
+    publish(msg);
 }
 
 
