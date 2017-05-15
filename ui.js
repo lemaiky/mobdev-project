@@ -2,8 +2,8 @@ var map;
 var playingArea;
 var drawingManager;
 var homeBaseListener;
-var ownFlagListUI;
-var enemyFlagListUI;
+var ownFlagListUI = [];
+var enemyFlagListUI = [];
 var homeBase; 
 var enemyBase;
 
@@ -741,10 +741,11 @@ function setInitialFlagUI(teamId, flaglist){
 
 function addFlagUI(teamId, flaglist){
 	flagcoords = flaglist;
+	console.log(flagcoords);
 	if (teamId == player.teamId){
 		console.log('hahahaaaaaaa');
-		if (!ownFlagListUI){
-			for (var i = 0 ; i < flagcoords; i++){
+		if (ownFlagListUI.length==0){
+			for (var i = 0 ; i < flagcoords.length; i++){
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
 					map: map
@@ -755,15 +756,17 @@ function addFlagUI(teamId, flaglist){
 	}
 	else{
 		console.log('the enemeyyyyyyy');
-		if (!enemyFlagListUI){
+		if (enemyFlagListUI.length==0){
 			console.log('asdlfkjafdslksfdlkjdfsjkldsflkdfsljkdsfjklfd');
 
-			for (var i = 0; i< flagcoords; i++){
+			for (var i = 0; i< flagcoords.length; i++){
+				console.log("marking the marker");
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
 					map: map
 				});
 				enemyFlagListUI.push(marker);
+				marker.setMap(map);
 			}
 		}
 	}
