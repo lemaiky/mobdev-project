@@ -395,7 +395,7 @@ $('#broadcastPlayers').click(function(){
 
 $("#toHomeBasePlacement").click(function(){
 
-	createTeams();
+	// createTeams();
 	drawingManager.setOptions({
 		drawingMode: google.maps.drawing.OverlayType.MARKER,
 		drawingControl: false,
@@ -639,7 +639,7 @@ function updateMapInfoUI(coordinates){
 	//console.log("object length");
 	//console.log(Object.keys(coordinates).length);
 	//objectLength = Object.keys(coordinates).length;
-	
+	console.log("does this get called after the home base");
 	playingArea = new google.maps.Polygon({
 		paths:coordinates
 	})
@@ -682,10 +682,13 @@ function updateTeamUI(playerid, teamId){
 }
 
 function updateBaseInfoUI(teamId, position){
+	position = JSON.parse(position);
 	if (teamId == player.teamId){
+		console.log('wooohooo')
 		homeBase.setPosition(position);
 	}
 	else{
+		console.log('blaharer')
 		enemyBase.setPosition(position);
 	}
 }

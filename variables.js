@@ -111,7 +111,8 @@ var updateMsg = {
 }
 
 var baseMsg = {
-	msgType: 5,
+	msgType: 11,
+	teamId:-1,
 	position: {}
 }
 
