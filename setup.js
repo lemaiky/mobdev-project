@@ -183,6 +183,9 @@ function onMessageArrived(message) {
 		case 7:
 			//release someone
 			// playerId = friend
+			if (player.playerId == msgObj.playerId){
+				youAreNotFrozenUI();
+			}
 			updatePlayerInfo(msgObj.playerId, null, null, null, msgObj.state, null, null);
 			break;
 		case 8:
