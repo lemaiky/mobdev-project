@@ -128,6 +128,9 @@ function isWinning(teamId) {
 function resetFlag(enemy) {
 	for(var i = 0; friendlyFlagList.length; ++i) {
 		var flag = friendlyFlagList[i];
+		if(flag.win && flag.win === true)
+			continue;
+		
 		if(flag.caught && flag.holdingPlayerId === enemy.playerId) {
 			flag.position = flag.originalPos;
 			flag.caught = false;
@@ -143,6 +146,7 @@ function winningFlag() {
 		if(flag.caught && flag.holdingPlayerId === player.playerId) {
 			// flag disappears from the other team's side
 			//teams[teamId].points += 1;
+			flag.win = true;
 			player.state = State.NORMAL;
 			isWinning(playerTeamId);
 			break;

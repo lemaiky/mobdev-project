@@ -54,8 +54,6 @@ function init(gamename, username){
 	
 	pubnub_channel = "MobileCatchTheFlag";
 
-	
-
     player.nickname = username;
     player.playerId = playerId;
     player.teamId = 0;
@@ -209,6 +207,9 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 				if(carryingFlag){
 					playersConnected[i].carryingFlag = carryingFlag;
 				}
+                if(playerId == player.playerId) {
+                    player = playersConnected[i];
+                }
 				break;	
 			}
 		}
@@ -217,11 +218,11 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 /*
 	Creates player object and adds to list of connected players
 */
-function addToPlayerList(playerName, playerId){
+function addToPlayerList(playerName, newPlayerId){
 	if(player.playerId == Game.admin){
 		var newplayer = Object.create(Player);
 		newplayer.nickname = playerName;
-		newplayer.playerId = playerId;
+		newplayer.playerId = newPlayerId;
 		newplayer.teamId = 0;
 		newplayer.position = {};
 		newplayer.caughtPosition = {};
