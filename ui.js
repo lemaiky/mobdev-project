@@ -468,7 +468,7 @@ $("#toConfirm").click(function(){
 	console.log(ownFlagListUI.length);
 	posns = [];
 	for (var i = 0; i < ownFlagListUI.length , i++){
-		posns.append(ownFlagListUI.getPosition());
+		posns.append(ownFlagListUI[i].getPosition());
 	}
 	// send these home base coordinates to ziad
 	pubFlagPosition(ownFlagListUI); // He wants team id also. How do we get that? 
@@ -742,11 +742,20 @@ function addFlagUI(teamId, flaglist){
 					position:flagcoords[i],
 					map: map
 				})
+				ownFlagListUI.push(marker);
 			}
 		}
 	}
 	else{
-		
+		if (!enemyFlagListUI){
+			for (var i = 0; i< flagcoords; i++){
+				var marker = new google.maps.Marker({
+					position:flagcoords[i],
+					map: map
+				});
+				enemyFlagListUI.push(marker);
+			}
+		}
 	}
 }
 
