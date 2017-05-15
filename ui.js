@@ -814,6 +814,12 @@ function updateTeamUI(playerid, teamId){
 function updateBaseInfoUI(teamId, position){
 	received_posn = JSON.parse(position);
 	if (teamId == player.teamId){
+		if (!homeBase){
+			homeBase = new google.maps.Marker({
+				position:position,
+				map: map
+			})
+		}
 		homeBase.setPosition(received_posn);
 		homeBase.setIcon("resources/icons/baseflag_small_green.png");
 	}
