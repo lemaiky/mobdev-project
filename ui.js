@@ -873,7 +873,8 @@ function addFlagUI(teamId, flaglist){
 }
 
 function updatePlayerPosition(playerId, position){
-	players[playerId].setPosition(position);	
+	if (players[playerId])
+		players[playerId].setPosition(position);	
 }
 
 function updateFlagPosition(teamId, flagId, position){
