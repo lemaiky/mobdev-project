@@ -411,8 +411,8 @@ function pubTeamChoice(movedPlayerId,teamId){
 }
 
 function pubMapPosition(coordinates){
-	baseMsg.position = coordinates;
-	publish(baseMsg);
+	mapInfoMsg.position = coordinates;
+	publish(mapInfoMsg);
 }
 
 function pubFlagPosition(coordinates, teamId, flagId){

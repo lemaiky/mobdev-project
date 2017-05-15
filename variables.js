@@ -56,6 +56,8 @@ var Flag = {
 	// caught (bool)
 }
 
+
+
 var Base = {
 	teamId:0,	
 	position: {}
