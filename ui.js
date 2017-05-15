@@ -911,4 +911,10 @@ function posnLoop(){
 	setTimeout(posnLoop, 500);
 }
 
-
+function removeFlag(teamId,flagId){
+	for (var i = 0; i < enemyFlagListUI; i++){
+		if (flagId === i){
+			enemyFlagListUI[i].setMap(null);
+		}
+	}
+}
