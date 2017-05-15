@@ -559,18 +559,22 @@ $("#startgame").click(function(){
 
 function youAreFrozenUI(){
 	document.getElementById("youAreFrozen").style.display = "inline-block";
+	navigator.vibrate(50);
 }
 
 function youAreNotFrozenUI(){
 	document.getElementById("youAreFrozen").style.display = "none";
+	navigator.vibrate(50);
 }
 
 function youHaveTheFlagUI(){
 	document.getElementById("youHaveTheFlag").style.display = "inline-block";
+	navigator.vibrate(50);
 }
 
 function youDontHaveTheFlagUI(){
 	document.getElementById("youHaveTheFlag").style.display = "none";
+	navigator.vibrate(50);
 }
 
 function youLostUI(){
@@ -581,6 +585,7 @@ function youLostUI(){
 
 	document.getElementById("youLost").innerText = "You lost! grrr!";
 	document.getElementById("youLost").style.display = "inline-block";
+	navigator.vibrate(500);
 }
 
 function youWonUI(){
@@ -591,14 +596,15 @@ function youWonUI(){
 
 	document.getElementById("youWon").innerText = "You won! Well played!";
 	document.getElementById("youWon").style.display = "inline-block";
+	navigator.vibrate(500);
 }
 
-function updateTeamScoreUI(teamid){
-	// temporary testing variables
-	var team1Score = 0;
-	var team2Score = 4;
-	document.getElementById("scoreTeam1").innerText = team1Score;
-	document.getElementById("scoreTeam2").innerText = team2Score;
+function updateTeamScoreUI(teamid, points){
+	if (teamid == 0){
+		document.getElementById("scoreTeam1").innerText = points;
+	} else if (teamid == 1){
+		document.getElementById("scoreTeam2").innerText = points;
+	}
 }
 
 // function activateGameplayTimer(){
@@ -612,11 +618,13 @@ function updateTeamScoreUI(teamid){
 
 $("#catchButton").click(function(){
 	console.log("CATCH");
+	navigator.vibrate(50);
 	grab();
 });
 
 $("#releaseButton").click(function(){
 	console.log("RELEASE");
+	navigator.vibrate(50);
 	release();
 });
 
@@ -680,8 +688,8 @@ $(".previous").click(function(){
 		len = items.length, 
 		i = 0; i < len; i ++)
 	{
-		//items[i].setAttribute('draggable', 'true');
-		items[i].draggable();
+		items[i].setAttribute('draggable', 'true');
+		//items[i].draggable();
 	}
 
 	//variable for storing the dragging item reference 
@@ -802,7 +810,7 @@ function updateBaseInfoUI(teamId, position){
 	if (teamId == player.teamId){
 		//baseIcon = google.maps.MarkerImage("newIcon2.png");
 		homeBase.setPosition(received_posn);
-		homeBase.setIcon("./resources/icons/baseflag_small_green.png");
+		homeBase.setIcon("./resources/icons/baseflag_small_red.png");
 	}
 	else{
 		enemyBase = new google.maps.Marker({
@@ -839,7 +847,7 @@ function addFlagUI(teamId, flaglist){
 			for (var i = 0 ; i < flagcoords.length; i++){
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
-					map: map
+					map: map,
 				})
 				ownFlagListUI.push(marker);
 			}

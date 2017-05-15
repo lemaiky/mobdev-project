@@ -219,7 +219,16 @@ function onMessageArrived(message) {
 		case 13: //Flag has moved
 			updateFlagPosition(msgObj.teamId, msgObj.flagId, msgObj.coordinates);
 			break;
-
+        case 14: // winning/losing message
+            if(msgObj.teamId === player.teamId) {
+                youWonUI();
+            } else {
+                youLostUI();
+            }
+            break;
+        case 15:
+            updateTeamPoints(msgObj.teamId, msgObj.points);
+            break;
 	}	
 }
 
@@ -308,7 +317,7 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 	}else{
 		for(i = 0; i < playersConnected.length;i++){
 			if(playersConnected[i].playerId == playerId){
-				if(playersConnected[i].teamId != teamId){
+				if(teamId){
 					playersConnected[i].teamId = teamId;
 				}
 				if(position){
@@ -331,7 +340,7 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
                 if(playerId === player.playerId) {
                     player = playersConnected[i];
                 }
-				break;	
+				break;
 			}
 		}
 	}
@@ -353,6 +362,15 @@ function createTeams(){
 	}
 	Game.teams = {team0, team1};
 
+}
+
+function updateTeamPoints(teamId, points) {
+    if(teamId === 0) {
+        Game.teams.team0.points = points;
+    } else {
+        Game.teams.team1.points = points;
+    }
+    updateTeamScoreUI(teamId, points);
 }
 
 
@@ -471,6 +489,23 @@ function pubPlayerList(){
 		playerList: JSON.stringify(playersConnected)
 	}
 	publish(msg);
+}
+
+function pubWinningTeam(teamId) {
+    var msg = {
+        msgType: 14,
+        teamId: teamId
+    }
+    publish(msg);
+}
+
+function pubTeamPoints(teamId, points) {
+    var msg = {
+        msgType: 15,
+        teamId: teamId,
+        points: points
+    };
+    publish(msg);
 }
 
 

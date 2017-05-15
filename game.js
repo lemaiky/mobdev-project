@@ -129,20 +129,6 @@ function inradius(obj, type) {
 	}
 }
 
-function isWinning() {
-	var team, enemyTeam;
-	if(player.teamId === 0) {
-		team = Game.teams.team0;
-		enemyTeam = Game.teams.team1;
-	} else {
-		team = Game.teams.team1;
-		enemyTeam = Game.teams.team0;
-	}
-	
-	// show winning page on team
-	// show losing page on enemyTeam
-}
-
 function resetFlag(enemy) {
 	for(var i = 0; friendlyFlagList.length; ++i) {
 		var flag = friendlyFlagList[i];
@@ -172,8 +158,9 @@ function winningFlag() {
 			team.points += 1;
 			flag.win = true;
 			player.state = State.NORMAL;
+			pubTeamPoints(player.teamId, team.points);
 			if(team.points === 5)
-				isWinning();
+				pubWinningTeam(player.teamId);
 
 			break;
 		}
