@@ -395,6 +395,7 @@ $('#broadcastPlayers').click(function(){
 
 $("#toHomeBasePlacement").click(function(){
 
+	createTeams();
 	drawingManager.setOptions({
 		drawingMode: google.maps.drawing.OverlayType.MARKER,
 		drawingControl: false,
@@ -670,7 +671,14 @@ function updateTeamUI(playerid, teamId){
 
 }
 
-
+function updateBaseInfoUI(teamId, position){
+	if (teamId == player.teamId){
+		homeBase.setPosition(position);
+	}
+	else{
+		enemyBase.setPosition(position);
+	}
+}
 
 
 

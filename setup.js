@@ -208,6 +208,7 @@ function onMessageArrived(message) {
 			break;
 		case 11:
 			console.log("Recieved base location");
+			updateBaseInfoUI(msgObj.teamId, msbObj.position);
 			break;
 	}	
 }
