@@ -71,8 +71,12 @@ function init(gamename, username){
 	console.log("initalize running");
 	team0 = Object.create(Team);
 	team0.teamId = 0;
+    team0.base = {};
+    team0.points = 0;
 	team1 = Object.create(Team);
 	team1.teamId = 1;
+    team1.base = {};
+    team1.points = 0;
 	player.nickname = username;
 	player.playerId = playerId;
 	player.teamId = 0;
@@ -219,11 +223,15 @@ function onMessageArrived(message) {
 			console.log("Recieved base location");
 			console.log(msgObj);
 			if(msgObj.teamId === 0){
-				Game.teams.team0.base.teamId = msgObj.teamId;
-				Game.teams.team0.base.position = JSON.parse(msgObj.position);
+                var base = Object.create(Base);
+                base.teamId = msgObj.teamId;
+				base.position = JSON.parse(msgObj.position);
+                Game.teams.team0.base = base;
 			}else if(msgObj.teamId === 1){
-				Game.teams.team1.base.teamId = msgObj.teamId;
-				Game.teams.team1.base.position = JSON.parse(msgObj.position);
+                var base = Object.create(Base);
+                base.teamId = msgObj.teamId;
+                base.position = JSON.parse(msgObj.position);
+                Game.teams.team1.base = base;
 			}
 			updateBaseInfoUI(msgObj.teamId, msgObj.position);
 			break;
