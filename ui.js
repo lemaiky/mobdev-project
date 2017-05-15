@@ -544,7 +544,7 @@ $("#startgame").click(function(){
 	// footer
 	document.getElementById("gameplayFooter").style.display = "inline-block";
 
-	//document.getElementById("youHaveTheFlag").style.display = "inline-block";
+	document.getElementById("youHaveTheFlag").style.display = "inline-block";
 							// youAreFrozen
 							// youHaveTheFlag
 
