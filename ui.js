@@ -7,6 +7,7 @@ var enemyFlagListUI = [];
 var homeBase; 
 var enemyBase;
 var players ={};
+var ownMarker; 
 
 
 /// INITIALIZATION
@@ -479,6 +480,20 @@ $("#toConfirm").click(function(){
 
 $("#startgame").click(function(){
 	// iterate over players, setting marker
+
+	navigator.geolocation.getCurrentPosition(function(position){
+		var pos = {
+			lat: position.coords.latitude,
+			lng: position.coords.longitude
+		};
+
+		ownMarker = new google.maps.Marker({
+			position:pos,
+			map:map,
+			icon: google.maps.SymbolPath.CIRCLE
+		});
+		
+	})
 
 	var playermarker = new google.maps.Marker({
 		map: map
