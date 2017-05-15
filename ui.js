@@ -508,6 +508,19 @@ $("#startgame").click(function(){
 			map:map,
 			icon: google.maps.SymbolPath.CIRCLE
 		});
+
+		circle = new google.maps.Circle({
+			strokeColor: '#FF0000',
+			strokeOpacity: 0.8,
+			strokeWeight: 2,
+			fillColor: '#FF0000',
+			fillOpacity: 0.35,
+			map: map,
+			center: ownFlagListUI[0].getPosition(),
+			radius: 10
+		});
+
+		circle.bindTo('center', ownMarker, 'position');
 		
 	})
 
@@ -516,6 +529,7 @@ $("#startgame").click(function(){
 	});
 	players[playerId] = playermarker;
 
+	posnLoop();
 
 	publishGameInfo();
 	// buttons
@@ -824,4 +838,22 @@ function updateFlagPosition(teamId, flagId, position){
 		enemyFlagListUI[flagId].setPosition(position);
 	}
 }
+
+function updateOwnPosition(){
+	navigator.geolocation.getCurrentPosition(function(position){
+		posn = {
+			lat:position.coords.latitude,
+			lng: position.coords.longitude
+		};
+		ownMarker.setPosition(posn);
+		pubRegularUpdate(player.id, ownMarker.getPosition(), null);
+	})
+}
+
+function posnLoop(){
+	console.log("updating");
+	updateOwnPosition();
+	setTimeout(posnLoop, 500);
+}
+
 
