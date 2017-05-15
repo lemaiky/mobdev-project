@@ -414,6 +414,7 @@ $("#toHomeBasePlacement").click(function(){
 	drawingManager.setMap(map);
 
 	homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+		marker.setIcon('resources/icons/baseflag_small_green.png');
 		drawingManager.setOptions({
 			drawingMode: null
 		})
@@ -446,6 +447,7 @@ $("#toFlagPlacement").click(function(){
 		drawingManager.setMap(map);
 		
 		flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+			marker.setIcon("resources/icons/flag_green.png");
 			drawingManager.setOptions({
 				drawingControl: false,
 			});
@@ -827,24 +829,24 @@ function updateBaseInfoUI(teamId, position){
 	}
 }
 
-function setInitialFlagUI(teamId, flaglist){
-	received_flaglist = JSON.parse(flaglist);
-	if (teamId == player.teamId){
-		if (!ownFlagListUI){
-			ownFlagListUI = received_flaglist;
-			for (var i = 0; i < ownFlagListUI.length; i++){
-				placeFlagMarker(ownFlagListUI[i]);
-				ownFlagListUI[i].setIcon("resources/icons/flag_green.png");
-			}
-		}
-	}
-	else{
-		enemyFlagListUI = received_flaglist;
-		for (var i = 0; i< enemyFlagListUI.length; i++){
-			placeFlagMarker(enemyFlagListUI[i]);
-		}
-	}
-}
+// function setInitialFlagUI(teamId, flaglist){
+// 	received_flaglist = JSON.parse(flaglist);
+// 	if (teamId == player.teamId){
+// 		if (!ownFlagListUI){
+// 			ownFlagListUI = received_flaglist;
+// 			for (var i = 0; i < ownFlagListUI.length; i++){
+// 				placeFlagMarker(ownFlagListUI[i]);
+// 				ownFlagListUI[i].setIcon("resources/icons/flag_green.png");
+// 			}
+// 		}
+// 	}
+// 	else{
+// 		enemyFlagListUI = received_flaglist;
+// 		for (var i = 0; i< enemyFlagListUI.length; i++){
+// 			placeFlagMarker(enemyFlagListUI[i]);
+// 		}
+// 	}
+// }
 
 function addFlagUI(teamId, flaglist){
 	flagcoords = flaglist;
@@ -854,17 +856,18 @@ function addFlagUI(teamId, flaglist){
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
 					map: map,
-					icon: 'resources/icons/flag_green.png'			//ownFlagListUI[i].setIcon("./resources/icons/flag_green.png");
+					icon: "resources/icons/flag_green.png"			//ownFlagListUI[i].setIcon("./resources/icons/flag_green.png");
 
-				})
-				ownFlagListUI[i].setIcon("resources/icons/flag_green.png");
+				});
 				ownFlagListUI.push(marker);
+				ownFlagListUI[i].setIcon("resources/icons/flag_green.png");
+				marker.setMap(map);
 			}
 		}
 	}
 	else{
 		if (enemyFlagListUI.length==0){
-			for (var i = 0; i< flagcoords.length; i++){
+			for (var i = 0; i < flagcoords.length; i++){
 				console.log("marking the marker");
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
