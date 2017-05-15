@@ -3,6 +3,8 @@ var playingArea;
 var drawingManager;
 var homeBaseListener;
 var flagList;
+var homeBase; 
+var enemyBase;
 
 
 /// INITIALIZATION
@@ -393,6 +395,7 @@ $('#broadcastPlayers').click(function(){
 
 $("#toHomeBasePlacement").click(function(){
 
+	createTeams();
 	drawingManager.setOptions({
 		drawingMode: google.maps.drawing.OverlayType.MARKER,
 		drawingControl: false,
@@ -403,6 +406,7 @@ $("#toHomeBasePlacement").click(function(){
 		drawingManager.setOptions({
 			drawingMode: null
 		})
+		homeBase = marker;
 		var coordinates  = marker.getPosition();
 		//console.log(coordinates);
 
@@ -677,7 +681,14 @@ function updateTeamUI(playerid, teamId){
 
 }
 
-
+function updateBaseInfoUI(teamId, position){
+	if (teamId == player.teamId){
+		homeBase.setPosition(position);
+	}
+	else{
+		enemyBase.setPosition(position);
+	}
+}
 
 
 

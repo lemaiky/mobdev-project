@@ -38,8 +38,8 @@ function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN
 		//Create cookie with playerId
 		console.log("Exists no cookie");
 		playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
-	  	localStorage.setItem("playerId", playerId);
-	  	console.log(localStorage.getItem("playerId"));
+		localStorage.setItem("playerId", playerId);
+		console.log(localStorage.getItem("playerId"));
 	}
 	*/
 	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
@@ -49,7 +49,7 @@ function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN
 
 }
 function joinGame(gamename, username){
- 	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
 	Game.gameName = gamename;
 	init(gamename, username);
 }
@@ -61,13 +61,13 @@ function joinGame(gamename, username){
 function init(gamename, username){
 
 	console.log("initalize running");
-    player.nickname = username;
-    player.playerId = playerId;
-    player.teamId = 0;
-    player.position = {};
-    player.caughtPosition = {};
-    player.state = State.NORMAL;
-    player.insideMap = false;
+	player.nickname = username;
+	player.playerId = playerId;
+	player.teamId = 0;
+	player.position = {};
+	player.caughtPosition = {};
+	player.state = State.NORMAL;
+	player.insideMap = false;
 	
 	if (!ready) {
 		pubTopic = 'MobileCatchTheFlag/' + Game.gameName + "/" + player.playerId; // We publish to our own device topic
@@ -97,10 +97,10 @@ function setupConnection() {
 	var finalWill = new Paho.MQTT.Message(JSON.stringify(willMsg));
 	finalWill.destinationName = pubTopic;
 	var options = {
-	  	useSSL: true,
-	    onSuccess: onConnect,
-	    onFailure: onConnectFailure,
-	    willMessage: finalWill
+		useSSL: true,
+		onSuccess: onConnect,
+		onFailure: onConnectFailure,
+		willMessage: finalWill
 	}
 	client.connect(options);
 }
@@ -141,70 +141,76 @@ function unsubscribe(){
 
 function onMessageArrived(message) {
 	var msgObj = JSON.parse(message.payloadString);
-        if(msgObj.msgType == 0){ // player info
-        	console.log("recieved player info");
-        	console.log(msgObj);
-        	addToPlayerList(msgObj.nickname, msgObj.playerId);
-
-        }else if(msgObj.msgType == 1){	//map posiiton
-        	console.log(msgObj);
-        	console.log("recieved map position");
-        
-
-        }else if(msgObj.msgType == 2){	//player joined team
-        	console.log("recieved team info");
-        	console.log(msgObj);
-        	updatePlayerInfo(msgObj.playerId, msgObj.teamId);
-        	updateTeamUI(msgObj.playerId, msgObj.teamId);
-        	//Call function to show player in team
-
-        }else if(msgObj.msgType == 3){	//flag placements
-        	console.log("recieved flag placements");
-        	console.log(msgObj);
-        	addFlags(JSON.parse(msgObj.flagList));
-
-        }else if(msgObj.msgType == 4){
-        	 console.log("default update msg");
-        	 console.log(msgObj);
-        	 if(caughtPosition != null){
-        	 	updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
-        	 }else{
-        	 	updatePlayerInfo(msgObj.playerId, null, msgObj.position, null, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
-        	 }
-        	 
-        }else if(msgObj.msgType == 5){
-        	console.log("recieved map info");
-        	console.log(msgObj);
-        	updateMapInfo(msgObj.position);
-        	// Add map info somehow
-        } else if(msgObj.msgType == 6){
-            //freeze someone
-            //playerId = enemy
-            updatePlayerInfo(msgObj.playerId, null, null, msgObj.caughtPosition, msgObj.state, null, null);
-        } else if(msgObj.msgType == 7){
-            //release someone
-            // playerId = friend
-            updatePlayerInfo(msgObj.playerId, null, null, null, msgObj.state, null, null);
-        } else if(msgObj.msgType == 8){
-        	console.log("recieved list of players");
-        	console.log(msgObj);
-        	playersConnected = JSON.parse(msgObj.playerList);
-        	if (!isAdmin()){
-        		console.log("pls add");
-        		for (var i = 0; i < playersConnected.length; i++){
-        			addPlayertoFreePlayersListUI(playersConnected[i].nickname, playersConnected[i].playerId);
-        		}
-        	}
-        }else if (msgObj.msgType == 9){ //Player disconencted
-        	addDisconnectedPlayer(msgObj.playerId);
-        	
-        }else if(msgObj.msgType == 10){ //Load gamestate only if rejoining
-        	if(hasReconnected){
-        		loadGameState(msgObj);
-        	}
-
-        }
-	
+	switch (msgObj.msgType){
+		case 0:
+			addToPlayerList(msgObj.nickname, msgObj.playerId);	
+			break;
+		case 1:
+			//received map position
+			break;
+		case 2:
+			if(msgObj.playerId == player.playerId){
+				player.teamId = msgObj.playerId;
+			}		
+			console.log("recieved team info");
+			console.log(msgObj);
+			updatePlayerInfo(msgObj.playerId, msgObj.teamId);
+			updateTeamUI(msgObj.playerId, msgObj.teamId);
+			break;
+		case 3:
+			console.log("recieved flag placements");
+			console.log(msgObj);
+			addFlags(JSON.parse(msgObj.flagList));
+			break;
+		case 4:
+			 console.log("default update msg");
+			 console.log(msgObj);
+			 if(caughtPosition != null){
+				updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
+			 }else{
+				updatePlayerInfo(msgObj.playerId, null, msgObj.position, null, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
+			 }
+			 break;
+		case 5:
+			console.log("recieved map info");
+			console.log(msgObj);
+			updateMapInfo(msgObj.position);
+			break;
+		case 6:
+			//freeze someone
+			//playerId = enemy
+			updatePlayerInfo(msgObj.playerId, null, null, msgObj.caughtPosition, msgObj.state, null, null);
+			break;
+		case 7:
+			//release someone
+			// playerId = friend
+			updatePlayerInfo(msgObj.playerId, null, null, null, msgObj.state, null, null);
+			break;
+		case 8:
+			console.log("recieved list of players");
+			console.log(msgObj);
+			playersConnected = JSON.parse(msgObj.playerList);
+			if (!isAdmin()){
+				console.log("pls add");
+				for (var i = 0; i < playersConnected.length; i++){
+					addPlayertoFreePlayersListUI(playersConnected[i].nickname, playersConnected[i].playerId);
+				}
+			}
+			break;
+		case 9:
+			addDisconnectedPlayer(msgObj.playerId);
+			break;
+			
+		case 10:
+			if(hasReconnected){
+				loadGameState(msgObj);
+			}
+			break;
+		case 11:
+			console.log("Recieved base location");
+			updateBaseInfoUI(msgObj.teamId, msbObj.position);
+			break;
+	}	
 }
 
 function onConnect(context) {
@@ -235,25 +241,24 @@ function status (s) {
 	Does a retain publish to save game state
 */
 function publishGameInfo(){
-	/*
 	var msg = {
-		msgType: 9
+		msgType: 9,
 		gameName: Game.gameName,
 		admin: Game.admin,
 		playerList: JSON.stringify(playersConnected),
 		friendlyFlagList: friendlyFlagList,
-		enemyFlagList: enemyFlagList
+		enemyFlagList: enemyFlagList,
+		disconnectedPlayers: disconnectedPlayers
 		//add base 
 	}
-	*/
-	//retainPublish(msg);
+	retainPublish(msg);
 }
 
 /*
 	Load game state if reconnecting
 */
 function loadGameState(msgObj){
-
+	disconnectedPlayers = JSON.parse(msgObj.disconnectedPlayers);
 	for(var i = 0; i < disconnectedPlayers.length; i++){
 		if(playerId == disconnectedPlayers[i].playerId){
 			console.log("Found disconnected player");
@@ -366,6 +371,7 @@ function pubRegularUpdate(playerId, position, caughtPosition, state, carryingFla
 
 function pubBasePosition(coordinates){
 	baseMsg.position = coordinates;
+	baseMsg.teamId = player.teamId;
 	publish(baseMsg);
 }
 
@@ -391,22 +397,22 @@ function pubFlagPosition(coordinates, teamId, flagId){
 
 
 function pubFreezeEnemy(playerId, caughtPosition, state) {
-    var msg = {
-        msgType: 6,
-        playerId: playerId,
-        caughtPosition: caughtPosition,
-        state: state
-    };
-    publish(msg);
+	var msg = {
+		msgType: 6,
+		playerId: playerId,
+		caughtPosition: caughtPosition,
+		state: state
+	};
+	publish(msg);
 }
 
 function pubReleaseFriend(playerId, state) {
-    var msg = {
-        msgType: 7,
-        playerId: playerId,
-        state: state
-    };
-    publish(msg);
+	var msg = {
+		msgType: 7,
+		playerId: playerId,
+		state: state
+	};
+	publish(msg);
 }
 
 function pubPlayerList(){
