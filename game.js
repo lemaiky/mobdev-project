@@ -169,7 +169,6 @@ function winningFlag() {
 			pubTeamPoints(player.teamId, team.points);
 			if(team.points === 5)
 				pubWinningTeam(player.teamId);
-
 			break;
 		}
 	}
