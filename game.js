@@ -88,6 +88,9 @@ function incourt() {
 }
 
 function inbase() {
+	if(player.state == State.NORMAL)
+		return;
+
 	var base;
 	if(player.teamId === 0) {
 		base = Game.teams.team0.base;
@@ -96,6 +99,7 @@ function inbase() {
 	}
 
 	if(inradius(base)) {
+		console.log("in base");
 		switch(player.state) {
 			case State.RELEASED:
 				unlockPosition();

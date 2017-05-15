@@ -206,10 +206,10 @@ function onMessageArrived(message) {
 			console.log("Recieved base location");
 			if(msgObj.teamId == 0){
 				Game.teams.team0.base.teamId = msgObj.teamId;
-				Game.teams.team0.base.position = msgObj.position;
+				Game.teams.team0.base.position = JSON.parse(msgObj.position);
 			}else{
 				Game.teams.team1.base.teamId = msgObj.teamId;
-				Game.teams.team1.base.position = msgObj.position;
+				Game.teams.team1.base.position = JSON.parse(msgObj.position);
 			}
 			updateBaseInfoUI(msgObj.teamId, msgObj.position);
 			break;
@@ -339,6 +339,7 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 				}
                 if(playerId === player.playerId) {
                     player = playersConnected[i];
+                    inbase();
                 }
 				break;
 			}
