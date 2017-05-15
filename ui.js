@@ -520,7 +520,7 @@ $("#startgame").click(function(){
 	})
 
 
-	// posnLoop();
+	 posnLoop();
 
 
 	//own team
