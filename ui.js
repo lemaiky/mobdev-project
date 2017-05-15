@@ -562,27 +562,41 @@ $("#startgame").click(function(){
 	// footer
 	document.getElementById("gameplayFooter").style.display = "inline-block";
 
-	document.getElementById("youHaveTheFlag").style.display = "inline-block";
-							// youAreFrozen
-							// youHaveTheFlag
-
-	gameover();
 });
 
-function gameover(){
-	if (document.getElementById("scoreTeam1").innerText == 5 || document.getElementById("scoreTeam2").innerText == 5){
-	// hide gameplay components
-		document.getElementById("gameplayCatchDiv").style.display = "none"; 
-		document.getElementById("gameplayReleaseDiv").style.display = "none";
-		document.getElementById("gameplayHeader").style.display = "none";
-		document.getElementById("gameplayFooter").style.display = "none";
+function youAreFrozenUI(){
+	document.getElementById("youAreFrozen").style.display = "inline-block";
+}
+
+function youAreNotFrozenUI(){
+	document.getElementById("youAreFrozen").style.display = "none";
+}
+
+function youHaveTheFlagUI(){
+	document.getElementById("youAreFrozen").style.display = "inline-block";
+}
+
+function youHaveTheFlagUI(){
+	document.getElementById("youAreFrozen").style.display = "none";
+}
+
+function youLostUI(){
+	document.getElementById("gameplayCatchDiv").style.display = "none"; 
+	document.getElementById("gameplayReleaseDiv").style.display = "none";
+	document.getElementById("gameplayHeader").style.display = "none";
+	document.getElementById("gameplayFooter").style.display = "none";
+
+	document.getElementById("youLost").style.display = "inline-block";
+}
 
 
-	// show game over components
-		document.getElementById("youWon").style.display = "inline-block";
-	//document.getElementById("youLost").style.display = "inline-block";
+function youWonUI(){
+	document.getElementById("gameplayCatchDiv").style.display = "none"; 
+	document.getElementById("gameplayReleaseDiv").style.display = "none";
+	document.getElementById("gameplayHeader").style.display = "none";
+	document.getElementById("gameplayFooter").style.display = "none";
 
-	}
+	document.getElementById("youWon").style.display = "inline-block";
 }
 
 
