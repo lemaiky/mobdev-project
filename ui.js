@@ -916,7 +916,6 @@ function removeFlag(teamId,flagId){
 				ownFlagListUI[i].setMap(null);
 			}
 		}
-	}
 	} else {
 		for (var i = 0; i < enemyFlagListUI.length; i++){
 			if (flagId === i){
