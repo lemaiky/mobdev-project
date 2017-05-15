@@ -557,7 +557,8 @@ $("#startgame").click(function(){
 	document.getElementById("scoreTeam2").innerText = 0;
 
 	// footer
-	document.getElementById("gameplayFooter").style.display = "inline-block";
+	// document.getElementById("gameplayFooter").style.display = "inline-block";
+	// document.getElementById("gameplayTimer").innerText = 0;
 
 });
 
@@ -583,6 +584,7 @@ function youLostUI(){
 	document.getElementById("gameplayHeader").style.display = "none";
 	document.getElementById("gameplayFooter").style.display = "none";
 
+	document.getElementById("youWon").innerText = "You lost! grrr!";
 	document.getElementById("youLost").style.display = "inline-block";
 }
 
@@ -592,6 +594,7 @@ function youWonUI(){
 	document.getElementById("gameplayHeader").style.display = "none";
 	document.getElementById("gameplayFooter").style.display = "none";
 
+	document.getElementById("youWon").innerText = "You won! Well played!";
 	document.getElementById("youWon").style.display = "inline-block";
 }
 
@@ -603,7 +606,22 @@ function updateTeamScoreUI(teamid){
 	document.getElementById("scoreTeam2").innerText = team2Score;
 }
 
+// function activateGameplayTimer(){
+// 	var timer = 0;
+// 	console.log("inside activateGameplayTimer");
+// 	setInterval(function(){
+// 		timer = timer + 1;
+// 		document.getElementById("gameplayTimer").innerText = timer;
+// 	},1000);
+// }
 
+$("#catchButton").click(function(){
+	console.log("CATCH");
+});
+
+$("#releaseButton").click(function(){
+	console.log("RELEASE");
+});
 
 $(".previous").click(function(){
 	if(animating) return false;
