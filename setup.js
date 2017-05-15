@@ -12,6 +12,8 @@ var enemyFlagList = new Array(); //List of flag objects
 var gameIsOver = true;
 var disconnectedPlayers = new Array();
 var hasReconnected =  false;
+var team0;
+var team1;
 
 
 var host = 'vernemq.evothings.com';
@@ -67,6 +69,10 @@ function joinGame(gamename, username){
 function init(gamename, username){
 
 	console.log("initalize running");
+	team0 = Object.create(Team);
+	team0.teamId = 0;
+	team1 = Object.create(Team);
+	team1.teamId = 1;
 	player.nickname = username;
 	player.playerId = playerId;
 	player.teamId = 0;
@@ -207,6 +213,7 @@ function onMessageArrived(message) {
 			break;
 		case 11:
 			console.log("Recieved base location");
+			console.log(msgObj);
 			if(msgObj.teamId === 0){
 				Game.teams.team0.base.teamId = msgObj.teamId;
 				Game.teams.team0.base.position = JSON.parse(msgObj.position);
@@ -352,11 +359,6 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 
 
 function createTeams(){
-	var team0 = Object.create(Team);
-	team0.teamId = 0;
-	var team1 = Object.create(Team);
-	team1.teamId = 1;
-
 	for(i = 0; i < playersConnected.length; i++){
 		if(playersConnected[i].teamId == 0){
 			team0.players.push(playersConnected[i]);
