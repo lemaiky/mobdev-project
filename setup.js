@@ -73,10 +73,12 @@ function init(gamename, username){
 	team0.teamId = 0;
     team0.base = {};
     team0.points = 0;
+    Game.teams.team0 = team0;
 	team1 = Object.create(Team);
 	team1.teamId = 1;
     team1.base = {};
     team1.points = 0;
+    Game.teams.team1 = team1;
 	player.nickname = username;
 	player.playerId = playerId;
 	player.teamId = 0;
@@ -251,6 +253,7 @@ function onMessageArrived(message) {
         case 15:
             updateTeamPoints(msgObj.teamId, msgObj.points, msgObj.flagId);
             break;
+
 	}	
 }
 
@@ -373,12 +376,11 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 function createTeams(){
 	for(i = 0; i < playersConnected.length; i++){
 		if(playersConnected[i].teamId == 0){
-			team0.players.push(playersConnected[i]);
+			Game.team0.players.push(playersConnected[i]);
 		}else{
-			team1.players.push(playersConnected[i]);
+			Game.team1.players.push(playersConnected[i]);
 		}
 	}
-	Game.teams = {team0, team1};
 
 }
 
@@ -527,8 +529,6 @@ function pubTeamPoints(teamId, points, flagId) {
     };
     publish(msg);
 }
-
-
 
 function isAdmin(){
 	return (player.playerId === Game.admin);
