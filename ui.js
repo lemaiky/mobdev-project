@@ -557,6 +557,11 @@ $("#startgame").click(function(){
 
 });
 
+
+function enemySuccessfullyGrabbed(){
+	alert("You caught an enemy!");
+}
+
 function youAreFrozenUI(){
 	document.getElementById("youAreFrozen").style.display = "inline-block";
 	navigator.vibrate(50);
