@@ -217,7 +217,7 @@ function onMessageArrived(message) {
 			playersConnected.push(JSON.parse(msgObj.player));
 			break;
 		case 13: //Flag has moved
-			updateFlagPosition(msgObj.teamId, msgObj.flagId, JSON.parse(msgObj.coordinates));
+			updateFlagPosition(msgObj.teamId, msgObj.flagId, msgObj.coordinates);
 			break;
 
 	}	

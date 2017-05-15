@@ -298,7 +298,7 @@ function initMap() {
 		zoom: 17,
 		mapTypeId: 'roadmap',
 		disableDefaultUI: true, 
-			oomControl: false,
+		zoomControl: false,
 		zoomControlOptions: {   position: google.maps.ControlPosition.LEFT_CENTER        
 		},          
 		scaleControl: false,
@@ -498,8 +498,11 @@ $("#startgame").click(function(){
 		ownMarker = new google.maps.Marker({
 			position:pos,
 			map:map,
-			draggable:true
+			draggable:true,
+
 		});
+		ownMarker.setDraggable(true);
+		ownMarker.setZIndex(1000000);
 
 		ownRadius = new google.maps.Circle({
 			strokeColor: '#FF0000',
@@ -516,12 +519,8 @@ $("#startgame").click(function(){
 		
 	})
 
-	var playermarker = new google.maps.Marker({
-		map: map
-	});
-	players[playerId] = playermarker;
 
-	posnLoop();
+	// posnLoop();
 
 
 	//own team
@@ -862,7 +861,6 @@ function addFlagUI(teamId, flaglist){
 }
 
 function updatePlayerPosition(playerId, position){
-	console.log('looking for player with id'+ playerId);
 	players[playerId].setPosition(position);	
 }
 
