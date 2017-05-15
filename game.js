@@ -95,7 +95,7 @@ function inbase() {
 	if(player.teamId === 0) {
 		base = Game.teams.team0.base;
 	} else {
-		base = Game.teams.team0.base;
+		base = Game.teams.team1.base;
 	}
 
 	if(inradius(base)) {

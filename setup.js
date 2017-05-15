@@ -204,10 +204,10 @@ function onMessageArrived(message) {
 			break;
 		case 11:
 			console.log("Recieved base location");
-			if(msgObj.teamId == 0){
+			if(msgObj.teamId === 0){
 				Game.teams.team0.base.teamId = msgObj.teamId;
 				Game.teams.team0.base.position = JSON.parse(msgObj.position);
-			}else{
+			}else if(msgObj.teamId === 1){
 				Game.teams.team1.base.teamId = msgObj.teamId;
 				Game.teams.team1.base.position = JSON.parse(msgObj.position);
 			}
@@ -227,7 +227,7 @@ function onMessageArrived(message) {
             }
             break;
         case 15:
-            updateTeamPoints(msgObj.teamId, msgObj.points, msg.flagId);
+            updateTeamPoints(msgObj.teamId, msgObj.points, msgObj.flagId);
             break;
 	}	
 }
