@@ -148,7 +148,7 @@ function onMessageArrived(message) {
 			break;
 		case 2: // Player changed team
 			if(msgObj.playerId == player.playerId){
-				player.teamId = msgObj.playerId;
+				player.teamId = msgObj.teamId;
 			}		
 			updatePlayerInfo(msgObj.playerId, msgObj.teamId);
 			updateTeamUI(msgObj.playerId, msgObj.teamId);
