@@ -516,7 +516,6 @@ $("#startgame").click(function(){
 			fillColor: '#FF0000',
 			fillOpacity: 0.35,
 			map: map,
-			center: ownFlagListUI[0].getPosition(),
 			radius: 10
 		});
 
