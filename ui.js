@@ -395,6 +395,7 @@ $('#broadcastPlayers').click(function(){
 
 $("#toHomeBasePlacement").click(function(){
 
+	// createTeams();
 	drawingManager.setOptions({
 		drawingMode: google.maps.drawing.OverlayType.MARKER,
 		drawingControl: false,
@@ -462,12 +463,22 @@ $("#toConfirm").click(function(){
 
 
 $("#startgame").click(function(){
+	// buttons
 	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
 	document.getElementById("gameplayReleaseDiv").style.display = "inline-block";
+
+	// header
 	document.getElementById("gameplayHeader").style.display = "inline-block";
 	document.getElementById("scoreTeam1").innerText = 3;
 	document.getElementById("scoreTeam2").innerText = 4;
-	document.getElementById("gameplayTimer").innerText = "2:59";
+
+	// footer
+	document.getElementById("gameplayFooter").style.display = "inline-block";
+	// document.getElementById("gameplayTimer").innerText = "2:59";
+
+	document.getElementById("youHaveTheFlag").style.display = "inline-block";
+							// youAreFrozen
+
 	gameover();
 });
 
@@ -628,7 +639,7 @@ function updateMapInfoUI(coordinates){
 	//console.log("object length");
 	//console.log(Object.keys(coordinates).length);
 	//objectLength = Object.keys(coordinates).length;
-	
+	console.log("does this get called after the home base");
 	playingArea = new google.maps.Polygon({
 		paths:coordinates
 	})
@@ -670,7 +681,17 @@ function updateTeamUI(playerid, teamId){
 
 }
 
-
+function updateBaseInfoUI(teamId, position){
+	position = JSON.parse(position);
+	if (teamId == player.teamId){
+		console.log('wooohooo')
+		homeBase.setPosition(position);
+	}
+	else{
+		console.log('blaharer')
+		enemyBase.setPosition(position);
+	}
+}
 
 
 

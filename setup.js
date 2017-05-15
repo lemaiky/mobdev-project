@@ -200,6 +200,7 @@ function onMessageArrived(message) {
 			break;
 		case 11:
 			console.log("Recieved base location");
+			updateBaseInfoUI(msgObj.teamId, msgObj.position);
 			break;
 	}	
 }
@@ -361,7 +362,7 @@ function pubRegularUpdate(playerId, position, caughtPosition, state, carryingFla
 }
 
 function pubBasePosition(coordinates){
-	baseMsg.position = coordinates;
+	baseMsg.position = JSON.stringify(coordinates);
 	baseMsg.teamId = player.teamId;
 	publish(baseMsg);
 }
