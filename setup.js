@@ -167,6 +167,8 @@ function onMessageArrived(message) {
 			addFlags(msgObj.teamId, JSON.parse(msgObj.flagList));
 			break;
 		case 4: // Default update msg
+				console.log("recvieved info");
+				console.log(msgObj);
 				updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
 			 break;
 		case 5: // Map info
@@ -194,7 +196,7 @@ function onMessageArrived(message) {
 			}
 			break;
 		case 9: // A player has disconnected
-			addDisconnectedPlayer(msgObj.playerId);
+			//addDisconnectedPlayer(msgObj.playerId);
 			break;
 			
 		case 10:
