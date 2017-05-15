@@ -393,6 +393,7 @@ function updateTeamPoints(teamId, points, flagId) {
         Game.teams.team1.points = points;
     }
     removeFlag(teamId,flagId);
+    youDontHaveTheFlagUI();
     updateTeamScoreUI(teamId, points);
 }
 
