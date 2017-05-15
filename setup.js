@@ -40,7 +40,7 @@ function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN
 	init(gamename, username);
 
 }
-function joinGame(gamename, username){
+function joinGame(gamename, username){ 
 	if(localStorage.getItem("savedPlayer") && (gamename == JSON.parse(localStorage.getItem("savedPlayer")).gamename)){
 		playerId = JSON.parse(localStorage.getItem("savedPlayer")).playerId;
 		hasReconnected = true;
@@ -371,13 +371,13 @@ function addToPlayerList(playerName, playerId){
 function addFlags(flagList){
 	for(i = 0; i < flagList.length; i++){
 		var newFlag = Object.create(Flag);
-		cFlag.flagId = flagList[i].flagId;
-		cFlag.teamId = flagList[i].teamId;
-		cFlag.originalPos = flagList[i].originalPos;
+		newFlag.flagId = flagList[i].flagId;
+		newFlag.teamId = flagList[i].teamId;
+		newFlag.originalPos = flagList[i].originalPos;
 		if(teamId){
-			friendlyFlagList.push(cFlag);
+			friendlyFlagList.push(newFlag);
 		}else{
-			enemyFlagList.push(cFlag);
+			enemyFlagList.push(newFlag);
 		}
 	}
 	
