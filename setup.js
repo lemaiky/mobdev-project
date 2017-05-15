@@ -28,28 +28,27 @@ var subTopic;
 
 //Combine these 2 same thing...
 function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN 
-	// Create a unique username from input
-	/*
-	if(localStorage.getItem("playerId")){
-		console.log("Exists cookie");
-		//get playerId value from cookie
-		//playerId = getFromcookie
-	}else{
-		//Create cookie with playerId
-		console.log("Exists no cookie");
-		playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
-		localStorage.setItem("playerId", playerId);
-		console.log(localStorage.getItem("playerId"));
-	}
-	*/
 	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	var obj = {
+		gamename: gamename,
+		playerId: playerId
+	}
+	localStorage.setItem("savedPlayer", JSON.stringify(obj));
+
 	Game.admin = playerId;
 	Game.gameName = gamename;
 	init(gamename, username);
 
 }
 function joinGame(gamename, username){
-	playerId = username + "-" + Math.random().toString(36).slice(2); // Creates a unique id for each player
+	if(localStorage.getItem("savedPlayer") && (gamename == JSON.parse(localStorage.getItem("savedPlayer")).gamename)){
+		playerId = JSON.parse(localStorage.getItem("savedPlayer")).playerId;
+		hasReconnected = true;
+	}else{ // todo: disconnect player 
+		localStorage.setItem("savedPlayer", JSON.stringify(obj));
+		playerId = username + "-" + Math.random().toString(36).slice(2); 
+	}
+
 	Game.gameName = gamename;
 	init(gamename, username);
 }
@@ -148,32 +147,26 @@ function onMessageArrived(message) {
 		case 1:
 			//received map position
 			break;
-		case 2:
+		case 2: // Player changed team
 			if(msgObj.playerId == player.playerId){
 				player.teamId = msgObj.teamId;
 			}		
-			console.log("recieved team info");
-			console.log(msgObj);
 			updatePlayerInfo(msgObj.playerId, msgObj.teamId);
 			updateTeamUI(msgObj.playerId, msgObj.teamId);
 			break;
-		case 3:
+		case 3: // Flag placements
 			console.log("recieved flag placements");
 			console.log(msgObj);
 			addFlags(JSON.parse(msgObj.flagList));
 			break;
-		case 4:
-			 console.log("default update msg");
-			 console.log(msgObj);
+		case 4: // Default update msg
 			 if(caughtPosition != null){
 				updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
 			 }else{
 				updatePlayerInfo(msgObj.playerId, null, msgObj.position, null, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
 			 }
 			 break;
-		case 5:
-			console.log("recieved map info");
-			console.log(msgObj);
+		case 5: // Map info
 			updateMapInfo(msgObj.position);
 			break;
 		case 6:
@@ -197,7 +190,7 @@ function onMessageArrived(message) {
 				}
 			}
 			break;
-		case 9:
+		case 9: // A player has disconnected
 			addDisconnectedPlayer(msgObj.playerId);
 			break;
 			
@@ -208,8 +201,18 @@ function onMessageArrived(message) {
 			break;
 		case 11:
 			console.log("Recieved base location");
+			if(msgObj.teamId == 0){
+				Game.teams.team0.base.teamId = msgObj.teamId;
+				Game.teams.team0.base.position = msgObj.position;
+			}else{
+				Game.teams.team1.base.teamId = msgObj.teamId;
+				Game.teams.team1.base.position = msgObj.position;
+			}
 			updateBaseInfoUI(msgObj.teamId, msgObj.position);
 			break;
+		case 12: //A player has reconnected
+			playersConnected.push(JSON.parse(msgObj.player));
+
 	}	
 }
 
@@ -243,8 +246,7 @@ function status (s) {
 function publishGameInfo(){
 	var msg = {
 		msgType: 9,
-		gameName: Game.gameName,
-		admin: Game.admin,
+		game: JSON.stringify(Game),
 		playerList: JSON.stringify(playersConnected),
 		friendlyFlagList: friendlyFlagList,
 		enemyFlagList: enemyFlagList,
@@ -260,15 +262,22 @@ function publishGameInfo(){
 function loadGameState(msgObj){
 	disconnectedPlayers = JSON.parse(msgObj.disconnectedPlayers);
 	for(var i = 0; i < disconnectedPlayers.length; i++){
-		if(playerId == disconnectedPlayers[i].playerId){
+		if(player.playerId == disconnectedPlayers[i].playerId){
 			console.log("Found disconnected player");
-			Game.gameName = msgObj.gameName;
-			Game.admin = msgObj.admin;
+			Game = JSON.parse(msgObj.game);
 			playersConnected = JSON.parse(msgObj.playerList);
 			friendlyFlagList = JSON.parse(msgObj.friendlyFlagList);
 			enemyFlagList = JSON.parse(msgObj.enemyFlagList);
+			playersConnected.push(disconnectedPlayers[i]);
+			player = disconnectedPlayers[i];
+			disconnectedPlayers.remove(i);
 		}
 	}
+	var msg = {
+		msgType: 12,
+		player: JSON.stringify(player)
+	}
+	publish(msg);
 
 
 }
@@ -316,6 +325,26 @@ function updatePlayerInfo(playerId, teamId, position, caughtPosition, state, ins
 		}
 	}
 }
+
+
+function createTeams(){
+	var team0 = Object.create(Team);
+	team0.teamId = 0;
+	var team1 = Object.create(Team);
+	team1.teamId = 1;
+
+	for(i = 0; i < playersConnected.length; i++){
+		if(playersConnected[i].teamId == 0){
+			team0.players.push(playersConnected[i]);
+		}else{
+			team1.players.push(playersConnected[i]);
+		}
+	}
+	Game.teams = {team0, team1};
+
+}
+
+
 /*
 	Creates player object and adds to list of connected players
 */
