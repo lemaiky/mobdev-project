@@ -152,6 +152,9 @@ function onMessageArrived(message) {
         
 
         }else if(msgObj.msgType == 2){	//player joined team
+        	if(msgObj.playerId == player.playerId){
+        		player.teamId = msgObj.playerId;
+        	}
         	console.log("recieved team info");
         	console.log(msgObj);
         	updatePlayerInfo(msgObj.playerId, msgObj.teamId);
@@ -195,13 +198,16 @@ function onMessageArrived(message) {
         			addPlayertoFreePlayersListUI(playersConnected[i].nickname, playersConnected[i].playerId);
         		}
         	}
-        }else if (msgObj.msgType == 9){ //Player disconencted
+        }else if(msgObj.msgType == 9){ //Player disconencted
         	addDisconnectedPlayer(msgObj.playerId);
         	
         }else if(msgObj.msgType == 10){ //Load gamestate only if rejoining
         	if(hasReconnected){
         		loadGameState(msgObj);
         	}
+
+        }else if(msgObj.msgType == 11){ //
+        	console.log("Recieved base location");
 
         }
 	
@@ -235,25 +241,24 @@ function status (s) {
 	Does a retain publish to save game state
 */
 function publishGameInfo(){
-	/*
 	var msg = {
-		msgType: 9
+		msgType: 9,
 		gameName: Game.gameName,
 		admin: Game.admin,
 		playerList: JSON.stringify(playersConnected),
 		friendlyFlagList: friendlyFlagList,
-		enemyFlagList: enemyFlagList
+		enemyFlagList: enemyFlagList,
+		disconnectedPlayers: disconnectedPlayers
 		//add base 
 	}
-	*/
-	//retainPublish(msg);
+	retainPublish(msg);
 }
 
 /*
 	Load game state if reconnecting
 */
 function loadGameState(msgObj){
-
+	disconnectedPlayers = JSON.parse(msgObj.disconnectedPlayers);
 	for(var i = 0; i < disconnectedPlayers.length; i++){
 		if(playerId == disconnectedPlayers[i].playerId){
 			console.log("Found disconnected player");
