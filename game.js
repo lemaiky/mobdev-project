@@ -106,7 +106,6 @@ function inbase() {
 				unlockPosition();
 				break;
 			case State.FLAG:
-		
 				winningFlag();
 				break;
 			default:

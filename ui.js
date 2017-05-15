@@ -912,13 +912,13 @@ function posnLoop(){
 function removeFlag(teamId,flagId){
 	if (player.teamId == teamId){
 		for (var i = 0; i < ownFlagListUI.length; i++){
-			if (flagId === i){
+			if (flagId == i){
 				ownFlagListUI[i].setMap(null);
 			}
 		}
 	} else {
 		for (var i = 0; i < enemyFlagListUI.length; i++){
-			if (flagId === i){
+			if (flagId == i){
 				enemyFlagListUI[i].setMap(null);
 			}
 		}
