@@ -894,8 +894,9 @@ function updateOwnPosition(){
 		if (ownMarker){
 			ownMarker.setPosition(posn);
 			ownRadius.setCenter(posn);
+			pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
 		}
-		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
+
 		if (player.state === State.FLAG){
 			pubFlagUpdate(player.teamId, player.currentFlag, position);
 		}
