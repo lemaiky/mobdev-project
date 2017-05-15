@@ -167,8 +167,6 @@ function onMessageArrived(message) {
 			addFlags(msgObj.teamId, JSON.parse(msgObj.flagList));
 			break;
 		case 4: // Default update msg
-				console.log("recvieved info");
-				console.log(msgObj);
 				updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
 			 break;
 		case 5: // Map info
@@ -409,8 +407,10 @@ function addFlags(teamId, flagList){
 	Methods to call for sending messages
 */
 
-function newFlagPosition(teamId ,flagId, coordinates){
-	//which array do we update?
+function pubFlagUpdate(teamId ,flagId, coordinates){
+	flagMsg.teamId = teamId;
+	flagMsg.flagId = flagId;
+	flagMsg.coordinates = coordinates;
 }
 
 
@@ -486,6 +486,7 @@ function pubWinningTeam(teamId) {
     }
     publish(msg);
 }
+
 
 
 function isAdmin(){
