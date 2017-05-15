@@ -419,7 +419,8 @@ function pubMapPosition(coordinates){
 function pubFlagPosition(flagList){
 	var msg = {
 		msgType: 3,
-		flagList: JSON.stringify(flagList)
+		flagList: JSON.stringify(flagList),
+		teamId: player.teamId
 	}
 	publish(msg);
 }
@@ -455,6 +456,7 @@ function pubPlayerList(){
 function isAdmin(){
 	return (player.playerId === Game.admin);
 }
+
 function updateMapInfo(coordinates){
 	updateMapInfoUI(coordinates);
 }
