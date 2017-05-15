@@ -8,6 +8,7 @@ var homeBase;
 var enemyBase;
 var players ={};
 var ownMarker; 
+var ownRadius;
 
 
 /// INITIALIZATION
@@ -509,7 +510,7 @@ $("#startgame").click(function(){
 			icon: google.maps.SymbolPath.CIRCLE
 		});
 
-		circle = new google.maps.Circle({
+		ownRadius = new google.maps.Circle({
 			strokeColor: '#FF0000',
 			strokeOpacity: 0.8,
 			strokeWeight: 2,
@@ -520,7 +521,7 @@ $("#startgame").click(function(){
 			radius: 10
 		});
 
-		circle.bindTo('center', ownMarker, 'position');
+		ownRadius.bindTo('center', ownMarker, 'position');
 		
 	})
 
@@ -530,6 +531,23 @@ $("#startgame").click(function(){
 	players[playerId] = playermarker;
 
 	posnLoop();
+
+
+	//own team
+	for (var i= 0; i < Game.teams.team0.players.length; i++){
+		players[Game.teams.team0.players[i].id] = new google.maps.Marker({
+			map:map, 
+			center: ownMarker
+		});
+ 	}
+
+ 	//otherteam
+	for (var i= 0; i < Game.teams.team1.players.length; i++){
+		players[Game.teams.team1.players[i].id] = new google.maps.Marker({
+			map:map, 
+			center: ownMarker
+		});
+ 	}
 
 	publishGameInfo();
 	// buttons
@@ -829,6 +847,7 @@ function addFlagUI(teamId, flaglist){
 }
 
 function updatePlayerPosition(playerId, position){
+	console.log("trynna update player position");
 	players[playerId].setPosition(position);	
 }
 
@@ -848,6 +867,7 @@ function updateOwnPosition(){
 			lng: position.coords.longitude
 		};
 		ownMarker.setPosition(posn);
+		ownRadius.setPosition(posn);
 		pubRegularUpdate(player.id, ownMarker.getPosition(), null);
 	})
 }
