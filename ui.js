@@ -491,7 +491,7 @@ $("#startgame").click(function(){
 	// footer
 	document.getElementById("gameplayFooter").style.display = "inline-block";
 
-	document.getElementById("youAreFrozen").style.display = "inline-block";
+	//document.getElementById("youHaveTheFlag").style.display = "inline-block";
 							// youAreFrozen
 							// youHaveTheFlag
 
@@ -577,7 +577,8 @@ $(".previous").click(function(){
 		len = items.length, 
 		i = 0; i < len; i ++)
 	{
-		items[i].setAttribute('draggable', 'true');
+		//items[i].setAttribute('draggable', 'true');
+		items[i].draggable();
 	}
 
 	//variable for storing the dragging item reference 

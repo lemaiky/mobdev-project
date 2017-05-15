@@ -31,6 +31,9 @@
 		<!-- Font -->
 		<!-- <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/intuitive" type="text/css"/> -->
 
+		<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+		<script src="./jquerylib/jquery-ui-touch-punch-master/jquery.ui.touch-punch.min.js"></script>
+
 
 		<!-- PubNub is used for its realtime data stream network. This is what allows us to broadcast. -->	
 		<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
@@ -58,17 +61,40 @@
 	<body>
 		<div id="map"></div>
 
+		<!-- Gameplay stuff -->
 		<div id="gameplayHeader">
-			<table>
+			<table id="teamHeader">
 			<tr>
-				<th><h2 id="team1Header">Team 1</h2></th> <th><h2 id="team2Header">Team 2</h2></th> 
+				<th class="headerText">
+					Team1
+				</th>
+				<th class="headerText">
+					Team2
+				</th>
 			</tr>
+				<th id="scoreTeam1" class="headerText">
+					3
+				</th>
+				<th id="scoreTeam2" class="headerText">
+					4
+				</th>
+			<tr>
+			</tr>
+
+			<!-- <div id="scoreTeam1">
+
+
+			<tr >
+				<th id="team1Header"><h2 >Team 1</h2></th> <th id="team2Header"><h2>Team 2</h2></th> 
+			</tr>
+
 			<tr>
 				<th><div id="scoreTeam1" class="scoreContent"></div></th> <th><div id="scoreTeam2" class="scoreContent"></div></th> 
 			</tr>
+
+			 -->
 			</table>
 		</div>
-
 		<div id="gameplayFooter">
 			<div id="gameplayTimer">
 				<h5> 5 </h5>
@@ -87,7 +113,9 @@
 		<div id="gameplayReleaseDiv" class="gameplayButtonDivs">
 			<input type="button" class="gameplayButtons action-button" id="releaseButton" value="RELEASE!" />
 		</div>
+		<!-- /// -->
 
+		<!-- End screen -->
 		<div id="youWon">
 			<table>
 			<tr>
@@ -102,7 +130,7 @@
 			</tr>
 			</table>
 		</div>
-
+		<!-- /// -->
 		
 
 			<!-- multistep form -->
@@ -117,13 +145,13 @@
 			</fieldset>
 			<fieldset>
 				<h2> Choose your teams</h2>
-				<table>
-				<tr> <th> Team 1 </th> <th> Team 2 </th> </tr>
+				<table id="chooseTeamsTable">
+				<tr> <th> <h4> Team 1 </h4> </th> <th> <h4> Team 2 </h4> </th> </tr>
 				<tr><td><ol data-draggable="target" class="teamtable" id="team1"></ol></td>
 				
 				<td><ol data-draggable="target" class="teamtable" id="team2"></ol></td></tr>
-				<tr><th colspan="2"> Place these players in a team!</th></tr> 
-				<tr><td colspan="2"><ol data-draggable="target" id="freeplayers">					
+				<tr><th colspan="2"> <h4> Place these players in a team! </h4> </th></tr> 
+				<tr><td colspan="2"><ol data-draggable="target" id="freeplayers">
 				</ol></td></tr>
 				</table>
 				<input type="button" id="broadcastPlayers" class="action-button" value="All players logged on" />
