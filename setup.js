@@ -390,7 +390,7 @@ function addFlags(teamId, flagList){
 		}
 	}
 	
-	//addFlagUI(teamId, flaglist);
+	addFlagUI(teamId, flaglist);
 }
 
 
