@@ -298,7 +298,7 @@ function initMap() {
 		zoom: 17,
 		mapTypeId: 'roadmap',
 		disableDefaultUI: true, 
-			oomControl: false,
+		zoomControl: false,
 		zoomControlOptions: {   position: google.maps.ControlPosition.LEFT_CENTER        
 		},          
 		scaleControl: false,
@@ -498,8 +498,11 @@ $("#startgame").click(function(){
 		ownMarker = new google.maps.Marker({
 			position:pos,
 			map:map,
-			draggable:true
+			draggable:true,
+
 		});
+		ownMarker.setDraggable(true);
+		ownMarker.setZIndex(1000000);
 
 		ownRadius = new google.maps.Circle({
 			strokeColor: '#FF0000',
@@ -516,12 +519,8 @@ $("#startgame").click(function(){
 		
 	})
 
-	var playermarker = new google.maps.Marker({
-		map: map
-	});
-	players[playerId] = playermarker;
 
-	posnLoop();
+	// posnLoop();
 
 
 	//own team
@@ -560,18 +559,22 @@ $("#startgame").click(function(){
 
 function youAreFrozenUI(){
 	document.getElementById("youAreFrozen").style.display = "inline-block";
+	navigator.vibrate(50);
 }
 
 function youAreNotFrozenUI(){
 	document.getElementById("youAreFrozen").style.display = "none";
+	navigator.vibrate(50);
 }
 
 function youHaveTheFlagUI(){
 	document.getElementById("youHaveTheFlag").style.display = "inline-block";
+	navigator.vibrate(50);
 }
 
 function youDontHaveTheFlagUI(){
 	document.getElementById("youHaveTheFlag").style.display = "none";
+	navigator.vibrate(50);
 }
 
 function youLostUI(){
@@ -582,6 +585,7 @@ function youLostUI(){
 
 	document.getElementById("youLost").innerText = "You lost! grrr!";
 	document.getElementById("youLost").style.display = "inline-block";
+	navigator.vibrate(500);
 }
 
 function youWonUI(){
@@ -592,6 +596,7 @@ function youWonUI(){
 
 	document.getElementById("youWon").innerText = "You won! Well played!";
 	document.getElementById("youWon").style.display = "inline-block";
+	navigator.vibrate(500);
 }
 
 function updateTeamScoreUI(teamid, points){
@@ -613,11 +618,13 @@ function updateTeamScoreUI(teamid, points){
 
 $("#catchButton").click(function(){
 	console.log("CATCH");
+	navigator.vibrate(50);
 	grab();
 });
 
 $("#releaseButton").click(function(){
 	console.log("RELEASE");
+	navigator.vibrate(50);
 	release();
 });
 
@@ -681,8 +688,8 @@ $(".previous").click(function(){
 		len = items.length, 
 		i = 0; i < len; i ++)
 	{
-		//items[i].setAttribute('draggable', 'true');
-		items[i].draggable();
+		items[i].setAttribute('draggable', 'true');
+		//items[i].draggable();
 	}
 
 	//variable for storing the dragging item reference 
@@ -803,7 +810,7 @@ function updateBaseInfoUI(teamId, position){
 	if (teamId == player.teamId){
 		//baseIcon = google.maps.MarkerImage("newIcon2.png");
 		homeBase.setPosition(received_posn);
-		homeBase.setIcon("./resources/icons/baseflag_small_green.png");
+		homeBase.setIcon("./resources/icons/baseflag_small_red.png");
 	}
 	else{
 		enemyBase = new google.maps.Marker({
@@ -840,7 +847,7 @@ function addFlagUI(teamId, flaglist){
 			for (var i = 0 ; i < flagcoords.length; i++){
 				var marker = new google.maps.Marker({
 					position:flagcoords[i],
-					map: map
+					map: map,
 				})
 				ownFlagListUI.push(marker);
 			}
@@ -862,7 +869,6 @@ function addFlagUI(teamId, flaglist){
 }
 
 function updatePlayerPosition(playerId, position){
-	console.log('looking for player with id'+ playerId);
 	players[playerId].setPosition(position);	
 }
 
@@ -881,7 +887,8 @@ function updateOwnPosition(){
 			lat:position.coords.latitude,
 			lng: position.coords.longitude
 		};
-		ownMarker.setPosition(posn);
+		if (ownMarker)
+			ownMarker.setPosition(posn);
 		ownRadius.setCenter(posn);
 		pubRegularUpdate(player.playerId, ownMarker.getPosition(), null);
 		if (player.state === State.FLAG){
