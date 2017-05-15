@@ -467,7 +467,7 @@ $("#toConfirm").click(function(){
 
 	console.log(ownFlagListUI.length);
 	posns = [];
-	for (var i = 0; i < ownFlagListUI.length , i++){
+	for (var i = 0; i < ownFlagListUI.length; i++){
 		posns.append(ownFlagListUI.getPosition());
 	}
 	// send these home base coordinates to ziad
