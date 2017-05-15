@@ -4,6 +4,13 @@ height:100%;
 width:100%;
 }
 
+@font-face {
+  	font-family: 'Komika';
+  	src: url('resources/fonts/KOMIKAHB.ttf');
+}
+
+chamsbold	
+
 table{
 	margin-right: auto;
 	margin-left: auto;
@@ -82,9 +89,11 @@ a[href^="https://www.google.com/maps"] {
 	z-index:99999999;
 }
 #gamestart fieldset {
-	background: white;
-	border: 0 none;
-	border-radius: 3px;
+	background: #F9FFF9;
+	border-style: solid;
+	border: 1px 1px;
+	border-color: #82735C;
+	border-radius: 4px;
 	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
 	padding: 20px 30px;
 	
@@ -107,14 +116,14 @@ a[href^="https://www.google.com/maps"] {
 	margin-bottom: 10px;
 	width: 100%;
 	box-sizing: border-box;
-	font-family: montserrat;
+	font-family: Intuitive;
 	color: #2C3E50;
 	font-size: 13px;
 }
 /*buttons*/
 #gamestart .action-button {
 	width: 100px;
-	background: #27AE60;
+	background: #CCDD89;
 	font-weight: bold;
 	color: white;
 	border: 0 none;
@@ -124,7 +133,7 @@ a[href^="https://www.google.com/maps"] {
 	margin: 10px 5px;
 }
 #gamestart .action-button:hover, #gamestart .action-button:focus {
-	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #CCDD89;
 }
 /*headings*/
 h2 {
@@ -144,6 +153,7 @@ h3{
 #gameplayHeader {
 	display: none;
 	width: 100%;
+	align-content: center;
 /*	margin: auto auto;
 */	top:0;
 	
@@ -157,14 +167,24 @@ h3{
 	border: 0 none;
 	border-radius: 3px;
 	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
-	padding: 5px 4px; /*20px 30px;*/
+	padding: 2px 4px; /*20px 30px;*/
 	
 	box-sizing: border-box;
 	margin: auto auto;
 	
 	position: absolute;
 
+	background-color: #F7DBA7;
+
 } 
+
+#team1Header, #team2Header{
+	text-align: center;
+}
+
+.scoreContent{
+	text-align: center;
+}
 
 .gameplayButtonDivs{
 	background: white;
@@ -184,7 +204,8 @@ h3{
 #gameplayCatchDiv {
 	top:80%;
 	left:20%;
-}
+/*	background-color: #B4E288;
+*/}
 
 
 #gameplayReleaseDiv {
@@ -194,21 +215,29 @@ h3{
 
 
 .gameplayButtons {
-	width: auto;
-	background-color: #27AE60;
+	width: 100%;
+	height: 100%;
+
 	font-weight: bold;
 	color: white;
 	border: 0 none;
 	border-radius: 1px;
 	cursor: pointer;
-	padding: 4px 2px;
-	margin: 4px 2px;
-	position: absolute;
+	/*padding: 4px 2px;*/
+/*	margin: 4px 2px;
+*/	position: absolute;
 	z-index:9999999999;
 
 	left:0%;
 	top:0%;
+}
 
+#catchButton{
+	background-color: #8DD882;
+}
+
+#releaseButton{
+	background-color: #5FB4CC;
 }
 
 #youWon, #youLost{
@@ -231,13 +260,13 @@ h3{
 /*	margin: 50px auto;
 	top:80%;
 */
-
+	text-align: center;
 	left: 50%;
     transform: translateX(-50%);	
 
 	display: none;
 	width: auto;
-	height: auto;
+	height: 100%;
 
 	bottom: 0;
 	position: absolute;
@@ -249,7 +278,7 @@ h3{
 }
 
 #youAreFrozen{
-	background-color: silver;
+	background-color: #5FB4CC;
 }
 
 #gameplayFooter{
@@ -273,12 +302,15 @@ h3{
 	margin: auto auto;
 	
 	position: absolute;
+
+	background-color: #F7DBA7;
+
 }
+
+
 
 #gameplayTimer{
 	width: 2%;
 	right: 0;
+	text-align: right;
 }
-
-/* If you have the flag, make map brighter or something
-   If you have the flag, make map darker or something */
