@@ -468,11 +468,11 @@ $("#toConfirm").click(function(){
 	console.log(ownFlagListUI.length);
 	posns = [];
 
-	for (var i = 0; i < ownFlagListUI.length , i++){
-		posns.append(ownFlagListUI[i].getPosition());
+	for (var i = 0; i < ownFlagListUI.length ;i++){
+		posns.push(ownFlagListUI[i].getPosition());
 
 	// send these home base coordinates to ziad
-	pubFlagPosition(ownFlagListUI); // He wants team id also. How do we get that? 
+	pubFlagPosition(posns); // He wants team id also. How do we get that? 
 }});
 
 
