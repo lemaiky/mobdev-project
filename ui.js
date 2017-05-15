@@ -553,7 +553,7 @@ $("#startgame").click(function(){
 
 	// header
 	document.getElementById("gameplayHeader").style.display = "inline-block";
-	document.getElementById("scoreTeam1").innerText = 2;
+	document.getElementById("scoreTeam1").innerText = 0;
 	document.getElementById("scoreTeam2").innerText = 0;
 
 	// footer
@@ -570,11 +570,11 @@ function youAreNotFrozenUI(){
 }
 
 function youHaveTheFlagUI(){
-	document.getElementById("youAreFrozen").style.display = "inline-block";
+	document.getElementById("youHaveTheFlag").style.display = "inline-block";
 }
 
-function youHaveTheFlagUI(){
-	document.getElementById("youAreFrozen").style.display = "none";
+function youDontHaveTheFlagUI(){
+	document.getElementById("youHaveTheFlag").style.display = "none";
 }
 
 function youLostUI(){
@@ -586,7 +586,6 @@ function youLostUI(){
 	document.getElementById("youLost").style.display = "inline-block";
 }
 
-
 function youWonUI(){
 	document.getElementById("gameplayCatchDiv").style.display = "none"; 
 	document.getElementById("gameplayReleaseDiv").style.display = "none";
@@ -596,6 +595,13 @@ function youWonUI(){
 	document.getElementById("youWon").style.display = "inline-block";
 }
 
+function updateTeamScoreUI(teamid){
+	// temporary testing variables
+	var team1Score = 0;
+	var team2Score = 4;
+	document.getElementById("scoreTeam1").innerText = team1Score;
+	document.getElementById("scoreTeam2").innerText = team2Score;
+}
 
 
 
