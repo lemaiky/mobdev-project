@@ -422,12 +422,13 @@ function addToPlayerList(playerName, playerId){
 */
 
 function addFlags(teamId, flagList){
-	for(i = 0; i < 5; i++){
-		if(i == 4){
-			i = 0;
+	var flagId = 0;
+	for(i = 0; i < flagList; i++){
+		if(flagId == 4){
+			flagId = 0;
 		}
 		var newFlag = Object.create(Flag);
-		newFlag.flagId = i;
+		newFlag.flagId = flagId;
 		newFlag.teamId = teamId;
 		newFlag.originalPos = flagList[i];
 		console.log(newFlag.teamId);
@@ -436,8 +437,7 @@ function addFlags(teamId, flagList){
 		}else{
 			enemyFlagList.push(newFlag);
 		}
-	}
-	
+	}	
 	addFlagUI(teamId, flagList);
 }
 
