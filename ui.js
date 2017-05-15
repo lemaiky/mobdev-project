@@ -737,7 +737,7 @@ function setInitialFlagUI(teamId, flaglist){
 }
 
 function addFlagUI(teamId, flaglist){
-	flagcoords = JSON.parse(flaglist);
+	flagcoords = flaglist;
 	if (teamId == player.teamId){
 		if (!ownFlagListUI){
 			for (var i = 0 ; i < flagcoords; i++){
