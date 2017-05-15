@@ -204,10 +204,10 @@ function onMessageArrived(message) {
 			break;
 		case 11:
 			console.log("Recieved base location");
-			if(msgObj.teamId == 0){
+			if(msgObj.teamId === 0){
 				Game.teams.team0.base.teamId = msgObj.teamId;
 				Game.teams.team0.base.position = JSON.parse(msgObj.position);
-			}else{
+			}else if(msgObj.teamId === 1){
 				Game.teams.team1.base.teamId = msgObj.teamId;
 				Game.teams.team1.base.position = JSON.parse(msgObj.position);
 			}
@@ -227,7 +227,7 @@ function onMessageArrived(message) {
             }
             break;
         case 15:
-            updateTeamPoints(msgObj.teamId, msgObj.points);
+            updateTeamPoints(msgObj.teamId, msgObj.points, msgObj.flagId);
             break;
 	}	
 }
@@ -365,12 +365,13 @@ function createTeams(){
 
 }
 
-function updateTeamPoints(teamId, points) {
+function updateTeamPoints(teamId, points, flagId) {
     if(teamId === 0) {
         Game.teams.team0.points = points;
     } else {
         Game.teams.team1.points = points;
     }
+    removeFlag(teamId,flagId);
     updateTeamScoreUI(teamId, points);
 }
 
@@ -500,11 +501,12 @@ function pubWinningTeam(teamId) {
     publish(msg);
 }
 
-function pubTeamPoints(teamId, points) {
+function pubTeamPoints(teamId, points, flagId) {
     var msg = {
         msgType: 15,
         teamId: teamId,
-        points: points
+        points: points,
+        flagId: flagId
     };
     publish(msg);
 }
