@@ -6,6 +6,7 @@ var ownFlagListUI = [];
 var enemyFlagListUI = [];
 var homeBase; 
 var enemyBase;
+var players ={};
 
 
 /// INITIALIZATION
@@ -477,6 +478,13 @@ $("#toConfirm").click(function(){
 
 
 $("#startgame").click(function(){
+	// iterate over players, setting marker
+
+	var playermarker = new google.maps.Marker({
+		map: map
+	});
+	players[playerId] = playermarker;
+
 
 	publishGameInfo();
 	// buttons
@@ -769,6 +777,19 @@ function addFlagUI(teamId, flaglist){
 				marker.setMap(map);
 			}
 		}
+	}
+}
+
+function updatePlayerPosition(playerId, position){
+	players[playerId].setPosition(position);
+}
+
+function updateFlagPosition(teamId, flagId, position){
+	if (teamId==player.teamId){
+		ownFlagListUI[flagId].setPosition(position);
+	}
+	else{
+		enemyFlagListUI[flagId].setPosition(position);
 	}
 }
 
