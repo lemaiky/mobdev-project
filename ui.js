@@ -619,7 +619,14 @@ $("#startgame").click(function(){
 
 });
 
-// function disconnected 
+function reloadGameplayUI(){
+		// buttons
+	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
+	document.getElementById("gameplayReleaseDiv").style.display = "inline-block";
+
+	// header
+	document.getElementById("gameplayHeader").style.display = "inline-block";
+}
 
 function enemySuccessfullyGrabbed(){
 	console.log("You froze an enemy!")	
@@ -940,6 +947,8 @@ function updatePlayerPosition(playerId, position){
 }
 
 function updateFlagPosition(teamId, flagId, position){
+	console.log("######## ownFlagListUI[flagId] below");
+	console.log(flagId);
 	if (teamId==player.teamId){
 		ownFlagListUI[flagId].setPosition(position);
 	}
@@ -961,7 +970,9 @@ function updateOwnPosition(){
 		}
 
 		if (player.state === State.FLAG){
-			console.log('we have a flag');
+			console.log("####### BELOW player current flag id");
+			// player.currentFlag = 
+			console.log(player.currentFlag);
 			pubFlagUpdate(player.teamId, player.currentFlag, ownMarker.getPosition());
 		}
 	})
