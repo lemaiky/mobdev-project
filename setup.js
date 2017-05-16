@@ -422,22 +422,24 @@ function addToPlayerList(playerName, playerId){
 */
 
 function addFlags(teamId, flagList){
-	var flagId = 0;
-	for(i = 0; i < flagList; i++){
-		if(flagId == 4){
-			flagId = 0;
-		}
+	var flagId1 = 0;
+	var flagId2 = 0;
+	console.log(flagList);
+	for(i = 0; i < flagList.length; i++){
 		var newFlag = Object.create(Flag);
-		newFlag.flagId = flagId;
+		
 		newFlag.teamId = teamId;
 		newFlag.originalPos = flagList[i];
-		console.log(newFlag.teamId);
+		
 		if(newFlag.teamId == player.teamId){
+			newFlag.flagId = flagId1;
+			flagId1++;
 			friendlyFlagList.push(newFlag);
 		}else{
+			newFlag.flagId = flagId2;
+			flagId2++;
 			enemyFlagList.push(newFlag);
 		}
-		flagId++;
 	}	
 	addFlagUI(teamId, flagList);
 }
