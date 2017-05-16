@@ -440,6 +440,7 @@ function addFlags(teamId, flagList){
 		}else{
 			enemyFlagList.push(newFlag);
 		}
+		flagId++;
 	}	
 	addFlagUI(teamId, flagList);
 }
