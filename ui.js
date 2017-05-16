@@ -10,6 +10,8 @@ var players ={};
 var ownMarker; 
 var ownRadius;
 var isWaiting=false;
+var isHomebaseSet = false;
+
 
 
 /// INITIALIZATION
@@ -332,6 +334,10 @@ function initMap() {
 
 
 
+// if (!isHomebaseSet){
+// 		// nothing happens
+// 		alert("Please set homebase!");
+
 /*************** START GAME FORM****************/
 
 
@@ -341,7 +347,27 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
-	continueForm(this);
+	if (this.id == "toFlagPlacement"){
+		if (homeBase != null){
+			// proceed
+			continueForm(this);
+		} else {
+			alert("No homebase is set!");
+		}
+	} else if (this.id == "toAreaSelection"){
+		continueForm(this);
+	} else if (this.id == "toHomeBasePlacement"){
+		continueForm(this);
+	} else if (this.id == "toConfirm"){
+		if (ownFlagListUI.length < 5){
+			alert("Set more flags!");
+		} else if (ownFlagListUI.length == 5){
+			continueForm(this);
+		} 
+	} else if (this.id == "startgame"){
+		continueForm(this);
+	}
+
 });
 
 function continueForm(el, skip){
@@ -442,6 +468,7 @@ $("#toHomeBasePlacement").click(function(){
 		// send these home base coordinates to ziad
 		pubBasePosition(coordinates); // He wants team id also. How do we get that? 
 	});
+
 });
 
 // $("#resetHomeBasePlacement").click(function(){
@@ -452,7 +479,11 @@ $("#toHomeBasePlacement").click(function(){
 // });
 
 $("#toFlagPlacement").click(function(){
-	ownFlagListUI = [];
+	if (homeBase != null){
+		console.log("homebase is set. Now, place flags");
+		console.log(homeBase);
+		console.log("##### homeBase variable above");
+		ownFlagListUI = [];
 
 		google.maps.event.removeListener(homeBaseListener);
 
@@ -462,7 +493,7 @@ $("#toFlagPlacement").click(function(){
 		});
 		
 		drawingManager.setMap(map);
-		
+			
 		flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
 			marker.setIcon("resources/icons/flag_green.png");
 			drawingManager.setOptions({
@@ -488,20 +519,26 @@ $("#toFlagPlacement").click(function(){
 					drawingMode: null,
 				});
 			}
-		});
+		});	
+	} else {
+		console.log("homebase is not set");
+	}	
 });
 
 $("#toConfirm").click(function(){
-	drawingManager.setOptions({
-		drawingMode: null
-	});
+	if (ownFlagListUI.length == 5){
 
-	posns = [];
-	for (var i = 0; i < ownFlagListUI.length; i++){
-		posns.push(ownFlagListUI[i].getPosition());
+		drawingManager.setOptions({
+			drawingMode: null
+		});
+
+		posns = [];
+		for (var i = 0; i < ownFlagListUI.length; i++){
+			posns.push(ownFlagListUI[i].getPosition());
+		}
+		// send these home base coordinates to ziad
+		pubFlagPosition(posns); // He wants team id also. How do we get that? 
 	}
-	// send these home base coordinates to ziad
-	pubFlagPosition(posns); // He wants team id also. How do we get that? 
 });
 
 
@@ -836,6 +873,7 @@ function updateBaseInfoUI(teamId, position){
 				position:position,
 				map: map
 			})
+			isHomebaseSet = true;
 		}
 		homeBase.setPosition(received_posn);
 		homeBase.setIcon("resources/icons/baseflag_small_green.png");
