@@ -10,6 +10,8 @@ var players ={};
 var ownMarker; 
 var ownRadius;
 var isWaiting=false;
+var isHomebaseSet = false;
+
 
 
 /// INITIALIZATION
@@ -332,6 +334,10 @@ function initMap() {
 
 
 
+// if (!isHomebaseSet){
+// 		// nothing happens
+// 		alert("Please set homebase!");
+
 /*************** START GAME FORM****************/
 
 
@@ -341,7 +347,32 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
-	continueForm(this);
+	console.log(this.id);
+	if (this.id == "toFlagPlacement"){
+		if (homeBase != null){
+			// proceed
+			continueForm(this);
+		} else {
+			alert("No homebase is set!");
+		}
+	} else if (this.id == "toAreaSelection"){
+		continueForm(this);
+	} else if (this.id == "toHomeBasePlacement"){
+		if (playingArea != null){
+			continueForm(this);
+		} else {
+			alert("Set playing area!");
+		}
+	} else if (this.id == "toConfirm"){
+		if (ownFlagListUI.length < 5){
+			alert("Set more flags!");
+		} else if (ownFlagListUI.length == 5){
+			continueForm(this);
+		} 
+	} else if (this.id == "startgame"){
+		continueForm(this);
+	}
+
 });
 
 function continueForm(el, skip){
@@ -422,26 +453,29 @@ $('#broadcastPlayers').click(function(){
 })
 
 $("#toHomeBasePlacement").click(function(){
-
-	createTeams();
-	drawingManager.setOptions({
-		drawingMode: google.maps.drawing.OverlayType.MARKER,
-		drawingControl: false,
-	});
-	drawingManager.setMap(map);
-
-	homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
-		marker.setIcon('resources/icons/baseflag_small_green.png');
+	if (playingArea != null){
+		createTeams();
 		drawingManager.setOptions({
-			drawingMode: null
-		})
-		homeBase = marker;
-		var coordinates  = marker.getPosition();
-		//console.log(coordinates);
+			drawingMode: google.maps.drawing.OverlayType.MARKER,
+			drawingControl: false,
+		});
+		drawingManager.setMap(map);
 
-		// send these home base coordinates to ziad
-		pubBasePosition(coordinates); // He wants team id also. How do we get that? 
-	});
+		homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+			marker.setIcon('resources/icons/baseflag_small_green.png');
+			drawingManager.setOptions({
+				drawingMode: null
+			})
+			homeBase = marker;
+			var coordinates  = marker.getPosition();
+			//console.log(coordinates);
+
+			// send these home base coordinates to ziad
+			pubBasePosition(coordinates); // He wants team id also. How do we get that? 
+		});
+	} else {
+		console.log("Please set playing area");
+	}	
 });
 
 // $("#resetHomeBasePlacement").click(function(){
@@ -452,7 +486,11 @@ $("#toHomeBasePlacement").click(function(){
 // });
 
 $("#toFlagPlacement").click(function(){
-	ownFlagListUI = [];
+	if (homeBase != null){
+		console.log("homebase is set. Now, place flags");
+		console.log(homeBase);
+		console.log("##### homeBase variable above");
+		ownFlagListUI = [];
 
 		google.maps.event.removeListener(homeBaseListener);
 
@@ -462,7 +500,7 @@ $("#toFlagPlacement").click(function(){
 		});
 		
 		drawingManager.setMap(map);
-		
+			
 		flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
 			marker.setIcon("resources/icons/flag_green.png");
 			drawingManager.setOptions({
@@ -488,20 +526,26 @@ $("#toFlagPlacement").click(function(){
 					drawingMode: null,
 				});
 			}
-		});
+		});	
+	} else {
+		console.log("homebase is not set");
+	}	
 });
 
 $("#toConfirm").click(function(){
-	drawingManager.setOptions({
-		drawingMode: null
-	});
+	if (ownFlagListUI.length == 5){
 
-	posns = [];
-	for (var i = 0; i < ownFlagListUI.length; i++){
-		posns.push(ownFlagListUI[i].getPosition());
+		drawingManager.setOptions({
+			drawingMode: null
+		});
+
+		posns = [];
+		for (var i = 0; i < ownFlagListUI.length; i++){
+			posns.push(ownFlagListUI[i].getPosition());
+		}
+		// send these home base coordinates to ziad
+		pubFlagPosition(posns); // He wants team id also. How do we get that? 
 	}
-	// send these home base coordinates to ziad
-	pubFlagPosition(posns); // He wants team id also. How do we get that? 
 });
 
 
@@ -575,7 +619,14 @@ $("#startgame").click(function(){
 
 });
 
-// function disconnected 
+function reloadGameplayUI(){
+		// buttons
+	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
+	document.getElementById("gameplayReleaseDiv").style.display = "inline-block";
+
+	// header
+	document.getElementById("gameplayHeader").style.display = "inline-block";
+}
 
 function enemySuccessfullyGrabbed(){
 	console.log("You froze an enemy!")	
@@ -836,6 +887,7 @@ function updateBaseInfoUI(teamId, position){
 				position:position,
 				map: map
 			})
+			isHomebaseSet = true;
 		}
 		homeBase.setPosition(received_posn);
 		homeBase.setIcon("resources/icons/baseflag_small_green.png");
@@ -895,6 +947,8 @@ function updatePlayerPosition(playerId, position){
 }
 
 function updateFlagPosition(teamId, flagId, position){
+	console.log("######## ownFlagListUI[flagId] below");
+	console.log(flagId);
 	if (teamId==player.teamId){
 		ownFlagListUI[flagId].setPosition(position);
 	}
@@ -916,7 +970,9 @@ function updateOwnPosition(){
 		}
 
 		if (player.state === State.FLAG){
-			console.log('we have a flag');
+			console.log("####### BELOW player current flag id");
+			// player.currentFlag = 
+			console.log(player.currentFlag);
 			pubFlagUpdate(player.teamId, player.currentFlag, ownMarker.getPosition());
 		}
 	})
@@ -928,17 +984,9 @@ function posnLoop(){
 }
 
 function removeFlag(teamId,flagId){
-	if (player.teamId == teamId){
-		for (var i = 0; i < ownFlagListUI.length; i++){
-			if (flagId == i){
-				ownFlagListUI[i].setMap(null);
-			}
-		}
+	if (player.teamId != teamId){
+		ownFlagListUI[flagId].setMap(null);
 	} else {
-		for (var i = 0; i < enemyFlagListUI.length; i++){
-			if (flagId == i){
-				enemyFlagListUI[i].setMap(null);
-			}
-		}
+		enemyFlagListUI[flagId].setMap(null);
 	}
 }

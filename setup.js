@@ -262,6 +262,15 @@ function onMessageArrived(message) {
 			}
 			break;
 		case 13: //Flag has moved
+			// console.log("team id: ");
+			// console.log(msgObj.teamId);
+
+			// console.log("flag id: ");
+			// console.log(msgObj.flagId);
+
+			// console.log("coords id: ");
+			// console.log(msgObj.coordinates);
+
 			updateFlagPosition(msgObj.teamId, msgObj.flagId, msgObj.coordinates);
 			break;
         case 14: // winning/losing message
@@ -569,6 +578,7 @@ function pubFlagUpdate(teamId ,flagId, coordinates){
 	flagMsg.teamId = teamId;
 	flagMsg.flagId = flagId;
 	flagMsg.coordinates = coordinates;
+	publish(flagMsg);
 }
 
 
