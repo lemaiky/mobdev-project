@@ -541,20 +541,23 @@ $("#toHomeBasePlacement").click(function(){
 		drawingManager.setMap(map);
 
 		homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
-			marker.setIcon('resources/icons/baseflag_small_green.png');
-			drawingManager.setOptions({
-				drawingMode: null
-			})
-			homeBase = marker;
 			var coordinates  = marker.getPosition();
 			//console.log(coordinates);
-
-			// send these home base coordinates to ziad
-			pubBasePosition(coordinates); 
+			var insideArea = google.maps.geometry.poly.containsLocation(coordinates, playingArea);
+			if(insideArea) {
+				marker.setIcon('resources/icons/baseflag_small_green.png');
+				drawingManager.setOptions({
+					drawingMode: null
+				})
+				homeBase = marker;
+				// send these home base coordinates to ziad
+				pubBasePosition(coordinates); // He wants team id also. How do we get that? 	
+			} else {
+				marker.setMap(null);
+			}
 		});
 		console.log('trynna get to homebase')
 	}
-
 
 });
 
