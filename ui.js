@@ -718,6 +718,7 @@ $( "#team1" ).droppable({
 		pubTeamChoice(ui.draggable[0].id, 0);
 	}
 });
+
 $( "#team2" ).droppable({
 	accept: ".draggable",
 	drop: function(event, ui) {
@@ -752,7 +753,10 @@ function youAreNotFrozenUI(){
 
 function youHaveTheFlagUI(){
 	document.getElementById("youHaveTheFlag").style.display = "inline-block";
-	navigator.vibrate(50);function youDontHaveTheFlagUI(){
+	navigator.vibrate(50);
+}
+
+function youDontHaveTheFlagUI(){
 	document.getElementById("youHaveTheFlag").style.display = "none";
 	navigator.vibrate(50);
 }
