@@ -38,6 +38,9 @@ a[href^="https://www.google.com/maps"] {
     display: block;
 }
 
+.wait-button{
+	display:none;
+}
 
 .teamtable li{
 	display:block;
