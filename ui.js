@@ -9,6 +9,7 @@ var enemyBase;
 var players ={};
 var ownMarker; 
 var ownRadius;
+var isWaiting=false;
 
 
 /// INITIALIZATION
@@ -17,10 +18,14 @@ var ownRadius;
 // $('#joingame').onClick = joinGame($('#gameName')[0].value, $('#nickname')[0].value);
 $('#newgame').click(function(){
 	createGame($('#gameName')[0].value, $('#nickname')[0].value);
+	continueForm(this, true);
 });
 
+
 $('#joingame').click(function(){
+	isWaiting=true;
 	joinGame($('#gameName')[0].value, $('#nickname')[0].value);
+	continueForm(this);
 });
 
 
@@ -336,11 +341,21 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
+	continueForm(this);
+});
+
+function continueForm(el, skip){
+	console.log('continueForm');
+	console.log(el);
 	if(animating) return false;
 	animating = true;
 	
-	current_fs = $(this).parent();
-	next_fs = $(this).parent().next();
+	current_fs = $(el).parent();
+	next_fs = $(el).parent().next();
+	if (skip){
+		next_fs = $(el).parent().next().next();
+	}
+
 	
 	
 	//show the next fieldset
@@ -366,7 +381,9 @@ $(".next").click(function(){
 		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
-});
+}
+
+
 
 $("#toAreaSelection").click(function(){
 

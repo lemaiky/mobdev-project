@@ -163,6 +163,7 @@ function onMessageArrived(message) {
 	var msgObj = JSON.parse(message.payloadString);
 	switch (msgObj.msgType){
 		case 0:
+
 			addToPlayerList(msgObj.nickname, msgObj.playerId);	
 			break;
 		case 1:
@@ -208,6 +209,8 @@ function onMessageArrived(message) {
 			console.log(msgObj);
 			playersConnected = JSON.parse(msgObj.playerList);
 			if (!isAdmin()){
+				isWaiting=false;
+				continueForm($('#pleasewait').get(0));
 				console.log("pls add");
 				for (var i = 0; i < playersConnected.length; i++){
 					addPlayertoFreePlayersListUI(playersConnected[i].nickname, playersConnected[i].playerId);
