@@ -25,6 +25,9 @@ function grab() {
 				flag.caught = true;
 				flag.holdingPlayerId = player.playerId;
 				player.state = State.FLAG;
+				console.log("###### FLAG CAUGHT ID");
+				console.log(flag.flagId);
+				setPlayersFlagId(flag.flagId);
 				//pubGrabFlag();
 				break;
 			}

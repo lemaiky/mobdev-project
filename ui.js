@@ -10,6 +10,8 @@ var players ={};
 var ownMarker; 
 var ownRadius;
 var isWaiting=false;
+var isHomebaseSet = false;
+
 
 
 /// INITIALIZATION
@@ -317,13 +319,13 @@ function initMap() {
 	map.mapTypes.set('styled_map', styledMapType);
 	map.setMapTypeId('styled_map');
 
-	// navigator.geolocation.getCurrentPosition(function(position){
-	// 	mapInitPos = {
-	// 		lat: position.coords.latitude,
-	// 		lng: position.coords.longitude
-	// 	}
-	// 	map.setCenter(mapInitPos);
-	// });
+	navigator.geolocation.getCurrentPosition(function(position){
+		mapInitPos = {
+			lat: position.coords.latitude,
+			lng: position.coords.longitude
+		}
+		map.setCenter(mapInitPos);
+	});
 
 	// gamestartdiv = document.getElementById('gamestart');
 	// map.controls[google.maps.ControlPosition.TOP_CENTER].push(gamestartdiv);
@@ -332,6 +334,10 @@ function initMap() {
 
 
 
+
+// if (!isHomebaseSet){
+// 		// nothing happens
+// 		alert("Please set homebase!");
 
 /*************** START GAME FORM****************/
 
@@ -342,7 +348,32 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
-	continueForm(this);
+	console.log(this.id);
+	if (this.id == "toFlagPlacement"){
+		if (homeBase != null){
+			// proceed
+			continueForm(this);
+		} else {
+			alert("No homebase is set!");
+		}
+	} else if (this.id == "toAreaSelection"){
+		continueForm(this);
+	} else if (this.id == "toHomeBasePlacement"){
+		if (playingArea != null){
+			continueForm(this);
+		} else {
+			alert("Set playing area!");
+		}
+	} else if (this.id == "toConfirm"){
+		if (ownFlagListUI.length < 5){
+			alert("Set more flags!");
+		} else if (ownFlagListUI.length == 5){
+			continueForm(this);
+		} 
+	} else if (this.id == "startgame"){
+		continueForm(this);
+	}
+
 });
 
 function continueForm(el, skip){
@@ -524,6 +555,7 @@ $("#toHomeBasePlacement").click(function(){
 		console.log('trynna get to homebase')
 	}
 
+
 });
 
 // $("#resetHomeBasePlacement").click(function(){
@@ -534,7 +566,11 @@ $("#toHomeBasePlacement").click(function(){
 // });
 
 $("#toFlagPlacement").click(function(){
-	ownFlagListUI = [];
+	if (homeBase != null){
+		console.log("homebase is set. Now, place flags");
+		console.log(homeBase);
+		console.log("##### homeBase variable above");
+		ownFlagListUI = [];
 
 		google.maps.event.removeListener(homeBaseListener);
 
@@ -544,46 +580,60 @@ $("#toFlagPlacement").click(function(){
 		});
 		
 		drawingManager.setMap(map);
-		
-		flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
-			marker.setIcon("resources/icons/flag_green.png");
-			drawingManager.setOptions({
-				drawingControl: false,
-			});
-
-
-			//console.log("flag positioned ");
-
-			// var flag = Object.create(Flag);
-			// flag.marker = marker;
-			// flag.flagId = ownFlagListUI.length;
-			// flag.position = marker.getPosition();
-			// flag.teamId = player.teamId;
-			// flag.originalPos = marker.getPosition();
-
 			
-			ownFlagListUI.push(marker);
-			//console.log(flagList.length); 
+		flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+			var coordinates = marker.getPosition();
+			var insideArea = google.maps.geometry.poly.containsLocation(coordinates, playingArea);
 
-			if (ownFlagListUI.length == 5) {
+			if(insideArea) {
+				marker.setIcon("resources/icons/flag_green.png");
 				drawingManager.setOptions({
-					drawingMode: null,
+					drawingControl: false,
 				});
+
+
+				//console.log("flag positioned ");
+
+				// var flag = Object.create(Flag);
+				// flag.marker = marker;
+				// flag.flagId = ownFlagListUI.length;
+				// flag.position = marker.getPosition();
+				// flag.teamId = player.teamId;
+				// flag.originalPos = marker.getPosition();
+
+				
+				ownFlagListUI.push(marker);
+				//console.log(flagList.length); 
+
+				if (ownFlagListUI.length == 5) {
+					drawingManager.setOptions({
+						drawingMode: null,
+					});
+				}	
+			} else {
+				marker.setMap(null);
 			}
-		});
+			
+		});	
+	} else {
+		console.log("homebase is not set");
+	}	
 });
 
 $("#toConfirm").click(function(){
-	drawingManager.setOptions({
-		drawingMode: null
-	});
+	if (ownFlagListUI.length == 5){
 
-	posns = [];
-	for (var i = 0; i < ownFlagListUI.length; i++){
-		posns.push(ownFlagListUI[i].getPosition());
+		drawingManager.setOptions({
+			drawingMode: null
+		});
+
+		posns = [];
+		for (var i = 0; i < ownFlagListUI.length; i++){
+			posns.push(ownFlagListUI[i].getPosition());
+		}
+		// send these home base coordinates to ziad
+		pubFlagPosition(posns); // He wants team id also. How do we get that? 
 	}
-	// send these home base coordinates to ziad
-	pubFlagPosition(posns); // He wants team id also. How do we get that? 
 });
 
 
@@ -657,7 +707,14 @@ $("#startgame").click(function(){
 
 });
 
-// function disconnected 
+function reloadGameplayUI(){
+		// buttons
+	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
+	document.getElementById("gameplayReleaseDiv").style.display = "inline-block";
+
+	// header
+	document.getElementById("gameplayHeader").style.display = "inline-block";
+}
 
 function enemySuccessfullyGrabbed(){
 	console.log("You froze an enemy!")	
@@ -930,6 +987,7 @@ function updateBaseInfoUI(teamId, position){
 				position:position,
 				map: map
 			})
+			isHomebaseSet = true;
 		}
 		homeBase.setPosition(received_posn);
 		homeBase.setIcon("resources/icons/baseflag_small_green.png");
@@ -989,12 +1047,20 @@ function updatePlayerPosition(playerId, position){
 }
 
 function updateFlagPosition(teamId, flagId, position){
+	console.log("######## ownFlagListUI[flagId] below");
+	console.log(flagId);
 	if (teamId==player.teamId){
 		ownFlagListUI[flagId].setPosition(position);
 	}
 	else{
 		enemyFlagListUI[flagId].setPosition(position);
 	}
+}
+
+function setPlayersFlagId(flagId){
+	player.currentFlag = flagId;
+	console.log("####### BELOW player current flag id");
+	console.log(player.currentFlag);
 }
 
 function updateOwnPosition(){
@@ -1010,8 +1076,16 @@ function updateOwnPosition(){
 		}
 
 		if (player.state === State.FLAG){
-			console.log('we have a flag');
-			pubFlagUpdate(player.teamId, player.currentFlag, ownMarker.getPosition());
+			// console.log("####### BELOW player current flag id");
+			// // player.currentFlag = 
+			//console.log(player.currentFlag);
+			var enemyTeadId;
+			if (player.teamId == 0){
+				enemyTeamId = 1;
+			} else {
+				enemyTeamId = 0;
+			}
+			pubFlagUpdate(enemyTeamId, player.currentFlag, ownMarker.getPosition());
 		}
 	})
 }
@@ -1022,17 +1096,9 @@ function posnLoop(){
 }
 
 function removeFlag(teamId,flagId){
-	if (player.teamId == teamId){
-		for (var i = 0; i < ownFlagListUI.length; i++){
-			if (flagId == i){
-				ownFlagListUI[i].setMap(null);
-			}
-		}
+	if (player.teamId != teamId){
+		ownFlagListUI[flagId].setMap(null);
 	} else {
-		for (var i = 0; i < enemyFlagListUI.length; i++){
-			if (flagId == i){
-				enemyFlagListUI[i].setMap(null);
-			}
-		}
+		enemyFlagListUI[flagId].setMap(null);
 	}
 }
