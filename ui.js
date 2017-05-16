@@ -318,13 +318,13 @@ function initMap() {
 	map.mapTypes.set('styled_map', styledMapType);
 	map.setMapTypeId('styled_map');
 
-	// navigator.geolocation.getCurrentPosition(function(position){
-	// 	mapInitPos = {
-	// 		lat: position.coords.latitude,
-	// 		lng: position.coords.longitude
-	// 	}
-	// 	map.setCenter(mapInitPos);
-	// });
+	navigator.geolocation.getCurrentPosition(function(position){
+		mapInitPos = {
+			lat: position.coords.latitude,
+			lng: position.coords.longitude
+		}
+		map.setCenter(mapInitPos);
+	});
 
 	// gamestartdiv = document.getElementById('gamestart');
 	// map.controls[google.maps.ControlPosition.TOP_CENTER].push(gamestartdiv);
