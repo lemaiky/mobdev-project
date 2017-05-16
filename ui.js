@@ -633,6 +633,22 @@ $("#startgame").click(function(){
 
 });
 
+
+$( "#team1" ).droppable({
+	accept: ".draggable",
+	drop: function(event, ui) {
+		$(ui.draggable).appendTo('#team1');
+		pubTeamChoice(ui.draggable[0].id, 0);
+	}
+});
+$( "#team2" ).droppable({
+	accept: ".draggable",
+	drop: function(event, ui) {
+		$(ui.draggable).appendTo('#team2');
+		pubTeamChoice(ui.draggable[0].id, 1);
+	}
+});
+
 function reloadGameplayUI(){
 		// buttons
 	document.getElementById("gameplayCatchDiv").style.display = "inline-block"; 
@@ -839,6 +855,7 @@ function addPlayertoFreePlayersListUI(playername, playerID){
 	var newplayer = document.createElement('li');
 	newplayer.setAttribute('data-draggable', 'item');
 	newplayer.setAttribute('draggable', true);
+	newplayer.className = "ui-widget-content ui-draggable draggable";
 	newplayer.innerText = playername;
 	newplayer.id = playerID;
 	newplayer.addEventListener('dragend', function(e){
@@ -850,7 +867,13 @@ function addPlayertoFreePlayersListUI(playername, playerID){
 			pubTeamChoice(newplayer.id, 1);
 		}
 	})
+    
 	$('#freeplayers').append(newplayer);
+	$( "#" + playerID ).draggable({
+		containment: "html",
+		helper: "clone",
+		revert: "invalid"
+	});
 }
 
 function updateMapInfoUI(coordinates){
@@ -890,7 +913,6 @@ function updateTeamUI(playerid, teamId){
 	else if (teamId == "1" && currentTeamSelection == 'team1'){
 		playerlisted.remove().appendTo('#team2');
 	}
-
 }
 
 function updateBaseInfoUI(teamId, position){
