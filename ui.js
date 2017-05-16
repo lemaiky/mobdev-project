@@ -462,16 +462,22 @@ $("#toHomeBasePlacement").click(function(){
 		drawingManager.setMap(map);
 
 		homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
-			marker.setIcon('resources/icons/baseflag_small_green.png');
-			drawingManager.setOptions({
-				drawingMode: null
-			})
-			homeBase = marker;
 			var coordinates  = marker.getPosition();
 			//console.log(coordinates);
+			var insideArea = google.maps.geometry.poly.containsLocation(coordinates, playingArea);
+			if(insideArea) {
+				marker.setIcon('resources/icons/baseflag_small_green.png');
+				drawingManager.setOptions({
+					drawingMode: null
+				})
+				homeBase = marker;
+				// send these home base coordinates to ziad
+				pubBasePosition(coordinates); // He wants team id also. How do we get that? 	
+			} else {
+				marker.setMap(null);
+			}
 
-			// send these home base coordinates to ziad
-			pubBasePosition(coordinates); // He wants team id also. How do we get that? 
+			
 		});
 	} else {
 		console.log("Please set playing area");
@@ -502,30 +508,38 @@ $("#toFlagPlacement").click(function(){
 		drawingManager.setMap(map);
 			
 		flagPlacementListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
-			marker.setIcon("resources/icons/flag_green.png");
-			drawingManager.setOptions({
-				drawingControl: false,
-			});
+			var coordinates = marker.getPosition();
+			var insideArea = google.maps.geometry.poly.containsLocation(coordinates, playingArea);
 
-
-			//console.log("flag positioned ");
-
-			// var flag = Object.create(Flag);
-			// flag.marker = marker;
-			// flag.flagId = ownFlagListUI.length;
-			// flag.position = marker.getPosition();
-			// flag.teamId = player.teamId;
-			// flag.originalPos = marker.getPosition();
-
-			
-			ownFlagListUI.push(marker);
-			//console.log(flagList.length); 
-
-			if (ownFlagListUI.length == 5) {
+			if(insideArea) {
+				marker.setIcon("resources/icons/flag_green.png");
 				drawingManager.setOptions({
-					drawingMode: null,
+					drawingControl: false,
 				});
+
+
+				//console.log("flag positioned ");
+
+				// var flag = Object.create(Flag);
+				// flag.marker = marker;
+				// flag.flagId = ownFlagListUI.length;
+				// flag.position = marker.getPosition();
+				// flag.teamId = player.teamId;
+				// flag.originalPos = marker.getPosition();
+
+				
+				ownFlagListUI.push(marker);
+				//console.log(flagList.length); 
+
+				if (ownFlagListUI.length == 5) {
+					drawingManager.setOptions({
+						drawingMode: null,
+					});
+				}	
+			} else {
+				marker.setMap(null);
 			}
+			
 		});	
 	} else {
 		console.log("homebase is not set");
