@@ -18,6 +18,7 @@ var isWaiting=false;
 // $('#joingame').onClick = joinGame($('#gameName')[0].value, $('#nickname')[0].value);
 $('#newgame').click(function(){
 	createGame($('#gameName')[0].value, $('#nickname')[0].value);
+	$("#toAreaSelection").hide();
 	continueForm(this, true);
 });
 
@@ -345,13 +346,12 @@ $(".next").click(function(){
 });
 
 function continueForm(el, skip){
-	console.log('continueForm');
-	console.log(el);
 	if(animating) return false;
 	animating = true;
-	
+
 	current_fs = $(el).parent();
 	next_fs = $(el).parent().next();
+
 	if (skip){
 		next_fs = $(el).parent().next().next();
 	}
@@ -383,27 +383,100 @@ function continueForm(el, skip){
 	});
 }
 
+function continueTo(el, nxt){
+	if(animating) return false;
+	animating = true;
 
+	current_fs = $(el).parent();
+	next_fs = $(el).parent().next(nxt);
+
+
+	
+	
+	//show the next fieldset
+	next_fs.show(); 
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale current_fs down to 80%
+			scale = 1 - (1 - now) * 0.2;
+			//2. bring next_fs from the right(50%)
+			left = (now * 50)+"%";
+			//3. increase opacity of next_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({'transform': 'scale('+scale+')'});
+			next_fs.css({'left': left, 'opacity': opacity});
+		}, 
+		duration: 800, 
+		complete: function(){
+			current_fs.hide();
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+}
+
+$('#broadcastPlayers').click(function(){
+	$("#toAreaSelection").show();
+	$('#broadcastPlayers').hide("fast");
+	pubPlayerList();
+})
+
+
+$("#toAreaSelection").off();
 
 $("#toAreaSelection").click(function(){
 
-	drawingManager = new google.maps.drawing.DrawingManager({
-		drawingMode: google.maps.drawing.OverlayType.POLYGON,
-		drawingControl: false,
-	});
-	drawingManager.setMap(map);
+	if (isAdmin())
+	{
+		continueTo(this, '#playingarea');
+		drawingManager = new google.maps.drawing.DrawingManager({
+			drawingMode: google.maps.drawing.OverlayType.POLYGON,
+			drawingControl: false,
+		});
+		drawingManager.setMap(map);
 
-	google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon){
-		drawingManager.setOptions({
-			drawingMode: null
-		})
-		playingArea = polygon;
-		var coordinates  = (polygon.getPath().getArray()); // These should be the coords
+		google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon){
+			console.log('done drawing');
+			console.log('animating?');
+			if(animating)
+				animating = false;
+			drawingManager.setOptions({
+				drawingMode: null
+			})
+			playingArea = polygon;
+			var coordinates  = (polygon.getPath().getArray()); // These should be the coords
+			
 
+			// send these polygon coordinates to ziad
+			pubMapPosition(coordinates);
+		});
 
-		// send these polygon coordinates to ziad
-		pubMapPosition(coordinates);
-	});
+	}
+	else{
+		console.log('here we should be');
+		continueForm(this, true);
+		drawingManager = new google.maps.drawing.DrawingManager({
+			drawingMode: google.maps.drawing.OverlayType.MARKER,
+			drawingControl: false,
+		});
+		drawingManager.setMap(map);
+
+		homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+			marker.setIcon('resources/icons/baseflag_small_green.png');
+			drawingManager.setOptions({
+				drawingMode: null
+			})
+			homeBase = marker;
+			var coordinates  = marker.getPosition();
+			//console.log(coordinates);
+
+			// send these home base coordinates to ziad
+			pubBasePosition(coordinates); 
+		});
+	}
 });
 
 $("#resetPlayingArea").off()
@@ -417,31 +490,40 @@ $("#resetPlayingArea").click(function(){
 
 
 
-$('#broadcastPlayers').click(function(){
-	pubPlayerList();
-})
+
+
+$('#toHomeBasePlacement').off()
 
 $("#toHomeBasePlacement").click(function(){
-
+	animating = false;
 	createTeams();
-	drawingManager.setOptions({
-		drawingMode: google.maps.drawing.OverlayType.MARKER,
-		drawingControl: false,
-	});
-	drawingManager.setMap(map);
+	if(true){
+		console.log("weroiajeadjfoqijerwoifdjalkfdjowerijrafd");
+		// continueTo(this, $('#homebase'));
+		// continueTo(this, '#homebase');
+		continueForm(this, true);
 
-	homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
-		marker.setIcon('resources/icons/baseflag_small_green.png');
 		drawingManager.setOptions({
-			drawingMode: null
-		})
-		homeBase = marker;
-		var coordinates  = marker.getPosition();
-		//console.log(coordinates);
+			drawingMode: google.maps.drawing.OverlayType.MARKER,
+			drawingControl: false,
+		});
+		drawingManager.setMap(map);
 
-		// send these home base coordinates to ziad
-		pubBasePosition(coordinates); // He wants team id also. How do we get that? 
-	});
+		homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+			marker.setIcon('resources/icons/baseflag_small_green.png');
+			drawingManager.setOptions({
+				drawingMode: null
+			})
+			homeBase = marker;
+			var coordinates  = marker.getPosition();
+			//console.log(coordinates);
+
+			// send these home base coordinates to ziad
+			pubBasePosition(coordinates); 
+		});
+		console.log('trynna get to homebase')
+	}
+
 });
 
 // $("#resetHomeBasePlacement").click(function(){
@@ -799,6 +881,18 @@ function updateMapInfoUI(coordinates){
 		paths:coordinates
 	})
 	playingArea.setMap(map);
+	if(!isAdmin())
+		{
+			console.log('lets try');
+			animating = false;
+			if ($('#teamselection').is(':visible')){
+				continueForm($('#toAreaSelection'), true);
+				animating = false;
+			}
+			console.log('lets see');
+			continueForm($("#waitforarea"));
+			console.log('should be further now');
+		}
 }
 
 

@@ -113,7 +113,8 @@
 		<!-- /// -->
 		
 
-			<!-- multistep form -->
+
+		<!-- multistep form -->
 		<form id="gamestart">
 			<!-- fieldsets -->
 			<fieldset>
@@ -127,7 +128,7 @@
 				<h2> Waiting for all players to connect...</h2>
 				<input type="button" id="pleasewait" class="wait-button" />
 			</fieldset>
-			<fieldset>
+			<fieldset id="teamselection">
 				<h2> Choose your teams</h2>
 				<table id="chooseTeamsTable">
 				<tr> <th> <h4> Team 1 </h4> </th> <th> <h4> Team 2 </h4> </th> </tr>
@@ -138,31 +139,32 @@
 				<tr><td colspan="2"><ol data-draggable="target" id="freeplayers">
 				</ol></td></tr>
 				</table>
-				<input type="button" id="broadcastPlayers" class="action-button" value="Update" />
+				<input type="button" id="broadcastPlayers" class="action-button" value="All players present" />
 				<input type="button" id="toAreaSelection" name="next" class="next action-button" value="Next" />
 			</fieldset>
-			<fieldset>
+			<fieldset id="playingarea">
 				<h2> Choose your playing area</h2>
 				<h4> Click to set a corner! </h4>
 				<input type="button" id="toHomeBasePlacement" class="next action-button" value="Confirm area"/>
 				<input type="button" id="resetPlayingArea" class="next action-button" value="Reset"/>
 			</fieldset>
-			<fieldset>
+			<fieldset id="waitforplayingarea">
+				<h2> Determining playing area...</h2>
+				<h4> The game leader is setting the area.</h4>
+				<input type="button" id="waitforarea" class="wait-button" />
+			</fieldset>
+			<fieldset id="homebase">
 				<h2> Place your Home Base!</h2>
 				<input type="button" id="toFlagPlacement" class="next action-button" value="Confirm"/>
 				<input type="button" id="resetHomeBasePlacement" class="next action-button" value="Reset"/>
 			</fieldset>
-			<fieldset>
+			<fieldset id="flags">
 				<h2> Place your flags!</h2>
 				<input type="button" id="toConfirm" class="next action-button" value="Confirm"/>
 				<input type="button" id="resetFlagPlacement" class="next action-button" value="Reset"/>
 			</fieldset>
 			<fieldset>
 				<h2> Ready to play?</h2>
-				<h3>Team 1</h3>
-				<ol data-draggable="target" id="team1"></ol>
-				<h3> Team 2 </h3>
-				<ol data-draggable="target" id="team2"></ol>
 				<input type="button" id="startgame" class="next action-button" value="Play game!"/>
 			</fieldset>
 
