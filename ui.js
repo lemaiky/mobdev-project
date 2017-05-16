@@ -347,6 +347,7 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
 $(".next").click(function(){
+	console.log(this.id);
 	if (this.id == "toFlagPlacement"){
 		if (homeBase != null){
 			// proceed
@@ -357,7 +358,11 @@ $(".next").click(function(){
 	} else if (this.id == "toAreaSelection"){
 		continueForm(this);
 	} else if (this.id == "toHomeBasePlacement"){
-		continueForm(this);
+		if (playingArea != null){
+			continueForm(this);
+		} else {
+			alert("Set playing area!");
+		}
 	} else if (this.id == "toConfirm"){
 		if (ownFlagListUI.length < 5){
 			alert("Set more flags!");
@@ -448,27 +453,29 @@ $('#broadcastPlayers').click(function(){
 })
 
 $("#toHomeBasePlacement").click(function(){
-
-	createTeams();
-	drawingManager.setOptions({
-		drawingMode: google.maps.drawing.OverlayType.MARKER,
-		drawingControl: false,
-	});
-	drawingManager.setMap(map);
-
-	homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
-		marker.setIcon('resources/icons/baseflag_small_green.png');
+	if (playingArea != null){
+		createTeams();
 		drawingManager.setOptions({
-			drawingMode: null
-		})
-		homeBase = marker;
-		var coordinates  = marker.getPosition();
-		//console.log(coordinates);
+			drawingMode: google.maps.drawing.OverlayType.MARKER,
+			drawingControl: false,
+		});
+		drawingManager.setMap(map);
 
-		// send these home base coordinates to ziad
-		pubBasePosition(coordinates); // He wants team id also. How do we get that? 
-	});
+		homeBaseListener = google.maps.event.addListener(drawingManager, 'markercomplete', function(marker){
+			marker.setIcon('resources/icons/baseflag_small_green.png');
+			drawingManager.setOptions({
+				drawingMode: null
+			})
+			homeBase = marker;
+			var coordinates  = marker.getPosition();
+			//console.log(coordinates);
 
+			// send these home base coordinates to ziad
+			pubBasePosition(coordinates); // He wants team id also. How do we get that? 
+		});
+	} else {
+		console.log("Please set playing area");
+	}	
 });
 
 // $("#resetHomeBasePlacement").click(function(){
