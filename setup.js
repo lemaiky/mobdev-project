@@ -9,11 +9,12 @@ var playerTeamId; // THIS Client team id
 var playersConnected = new Array(); //List of players connected
 var friendlyFlagList = new Array(); //List of flag objects 
 var enemyFlagList = new Array(); //List of flag objects 
-var gameIsOver = true;
+var gameIsOver = false;
 var disconnectedPlayers = new Array();
 var hasReconnected =  false;
 var team0;
 var team1;
+var mapCoordinates;
 
 
 var host = 'vernemq.evothings.com';
@@ -35,7 +36,7 @@ function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN
 		gamename: gamename,
 		playerId: playerId
 	}
-	localStorage.setItem("savedPlayer", JSON.stringify(obj));
+	localStorage.setItem("adminPlayer", JSON.stringify(obj));
 
 	Game.admin = playerId;
 	Game.gameName = gamename;
@@ -43,10 +44,11 @@ function createGame(gamename, username){ //TODO: PASS IF USER IS ADMIN
 
 }
 function joinGame(gamename, username){ 
-/*
 	if(localStorage.getItem("savedPlayer") && (gamename == JSON.parse(localStorage.getItem("savedPlayer")).gamename)){
+		console.log("A player is trying to reconnect");
 		playerId = JSON.parse(localStorage.getItem("savedPlayer")).playerId;
 		hasReconnected = true;
+		$("#gamestart").hide();
 	}else{ // todo: disconnect player 
 		playerId = username + "-" + Math.random().toString(36).slice(2); 
 		var obj = {
@@ -56,8 +58,7 @@ function joinGame(gamename, username){
 		localStorage.setItem("savedPlayer", JSON.stringify(obj));
 		
 	}
-*/
-	playerId = username + "-" + Math.random().toString(36).slice(2); 
+
 	Game.gameName = gamename;
 	init(gamename, username);
 }
@@ -182,10 +183,12 @@ function onMessageArrived(message) {
 			addFlags(msgObj.teamId, JSON.parse(msgObj.flagList));
 			break;
 		case 4: // Default update msg
-
-			updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
+			if(!hasReconnected){
+				updatePlayerInfo(msgObj.playerId, null, msgObj.position, msgObj.caughtPosition, msgObj.state, msgObj.insideMap, msgObj.carryingFlag);
+			}
 			 break;
 		case 5: // Map info
+			mapCoordinates = msgObj.position;
 			updateMapInfo(msgObj.position);
 			break;
 		case 6:
@@ -199,10 +202,12 @@ function onMessageArrived(message) {
 		case 7:
 			//release someone
 			// playerId = friend
-			if (player.playerId == msgObj.playerId){
-				youAreNotFrozenUI();
+			if(!hasReconnected){
+				if (player.playerId == msgObj.playerId){
+					youAreNotFrozenUI();
+				}
+				updatePlayerInfo(msgObj.playerId, null, null, null, msgObj.state, null, null);
 			}
-			updatePlayerInfo(msgObj.playerId, null, null, null, msgObj.state, null, null);
 			break;
 		case 8:
 			console.log("recieved list of players");
@@ -218,12 +223,19 @@ function onMessageArrived(message) {
 			}
 			break;
 		case 9: // A player has disconnected
-			//addDisconnectedPlayer(msgObj.playerId);
+			if(!hasReconnected){	
+				addDisconnectedPlayer(msgObj.playerId);
+			}
 			break;
 			
 		case 10:
 			if(hasReconnected){
-				loadGameState(msgObj);
+				console.log(msgObj);
+			 	Game = JSON.parse(msgObj.game);
+				var reconnectMsg ={
+					msgType: 16
+				}
+				publish(reconnectMsg);
 			}
 			break;
 		case 11:
@@ -243,9 +255,22 @@ function onMessageArrived(message) {
 			updateBaseInfoUI(msgObj.teamId, msgObj.position);
 			break;
 		case 12: //A player has reconnected
-			playersConnected.push(JSON.parse(msgObj.player));
+			if(player.playerId != msgObj.player.playerId){
+				console.log("Player is reconnected");
+				playersConnected.push(msgObj.player);
+				removeDisconnectedPlayer(msgObj.player.playerId);
+			}
 			break;
 		case 13: //Flag has moved
+			// console.log("team id: ");
+			// console.log(msgObj.teamId);
+
+			// console.log("flag id: ");
+			// console.log(msgObj.flagId);
+
+			// console.log("coords id: ");
+			// console.log(msgObj.coordinates);
+
 			updateFlagPosition(msgObj.teamId, msgObj.flagId, msgObj.coordinates);
 			break;
         case 14: // winning/losing message
@@ -258,6 +283,20 @@ function onMessageArrived(message) {
         case 15:
             updateTeamPoints(msgObj.teamId, msgObj.points, msgObj.flagId);
             break;
+     	case 16:
+     		if(!hasReconnected){
+				sendUpdatedGameLists();
+			}
+			break;
+		case 17: //Recieved updates lists
+			console.log("recieved player update");
+			if(hasReconnected){
+				console.log(msgObj);
+				loadGameState(msgObj);
+				hasReconnected = false;
+				loadUIStuff();
+			}
+			break;
 
 	}	
 }
@@ -286,42 +325,126 @@ function status (s) {
 	console.log("Status update: " + s);
 	
 }
+
+function loadUIStuff(){
+	console.log("loading ui");
+	//Team scores
+	reloadGameplayUI();
+	updateTeamScoreUI(0, Game.teams.team0.points);
+	updateTeamScoreUI(1, Game.teams.team1.points);
+
+	//Base
+	updateBaseInfoUI(0, JSON.stringify(Game.teams.team0.base.position));
+	updateBaseInfoUI(1, JSON.stringify(Game.teams.team1.base.position));
+	//Team score
+	updateTeamScoreUI(0, Game.teams.team0.points);
+	updateTeamScoreUI(1, Game.teams.team1.points);
+	//
+	updateMapInfoUI(mapCoordinates);
+
+	//Add flags
+	
+	var friendlyFlagListPositions = [];
+	for(var i = 0; i < friendlyFlagList.length; i++){
+		friendlyFlagListPositions.push(friendlyFlagList[i].originalPos);
+	}
+
+	var enemyFlagListPositions = [];
+	for(var i = 0; i < friendlyFlagList.length; i++){
+		enemyFlagListPositions.push(enemyFlagList[i].originalPos);
+	}
+
+	if(player.teamId == 0){
+		addFlagUI(player.teamId, friendlyFlagListPositions);
+		addFlagUI(1, enemyFlagListPositions);
+	}else{
+		addFlagUI(player.teamId, friendlyFlagListPositions);
+		addFlagUI(0, enemyFlagListPositions);
+	}
+
+	
+	
+
+
+}
+
+
+function removeDisconnectedPlayer(playerId){
+	var tmpArr = []
+	for(var i = 0; i < disconnectedPlayers.length; i++){
+		if(playerId != disconnectedPlayers[i].playerId){
+			tmpArr.push(disconnectedPlayers[i]);
+		}
+	}
+	disconnectedPlayers = tmpArr;
+}
+
+function removeConnectedPlayer(playerId){
+	var tmpArr = []
+	for(var i = 0; i < playersConnected.length; i++){
+		console.log(playersConnected[i]);
+		if(playerId != playersConnected[i].playerId){
+			tmpArr.push(playersConnected[i]);
+		}
+	}
+	playersConnected = tmpArr;
+}
+
+function sendUpdatedGameLists(){
+	var msg = {
+		msgType: 17,
+		disconnectedPlayers : disconnectedPlayers,
+		friendlyFlagList: friendlyFlagList,
+		enemyFlagList: enemyFlagList,
+		playersConnected: playersConnected,
+		map: mapCoordinates
+
+	}
+	console.log(msg);
+	publish(msg);
+}
+
 /*
 	Does a retain publish to save game state
 */
 function publishGameInfo(){
-	var msg = {
-		msgType: 9,
-		game: JSON.stringify(Game),
-		playerList: JSON.stringify(playersConnected),
-		friendlyFlagList: friendlyFlagList,
-		enemyFlagList: enemyFlagList,
-		disconnectedPlayers: disconnectedPlayers
-		//add base 
+	if(isAdmin()){
+		var msg = {
+			msgType: 10,
+			game: JSON.stringify(Game)
+			//add base 
+		}
+		retainPublish(msg);
 	}
-	retainPublish(msg);
 }
 
 /*
 	Load game state if reconnecting
+	Go through disconenctedp players until finding correct Id
+	populate critical variables
+	remove player from disconnected list
+	send to all that a players has reconnect succesfully
+
 */
 function loadGameState(msgObj){
-	disconnectedPlayers = JSON.parse(msgObj.disconnectedPlayers);
-	for(var i = 0; i < disconnectedPlayers.length; i++){
-		if(player.playerId == disconnectedPlayers[i].playerId){
+	console.log(msgObj);
+	console.log("Updating old info");
+	console.log(msgObj.disconnectedPlayers);
+	for(var i = 0; i < msgObj.disconnectedPlayers.length; i++){
+			console.log(player.playerId +  ":  " + msgObj.disconnectedPlayers[i].playerId);
+		if(player.playerId == msgObj.disconnectedPlayers[i].playerId){
 			console.log("Found disconnected player");
-			Game = JSON.parse(msgObj.game);
-			playersConnected = JSON.parse(msgObj.playerList);
-			friendlyFlagList = JSON.parse(msgObj.friendlyFlagList);
-			enemyFlagList = JSON.parse(msgObj.enemyFlagList);
-			playersConnected.push(disconnectedPlayers[i]);
-			player = disconnectedPlayers[i];
-			disconnectedPlayers.remove(i);
+			playersConnected = msgObj.playersConnected;
+			friendlyFlagList = msgObj.friendlyFlagList;
+			enemyFlagList = msgObj.enemyFlagList;
+			playersConnected.push(msgObj.disconnectedPlayers[i].player);
+			removeDisconnectedPlayer(player.playerId);
+			mapCoordinates = msgObj.map;		
 		}
 	}
-	var msg = {
+	var msg = { //Send to clients that player has reconnected.
 		msgType: 12,
-		player: JSON.stringify(player)
+		player: player
 	}
 	publish(msg);
 
@@ -331,9 +454,8 @@ function loadGameState(msgObj){
 function addDisconnectedPlayer(disconnectedPlayerId){
 	for(var i = 0; i < playersConnected.length; i++){
 		if(playersConnected[i].playerId === disconnectedPlayerId){
-
 			disconnectedPlayers.push(playersConnected[i]);
-			playersConnected.remove(i);
+			removeConnectedPlayer(disconnectedPlayerId);
 			console.log("Added " + disconnectedPlayerId + " to disconnected list");
 		}
 	}
@@ -456,6 +578,7 @@ function pubFlagUpdate(teamId ,flagId, coordinates){
 	flagMsg.teamId = teamId;
 	flagMsg.flagId = flagId;
 	flagMsg.coordinates = coordinates;
+	publish(flagMsg);
 }
 
 
