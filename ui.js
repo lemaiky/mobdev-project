@@ -957,6 +957,12 @@ function updateFlagPosition(teamId, flagId, position){
 	}
 }
 
+function setPlayersFlagId(flagId){
+	player.currentFlag = flagId;
+	console.log("####### BELOW player current flag id");
+	console.log(player.currentFlag);
+}
+
 function updateOwnPosition(){
 	navigator.geolocation.getCurrentPosition(function(position){
 		posn = {
@@ -970,10 +976,16 @@ function updateOwnPosition(){
 		}
 
 		if (player.state === State.FLAG){
-			console.log("####### BELOW player current flag id");
-			// player.currentFlag = 
-			console.log(player.currentFlag);
-			pubFlagUpdate(player.teamId, player.currentFlag, ownMarker.getPosition());
+			// console.log("####### BELOW player current flag id");
+			// // player.currentFlag = 
+			//console.log(player.currentFlag);
+			var enemyTeadId;
+			if (player.teamId == 0){
+				enemyTeamId = 1;
+			} else {
+				enemyTeamId = 0;
+			}
+			pubFlagUpdate(enemyTeamId, player.currentFlag, ownMarker.getPosition());
 		}
 	})
 }
