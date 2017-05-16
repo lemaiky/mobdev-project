@@ -639,7 +639,7 @@ $("#toConfirm").click(function(){
 
 $("#startgame").click(function(){
 	// iterate over players, setting marker
-
+	$("waitforplayingarea").hide();
 	navigator.geolocation.getCurrentPosition(function(position){
 		var pos = {
 			lat: position.coords.latitude,
@@ -749,10 +749,7 @@ function youAreNotFrozenUI(){
 
 function youHaveTheFlagUI(){
 	document.getElementById("youHaveTheFlag").style.display = "inline-block";
-	navigator.vibrate(50);
-}
-
-function youDontHaveTheFlagUI(){
+	navigator.vibrate(50);function youDontHaveTheFlagUI(){
 	document.getElementById("youHaveTheFlag").style.display = "none";
 	navigator.vibrate(50);
 }
